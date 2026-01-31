@@ -1,6 +1,31 @@
-namespace blog.Controllers;
+using Blog.Common.Utils;
+using Blog.Services.Log;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
-public class SiteController
+namespace blog.Controllers;
+[Route("api/[controller]/[action]")]
+[ApiController]
+public class SiteController: ControllerBase
 {
-    
+    private readonly ActionLogService _actionLogService;
+
+    public SiteController(ActionLogService actionLogService)
+    {
+        _actionLogService = actionLogService;
+    }
+
+    [HttpGet]
+    public ApiResult<string> SiteInfo()
+    { 
+       var log =   ActionLogService.GetActionLogService(HttpContext);
+       log.AddItemInfo("test_csharp_site", "test_csharp_val");
+       log.Insert(HttpContext);
+       return new ApiResult<string>()
+       {
+           Code = ApiResultCode.Success,
+           Message = "success",
+           Data = "this is site info"
+       };
+    }
 }

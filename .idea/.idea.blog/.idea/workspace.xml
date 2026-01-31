@@ -9,62 +9,90 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad2e893a-21fd-4060-a0ad-c5da0ae46372" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.blog/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.blog/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Blog.sln" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Controllers/BaseController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Controllers/LogController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Controllers/WeatherForecastController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Middleware/LogMiddleware.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/BaseModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/Log/ActionLog.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/Log/LoginLog.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/Log/RuntimeLog.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/LogModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/enums/Log/LogLevelEnum.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/enums/Log/LogTypeEnum.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Models/enums/Log/LoginTypeEnum.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Properties/launchSettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Services/Log/ActionLogService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Services/Log/LoginLogService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Services/Log/RuntimeLogService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/Services/LogService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/WeatherForecast.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/appsettings.Development.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/appsettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/blog.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blog/blog.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.blog/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.blog/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Blog.Api.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Blog.Api.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Controllers/BaseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Controllers/BaseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Controllers/LogController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Controllers/LogController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Controllers/LoginController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Controllers/LoginController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Controllers/SiteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Controllers/SiteController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Middleware/LogMiddleware.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Middleware/LogMiddleware.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Migrations/20260129162947_InitialCreate.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Migrations/20260129162947_InitialCreate.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Migrations/ModelsContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Migrations/ModelsContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Common/AppSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Common/AppSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Common/Utils/Result.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Common/Utils/Result.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Common/Utils/StackInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Common/Utils/StackInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Core/DbContext/BlogDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Core/DbContext/BlogDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Models/enums/RunDateTimeEnum.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Models/enums/RunDateTimeEnum.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/Local/LocalService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Local/LocalService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/Log/ActionLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Log/ActionLogService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/Log/LoginLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Log/LoginLogService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/Log/RuntimeLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Log/RuntimeLogService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/blog.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Controllers/BaseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/blog/Controllers/BaseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Controllers/LogController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Controllers/LoginController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Controllers/WeatherForecastController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Middleware/LogMiddleware.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Migrations/20260129162947_InitialCreate.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Migrations/20260129162947_InitialCreate.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Migrations/ModelsContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/BaseModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/BlogContext.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/BlogDbContext.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/DbContext.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/Log/ActionLog.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/Log/LoginLog.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/Log/RuntimeLog.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/LogModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/ModelsContext.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/enums/Log/LogLevelEnum.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/enums/Log/LogTypeEnum.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Models/enums/Log/LoginTypeEnum.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/blog/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Properties/launchSettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Services/Log/ActionLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/blog/Services/Log/ActionLogService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Services/Log/LoginLogService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Services/Log/RuntimeLogService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/Services/LogService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/WeatherForecast.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/appsettings.Development.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/appsettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/blog.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/blog.http" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1d872bc46057829e348ade299703f677f13aaa7d76c6e8792dc97bf195968/HttpContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3bd4df5aff92cabbc4d630be64227073db1b8539b3a1e47786b4b189d7cdb7/DbContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/455e902e2260d6326d6a6c313254991431bcf4dae1801dd022cfb54572169453/ApiControllerAttribute.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/90881468902edd1541687085e1d38c9a384961660156efd4e193af62ce0d58e/HttpContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b69d26d8be6c9a66547d914640d41c6447eaf9773d86ffed1706af50cac8/Ok.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c7afd9724cf757c4a8469dba2bdc22ab5ac111c91f431dbfefc992dacb3e8635/ControllerBase.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Blog/Middleware/LogMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Blog/Models/enums/Log/LogLevelEnum.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Blog/Models/enums/Log/LogTypeEnum.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d562c132b2b09bb93469fd291d356db8c62af45767583f4dac8907177e4dec0/AuthorizationMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Api/Controllers/SiteController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Common/AppSettings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Models/enums/RunDateTimeEnum.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog/Utils/Result.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/blog/Controllers/BaseController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/blog/Controllers/LogController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/blog/Models/BaseModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/blog/Models/Log/ActionLog.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/blog/Models/Log/LoginLog.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/blog/Models/Log/RuntimeLog.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/blog/Models/LogModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/blog/Services/LogService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/local/share/dotnet/sdk/10.0.102/Sdks/Microsoft.NET.Sdk.Web/Sdk/Sdk.targets" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -75,10 +103,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    ".NET Launch Settings Profile.blog: http.executor": "Debug",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "git-widget-placeholder": "main",
@@ -93,7 +123,7 @@
 }]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.blog: http">
     <configuration name="blog: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
-      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Blog/Blog.csproj" />
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Blog.Api/Blog.Api.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net10.0" />
       <option name="LAUNCH_PROFILE_NAME" value="http" />
       <option name="USE_MONO" value="0" />
@@ -109,7 +139,7 @@
       </method>
     </configuration>
     <configuration name="blog: https" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
-      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Blog/Blog.csproj" />
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Blog.Api/Blog.Api.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net10.0" />
       <option name="LAUNCH_PROFILE_NAME" value="https" />
       <option name="USE_MONO" value="0" />
@@ -135,13 +165,15 @@
       <workItem from="1769685331186" duration="3705000" />
       <workItem from="1769690093980" duration="10000" />
       <workItem from="1769690301953" duration="1077000" />
-      <workItem from="1769691391535" duration="7743000" />
+      <workItem from="1769691391535" duration="32842000" />
+      <workItem from="1769774507788" duration="13821000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

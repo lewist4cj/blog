@@ -8,25 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="DbContext\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.23" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.23">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.23">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
       <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Blog.Service\Blog.Service.csproj" />
+      <ProjectReference Include="..\Blog.Services\Blog.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Utils\" />
     </ItemGroup>
 
 </Project>

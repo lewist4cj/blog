@@ -1,4 +1,4 @@
-using blog.Utils;
+using Blog.Common.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;
@@ -7,7 +7,7 @@ namespace blog.Controllers;
 public class LoginController:BaseController
 {
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(HttpContext ctx)
     {
         
         return Ok(new ApiResult<string>

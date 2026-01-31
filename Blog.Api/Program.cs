@@ -1,9 +1,8 @@
 using Blog.Common;
 using blog.Middleware;
-using Microsoft.EntityFrameworkCore;
-using blog.Models;
-using blog.Services.Log;
-using Serilog;
+using Blog.Services.Log;
+using Blog.Core.DbContext;
+using Blog.Services.Local;
 
 var builder = WebApplication.CreateBuilder(args);
 //  Configuration
@@ -12,20 +11,14 @@ builder.Services.AddSingleton(new AppSettings(builder.Configuration));
 // Add services to the container.
 builder.Services.AddControllers();
 
-
-// serilog configuration 
-if (AppSettings.Configuration != null)
-{
-    var logConfig = new LoggerConfiguration().ReadFrom.Configuration(AppSettings.Configuration)
-        .Enrich.FromLogContext()
-        .WriteTo.Console();
-    Log.Logger = logConfig.CreateLogger();
-}
+// 添加 IHttpContextAccessor 服务
+builder.Services.AddHttpContextAccessor();
 
 // 配置数据库上下文
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddDbContext<BlogDbContext>();
+builder.Services.AddSingleton<LocalService>();
 
 // 注册日志服务
 builder.Services.AddScoped<ActionLogService>();
@@ -39,7 +32,7 @@ app.UseHttpsRedirection();
 // 注册日志中间件 - 应该在 UseAuthorization 之前注册
 app.UseMiddleware<LogMiddleware>();
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapControllers();
 

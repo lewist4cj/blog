@@ -1,5 +1,5 @@
-using blog.Services.Log;
 using System.IO;
+using Blog.Services.Log;
 
 namespace blog.Middleware;
 
@@ -16,6 +16,7 @@ public class LogMiddleware(RequestDelegate next)
         context.Request.Body.Seek(0, SeekOrigin.Begin);
         // setting the request body of action log service
         actionLog.RequestBody = requestBody;
+        Console.WriteLine($"request body: --------{actionLog.RequestBody}");
         actionLog.ShowRequest = true;
         context.Items["log"] = actionLog;
         
@@ -39,6 +40,7 @@ public class LogMiddleware(RequestDelegate next)
                 // setting the response body of action log service
                 actionLog.ShowResponse = true;
                 actionLog.ResponseBody = responseBody;
+                Console.WriteLine($"response body: --------{actionLog.ResponseBody}");
                 actionLog.IsMiddlewareSave(context);
                 
                 // copy response body to original response body

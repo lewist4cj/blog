@@ -9,4 +9,9 @@ public class LogController: BaseController
     {
         return null;
     }
+
+    public void UpdateLog()
+    {
+        
+    }
 }

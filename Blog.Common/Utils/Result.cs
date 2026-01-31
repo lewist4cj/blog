@@ -1,4 +1,4 @@
-namespace Blog.Utils;
+namespace Blog.Common.Utils;
 
 public class ApiResult<T>
 {

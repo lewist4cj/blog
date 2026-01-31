@@ -1,9 +1,11 @@
+using Blog.Common;
+using blog.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace blog.Models;
+namespace Blog.Core.DbContext;
 
-public class BlogDbContext: DbContext
+public class BlogDbContext: Microsoft.EntityFrameworkCore.DbContext
 {
     public DbSet<LogModel> Logs { get; set; }
     
@@ -11,14 +13,12 @@ public class BlogDbContext: DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();   
-                
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            var serverVersion = ServerVersion.AutoDetect(connectionString);
-            optionsBuilder.UseMySql(connectionString, serverVersion);
+            if (AppSettings.Configuration != null)
+            {
+                var connectionString = AppSettings.Configuration.GetConnectionString("DefaultConnection");
+                var serverVersion = ServerVersion.AutoDetect(connectionString);
+                optionsBuilder.UseMySql(connectionString, serverVersion);
+            }
         }
     }
 }

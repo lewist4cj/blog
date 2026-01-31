@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Blog.Utils;
+namespace Blog.Common.Utils;
 
 public class StackInfo
 {

@@ -1,11 +1,11 @@
 using IP2Region.Net.Abstractions;
 using IP2Region.Net.XDB;
 
-namespace Blog.Common.Utils;
+namespace Blog.Services.Local;
 
-public class IpAddress
+public class LocalService
 {
-    public string GetLocalByIp(string ip)
+    public static string GetLocalByIp(string ip)
     {
         try
         {

@@ -1,4 +1,4 @@
-namespace Blog.Service.Log;
+namespace Blog.Services.Log;
 
 public class LoginLogService
 {
