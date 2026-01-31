@@ -1,7 +1,7 @@
 using Blog.Common;
+using Blog.Core.DbContext;
 using blog.Middleware;
 using Blog.Services.Log;
-using Blog.Core.DbContext;
 using Blog.Services.Local;
 
 var builder = WebApplication.CreateBuilder(args);

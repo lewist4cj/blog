@@ -1,52 +1,52 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using blog.Models.enums.Log;
 
 namespace blog.Models;
 
+[Table("log_models")]
 public class LogModel : BaseModel
 {
+    [Column("log_type")]
     public LogTypeEnum LogType { get; set; }
-
-    public string Title { get; set; } = string.Empty;   
-
-    public string Content { get; set; } = string.Empty;
-
-    public LogLevelEnum Level { get; set; }
-
-    public long UserId { get; set; }
-
-    public string Ip   { get; set; } = string.Empty;
-
-    public string Addr { get; set; } = string.Empty;
-
-    public bool IsRead { get; set; }
-
-    public bool LoginStatus { get; set; }
     
-    public string UserName { get; set; } = string.Empty;
-
-    public string Pwd { get; set; } = string.Empty;
-
-    public short LoginType { get; set; }
-
-    public string ServiceName { get; set; } = string.Empty;
+    [MaxLength(32)]
+    public string? Title { get; set; }
+    
+    public string? Content { get; set; }
+    
+    public LogLevelEnum? Level { get; set; }
+    
+    [Column("user_id")]
+    public long? UserId { get; set; }
+    
+    [MaxLength(32)]
+    public string? Ip { get; set; }
+    
+    [MaxLength(64)]
+    public string? Addr { get; set; }
+    
+    [Column("is_read")]
+    public bool? IsRead { get; set; }
+    
+    [Column("login_status")]
+    public bool? LoginStatus { get; set; }
+    
+    [Column("user_name")]
+    [MaxLength(32)]
+    public string? UserName { get; set; }
+    
+    [MaxLength(32)]
+    public string? Pwd { get; set; }
+    
+    [Column("login_type")]
+    public LoginTypeEnum? LoginType { get; set; }
+    
+    [Column("service_name")]
+    [MaxLength(32)]
+    public string? ServiceName { get; set; }
+    
+    // 导航属性
+    [ForeignKey(nameof(UserId))]
+    public UserModel? UserModel { get; set; }
 }
-
-// CREATE TABLE `log_models` (
-//     `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-//     `created_at` timestamp default CURRENT_TIMESTAMP NOT NULL,
-//     `updated_at` timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP NOT NULL,
-//     `log_type` tinyint DEFAULT NULL,
-//     `title` varchar(32) DEFAULT NULL,
-//     `content` longtext,
-//     `level` tinyint DEFAULT NULL,
-//     `user_id` bigint unsigned DEFAULT NULL,
-//     `ip` varchar(32) DEFAULT NULL,
-//     `addr` varchar(64) DEFAULT NULL,
-//     `is_read` tinyint(1) DEFAULT NULL,
-//     `login_status` tinyint(1) DEFAULT NULL,
-//     `user_name` varchar(32) DEFAULT NULL,
-//     `pwd` varchar(32) DEFAULT NULL,
-//     `login_type` tinyint DEFAULT NULL,
-//     `service_name` varchar(32) DEFAULT NULL,
-//     PRIMARY KEY (`id`)
-//     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;

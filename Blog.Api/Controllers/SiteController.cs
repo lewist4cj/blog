@@ -6,14 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace blog.Controllers;
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class SiteController: ControllerBase
+public class SiteController(ActionLogService actionLogService) : ControllerBase
 {
-    private readonly ActionLogService _actionLogService;
-
-    public SiteController(ActionLogService actionLogService)
-    {
-        _actionLogService = actionLogService;
-    }
+    private readonly ActionLogService _actionLogService = actionLogService;
 
     [HttpGet]
     public ApiResult<string> SiteInfo()
