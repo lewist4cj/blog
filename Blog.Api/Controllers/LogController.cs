@@ -1,4 +1,4 @@
-using blog.Models;
+using Blog.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;

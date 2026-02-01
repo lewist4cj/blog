@@ -2,51 +2,63 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using blog.Models.enums.Log;
 
-namespace blog.Models;
+namespace Blog.Models;
 
 [Table("log_models")]
-public class LogModel : BaseModel
+public partial class LogModel
 {
+    [Key]
+    [Column("id")]
+    public ulong Id { get; set; }
+
+    [Column("created_at", TypeName = "timestamp")]
+    public DateTime CreatedAt { get; set; }
+
+    [Column("updated_at", TypeName = "timestamp")]
+    public DateTime UpdatedAt { get; set; }
+
     [Column("log_type")]
-    public LogTypeEnum LogType { get; set; }
-    
-    [MaxLength(32)]
+    public LogTypeEnum? LogType { get; set; }
+
+    [Column("title")]
+    [StringLength(32)]
     public string? Title { get; set; }
-    
+
+    [Column("content")]
     public string? Content { get; set; }
-    
+
+    [Column("level")]
     public LogLevelEnum? Level { get; set; }
-    
+
     [Column("user_id")]
-    public long? UserId { get; set; }
-    
-    [MaxLength(32)]
+    public ulong? UserId { get; set; }
+
+    [Column("ip")]
+    [StringLength(32)]
     public string? Ip { get; set; }
-    
-    [MaxLength(64)]
+
+    [Column("addr")]
+    [StringLength(64)]
     public string? Addr { get; set; }
-    
+
     [Column("is_read")]
     public bool? IsRead { get; set; }
-    
+
     [Column("login_status")]
     public bool? LoginStatus { get; set; }
-    
+
     [Column("user_name")]
-    [MaxLength(32)]
+    [StringLength(32)]
     public string? UserName { get; set; }
-    
-    [MaxLength(32)]
+
+    [Column("pwd")]
+    [StringLength(32)]
     public string? Pwd { get; set; }
-    
+
     [Column("login_type")]
-    public LoginTypeEnum? LoginType { get; set; }
-    
+    public sbyte? LoginType { get; set; }
+
     [Column("service_name")]
-    [MaxLength(32)]
+    [StringLength(32)]
     public string? ServiceName { get; set; }
-    
-    // 导航属性
-    [ForeignKey(nameof(UserId))]
-    public UserModel? UserModel { get; set; }
 }

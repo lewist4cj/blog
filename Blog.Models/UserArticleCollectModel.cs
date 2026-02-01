@@ -1,30 +1,22 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace blog.Models;
+namespace Blog.Models;
 
+[Keyless]
 [Table("user_article_collect_models")]
-public class UserArticleCollectModel
+[Index("UserId", "ArticleId", "CollectId", Name = "idx_name", IsUnique = true)]
+public partial class UserArticleCollectModel
 {
     [Column("user_id")]
-    public long? UserId { get; set; }
-    
+    public ulong? UserId { get; set; }
+
     [Column("article_id")]
-    public long? ArticleId { get; set; }  // 改为 long? 与 BaseModel.Id 类型匹配
-    
+    public ulong? ArticleId { get; set; }
+
     [Column("collect_id")]
-    public long? CollectId { get; set; }
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    
-    // 导航属性
-    [ForeignKey(nameof(UserId))]
-    public UserModel? UserModel { get; set; }
-    
-    [ForeignKey(nameof(ArticleId))]
-    public ArticleModel? ArticleModel { get; set; }
-    
-    [ForeignKey(nameof(CollectId))]
-    public CollectModel? CollectModel { get; set; }
+    public ulong? CollectId { get; set; }
+
+    [Column("created_at", TypeName = "timestamp")]
+    public DateTime CreatedAt { get; set; }
 }

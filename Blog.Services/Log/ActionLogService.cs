@@ -1,11 +1,11 @@
 using System.Collections;
-using blog.Models;
 using blog.Models.enums.Log;
 using Blog.Services.Local;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Blog.Common.Utils;
-using Blog.Core.DbContext;
+using Blog.Core.BlogDbContext;
+using Blog.Models;
 
 namespace Blog.Services.Log;
 
@@ -122,7 +122,7 @@ public class ActionLogService
         // TODO insert the record into database
         if (_context != null)
         {
-            _context.Logs.Add(LogModel!);
+            _context.LogModels.Add(LogModel!);
             _context.SaveChanges();
         }
     }
@@ -137,11 +137,11 @@ public class ActionLogService
           // TODO: update the field LogModel
           if (_context != null)
           {
-              _context.Logs.Update(LogModel);
+              _context.LogModels.Update(LogModel);
               _context.SaveChanges();
           }
           ItemList.Clear();
-          return LogModel.Id;
+          return (long)LogModel.Id;
         }
         
         // setting  request info 
@@ -169,9 +169,11 @@ public class ActionLogService
         // setting item list
         var ip = ctx.Connection.RemoteIpAddress.ToString() ?? "unknow";
         var local = LocalService.GetLocalByIp(ip);
+        // 截断过长的地址信息，避免数据库字段长度限制
+        var truncatedAddr = local?.Length > 64 ? local.Substring(0, 64) : local;
         var model  = new LogModel
         {
-            Id = 0,
+            // Id由数据库自动生成，不需要手动设置
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now,
             LogType = LogTypeEnum.ActionLogType,
@@ -180,7 +182,7 @@ public class ActionLogService
             Level = LogLevelEnum.Info,
             UserId = 0,
             Ip = ip,
-            Addr = local,
+            Addr = truncatedAddr,
             IsRead = false,
         };
         // TODO insert the model record into database
@@ -188,7 +190,7 @@ public class ActionLogService
         if (_context != null)
         {
             Console.WriteLine($"log list content is {model.Content}");
-            _context.Logs.Add(model);
+            _context.LogModels.Add(model);
             _context.SaveChanges();
         }
         else
@@ -197,7 +199,7 @@ public class ActionLogService
         }
         LogModel = model;
         ItemList.Clear();
-        return model.Id;
+        return (long)model.Id;
     }
     
     

@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Models;
 
-[Table("category_models")]
-public partial class CategoryModel
+[Table("global_notications")]
+public partial class GlobalNotication
 {
     [Key]
     [Column("id")]
@@ -20,6 +20,15 @@ public partial class CategoryModel
     [StringLength(32)]
     public string? Title { get; set; }
 
-    [Column("user_id")]
-    public ulong? UserId { get; set; }
+    [Column("icon")]
+    [StringLength(256)]
+    public string? Icon { get; set; }
+
+    [Column("content")]
+    [StringLength(64)]
+    public string? Content { get; set; }
+
+    [Column("href")]
+    [StringLength(256)]
+    public string? Href { get; set; }
 }

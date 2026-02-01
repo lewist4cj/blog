@@ -1,39 +1,37 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace blog.Models;
+namespace Blog.Models;
 
 [Table("comment_models")]
-public class CommentModel : BaseModel
+public partial class CommentModel
 {
-    [MaxLength(256)]
+    [Key]
+    [Column("id")]
+    public ulong Id { get; set; }
+
+    [Column("created_at", TypeName = "timestamp")]
+    public DateTime CreatedAt { get; set; }
+
+    [Column("updated_at", TypeName = "timestamp")]
+    public DateTime UpdatedAt { get; set; }
+
+    [Column("content")]
+    [StringLength(256)]
     public string? Content { get; set; }
-    
+
     [Column("user_id")]
-    public long? UserId { get; set; }
-    
+    public ulong? UserId { get; set; }
+
     [Column("article_id")]
-    public long? ArticleId { get; set; }
-    
+    public ulong? ArticleId { get; set; }
+
     [Column("parent_id")]
-    public long? ParentId { get; set; }
-    
+    public ulong? ParentId { get; set; }
+
     [Column("root_parent_id")]
-    public long? RootParentId { get; set; }
-    
+    public ulong? RootParentId { get; set; }
+
     [Column("digg_count")]
     public long? DiggCount { get; set; }
-    
-    // 导航属性
-    [ForeignKey(nameof(UserId))]
-    public UserModel? UserModel { get; set; }
-    
-    [ForeignKey(nameof(ArticleId))]
-    public ArticleModel? ArticleModel { get; set; }
-    
-    [ForeignKey(nameof(ParentId))]
-    public CommentModel? ParentComment { get; set; }
-    
-    [ForeignKey(nameof(RootParentId))]
-    public CommentModel? RootParentComment { get; set; }
 }

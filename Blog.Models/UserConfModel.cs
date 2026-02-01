@@ -1,33 +1,31 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace blog.Models;
+namespace Blog.Models;
 
+[Keyless]
 [Table("user_conf_models")]
-public class UserConfModel : BaseModel
+[Index("UserId", Name = "uni_user_conf_models_user_id", IsUnique = true)]
+public partial class UserConfModel
 {
     [Column("user_id")]
-    public long UserId { get; set; }
-    
-    [ForeignKey(nameof(UserId))]
-    public UserModel UserModel { get; set; } = null!;
-    
-    [Column(TypeName = "longtext")]
-    public List<string> LikeTags { get; set; } = new();
-    
-    [Column("update_username_date")]
+    public ulong? UserId { get; set; }
+
+    [Column("like_tags")]
+    public string? LikeTags { get; set; }
+
+    [Column("update_username_date", TypeName = "datetime(3)")]
     public DateTime? UpdateUsernameDate { get; set; }
-    
+
     [Column("publish_collections")]
-    public bool PublishCollections { get; set; }
-    
+    public bool? PublishCollections { get; set; }
+
     [Column("publish_followings")]
-    public bool PublishFollowings { get; set; }
-    
+    public bool? PublishFollowings { get; set; }
+
     [Column("publish_fans")]
-    public bool PublishFans { get; set; }
-    
+    public bool? PublishFans { get; set; }
+
     [Column("theme_style_id")]
-    public long? ThemeStyleId { get; set; }
+    public ulong? ThemeStyleId { get; set; }
 }

@@ -1,59 +1,57 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace blog.Models;
+namespace Blog.Models;
 
 [Table("article_models")]
-public class ArticleModel : BaseModel
+public partial class ArticleModel
 {
-    [Column(TypeName = "longtext")]
+    [Key]
+    [Column("id")]
+    public ulong Id { get; set; }
+
+    [Column("created_at", TypeName = "timestamp")]
+    public DateTime CreatedAt { get; set; }
+
+    [Column("updated_at", TypeName = "timestamp")]
+    public DateTime UpdatedAt { get; set; }
+
+    [Column("title")]
     public string? Title { get; set; }
-    
-    [Column(TypeName = "longtext")]
+
+    [Column("desc")]
     public string? Desc { get; set; }
-    
-    [Column(TypeName = "longtext")]
+
+    [Column("content")]
     public string? Content { get; set; }
-    
+
     [Column("content_id")]
     public ulong? ContentId { get; set; }
-    
-    [Column("tag_list", TypeName = "longtext")]
+
+    [Column("tag_list")]
     public string? TagList { get; set; }
-    
-    [Column(TypeName = "longtext")]
+
+    [Column("cover")]
     public string? Cover { get; set; }
-    
+
     [Column("user_id")]
-    public long? UserId { get; set; }
-    
+    public ulong? UserId { get; set; }
+
     [Column("look_count")]
     public long? LookCount { get; set; }
-    
+
     [Column("like_count")]
     public long? LikeCount { get; set; }
-    
+
     [Column("comment_count")]
     public long? CommentCount { get; set; }
-    
+
     [Column("collect_count")]
     public long? CollectCount { get; set; }
-    
+
     [Column("enable_comment")]
     public bool? EnableComment { get; set; }
-    
+
+    [Column("status")]
     public long? Status { get; set; }
-    
-    // 导航属性
-    [ForeignKey(nameof(UserId))]
-    public UserModel? UserModel { get; set; }
-    
-    // 反向导航属性
-    public ICollection<CommentModel>? Comments { get; set; }
-    
-    public ICollection<ArticleDiggModel>? ArticleDiggs { get; set; }
-    
-    public ICollection<UserArticleCollectModel>? UserArticleCollects { get; set; }
-    
-    public ICollection<UserArticleLookHistoryModel>? UserArticleLookHistories { get; set; }
 }

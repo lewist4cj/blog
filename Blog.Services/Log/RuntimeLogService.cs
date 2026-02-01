@@ -1,20 +1,21 @@
 using System.Collections;
 using Blog.Common.Utils;
-using Blog.Core.DbContext;
-using blog.Models;
-using blog.Models.enums;
+using Blog.Core.BlogDbContext;
+using Blog.Models;
 using blog.Models.enums.Log;
+using blog.Models.enums;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Services.Log;
 
-public class RuntimeLogService(BlogDbContext  context)
+public class RuntimeLogService(BlogDbContext context)
 {
     private ArrayList ItemList  = new ArrayList();
     public string Title { get; set; } = "";
     public LogLevelEnum Level { get; set; } = LogLevelEnum.Info;
     public LogModel? LogModel { get; set; }
-    public string ServiceName { get; set; }
+    public string ServiceName { get; set; } = string.Empty;
     
     
     private void AddItem(string label, string value, LogLevelEnum level)
@@ -58,7 +59,7 @@ public class RuntimeLogService(BlogDbContext  context)
             LogType = LogTypeEnum.RuntimeLogType,
             ServiceName = serviceName,
             Title = Title,
-            Level = Level,
+            Level = LogLevelEnum.Info,
             Content = string.Join("\n", ItemList),
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
@@ -71,21 +72,21 @@ public class RuntimeLogService(BlogDbContext  context)
                                               ORDER BY UpdatedAt DESC
                            """;
         
-        var logs =context.Logs
-            .FromSqlRaw(sql, (int)LogTypeEnum.RuntimeLogType, GetLogsSqlStr(runDateTime))
+        var logs = context.LogModels
+            .FromSqlRaw(sql, (sbyte)LogTypeEnum.RuntimeLogType, GetLogsSqlStr(runDateTime))
             .ToList();
         if (logs.Count > 0)
         {
             // update log
             logs[0].Content = logModel.Content;
-            context.Logs.Update(logs[0]);
+            context.LogModels.Update(logs[0]);
             context.SaveChanges();
             ItemList.Clear();
             return;
         }
        
             // insert log
-            context.Logs.Add(logModel);
+            context.LogModels.Add(logModel);
             context.SaveChanges();
             ItemList.Clear();
     }
