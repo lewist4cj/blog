@@ -8,7 +8,7 @@ namespace blog.Controllers;
 [ApiController]
 public class SiteController(ActionLogService actionLogService) : ControllerBase
 {
-    private readonly ActionLogService _actionLogService = actionLogService;
+    // private readonly ActionLogService _actionLogService = actionLogService;
 
     [HttpGet]
     public ApiResult<string> SiteInfo()
