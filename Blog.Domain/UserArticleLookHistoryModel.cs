@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Blog.Models;
+namespace Blog.Domain;
 
-[Table("category_models")]
-public partial class CategoryModel
+[Table("user_article_look_history_models")]
+public partial class UserArticleLookHistoryModel:BaseEntity
 {
-    [Key]
-    [Column("id")]
-    public ulong Id { get; set; }
+    // [Key]
+    // [Column("id")]
+    // public ulong Id { get; }
 
     [Column("created_at", TypeName = "timestamp")]
     public DateTime CreatedAt { get; set; }
@@ -16,10 +16,9 @@ public partial class CategoryModel
     [Column("updated_at", TypeName = "timestamp")]
     public DateTime UpdatedAt { get; set; }
 
-    [Column("title")]
-    [StringLength(32)]
-    public string? Title { get; set; }
-
     [Column("user_id")]
     public ulong? UserId { get; set; }
+
+    [Column("article_id")]
+    public ulong? ArticleId { get; set; }
 }

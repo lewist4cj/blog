@@ -1,5 +1,6 @@
 using Blog.Common;
 using Blog.Core.DbContext;
+using Blog.Core.Repository;
 using blog.Middleware;
 using Blog.Services.Log;
 using Blog.Services.Local;
@@ -29,6 +30,7 @@ builder.Services.AddDbContext<BlogDbContext>(options =>
            // 默认不跟踪查询结果，提高性能
            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
+builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddSingleton<LocalService>();
 
 // 注册日志服务

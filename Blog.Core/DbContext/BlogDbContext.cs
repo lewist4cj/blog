@@ -1,5 +1,8 @@
-using Blog.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Blog.Common;
+using Blog.Domain;
 
 namespace Blog.Core.DbContext;
 
@@ -12,6 +15,7 @@ public partial class BlogDbContext : Microsoft.EntityFrameworkCore.DbContext
     public BlogDbContext(DbContextOptions<BlogDbContext> options)
         : base(options)
     {
+        
     }
 
     public virtual DbSet<ArticleDiggModel> ArticleDiggModels { get; set; }
@@ -38,19 +42,33 @@ public partial class BlogDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     public virtual DbSet<UserModel> UserModels { get; set; }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     if (AppSettings.Configuration != null)
-    //     {
-    //         var connectionString = AppSettings.Configuration.GetConnectionString("DefaultConnection");
-    //         if (!string.IsNullOrEmpty(connectionString))
-    //         {
-    //             optionsBuilder.UseMySql(connectionString,
-    //                 ServerVersion.AutoDetect(connectionString))
-    //                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-    //         }
-    //     }
-    // }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            // 设计时配置 - 直接读取配置文件
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .Build();
+            
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            Console.WriteLine("Design-time connection string: " + connectionString);
+            
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            }
+            else
+            {
+                // 后备连接字符串
+                var fallbackConnectionString = "server=localhost;port=3306;database=blog_design_time;user=root;password=;";
+                Console.WriteLine("Using fallback connection string");
+                optionsBuilder.UseMySql(fallbackConnectionString, ServerVersion.AutoDetect(fallbackConnectionString));
+            }
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

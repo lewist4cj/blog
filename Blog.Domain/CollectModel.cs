@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Blog.Models;
+namespace Blog.Domain;
 
-[Table("global_notications")]
-public partial class GlobalNotication
+[Table("collect_models")]
+public partial class CollectModel:BaseEntity
 {
-    [Key]
-    [Column("id")]
-    public ulong Id { get; set; }
+    // [Key]
+    // [Column("id")]
+    // public ulong Id { get; }
 
     [Column("created_at", TypeName = "timestamp")]
     public DateTime CreatedAt { get; set; }
@@ -20,15 +20,17 @@ public partial class GlobalNotication
     [StringLength(32)]
     public string? Title { get; set; }
 
-    [Column("icon")]
+    [Column("abstract")]
     [StringLength(256)]
-    public string? Icon { get; set; }
+    public string? Abstract { get; set; }
 
-    [Column("content")]
-    [StringLength(64)]
-    public string? Content { get; set; }
-
-    [Column("href")]
+    [Column("cover")]
     [StringLength(256)]
-    public string? Href { get; set; }
+    public string? Cover { get; set; }
+
+    [Column("article_count")]
+    public long? ArticleCount { get; set; }
+
+    [Column("user_id")]
+    public ulong? UserId { get; set; }
 }

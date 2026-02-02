@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Models;
+namespace Blog.Domain;
 
 [Keyless]
 [Table("article_digg_models")]
 [Index("UserId", "ArticleId", Name = "idx_name", IsUnique = true)]
-public partial class ArticleDiggModel
+public partial class ArticleDiggModel:BaseEntity
 {
     [Column("user_id")]
     public ulong? UserId { get; set; }

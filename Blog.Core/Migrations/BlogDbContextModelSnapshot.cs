@@ -24,7 +24,7 @@ namespace Blog.Core.Migrations
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Blog.Models.ArticleDiggModel", b =>
+            modelBuilder.Entity("Blog.Domain.ArticleDiggModel", b =>
                 {
                     b.Property<ulong?>("ArticleId")
                         .HasColumnType("bigint unsigned")
@@ -46,7 +46,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("article_digg_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.ArticleModel", b =>
+            modelBuilder.Entity("Blog.Domain.ArticleModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("article_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.BannerModel", b =>
+            modelBuilder.Entity("Blog.Domain.BannerModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -164,7 +164,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("banner_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.CategoryModel", b =>
+            modelBuilder.Entity("Blog.Domain.CategoryModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -202,7 +202,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("category_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.CollectModel", b =>
+            modelBuilder.Entity("Blog.Domain.CollectModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +254,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("collect_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.CommentModel", b =>
+            modelBuilder.Entity("Blog.Domain.CommentModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -308,7 +308,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("comment_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.GlobalNotication", b =>
+            modelBuilder.Entity("Blog.Domain.GlobalNotication", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -357,7 +357,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("global_notications");
                 });
 
-            modelBuilder.Entity("Blog.Models.LogModel", b =>
+            modelBuilder.Entity("Blog.Domain.LogModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -444,7 +444,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("log_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.UserArticleCollectModel", b =>
+            modelBuilder.Entity("Blog.Domain.UserArticleCollectModel", b =>
                 {
                     b.Property<ulong?>("ArticleId")
                         .HasColumnType("bigint unsigned")
@@ -470,7 +470,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("user_article_collect_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.UserArticleLookHistoryModel", b =>
+            modelBuilder.Entity("Blog.Domain.UserArticleLookHistoryModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -507,7 +507,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("user_article_look_history_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.UserConfModel", b =>
+            modelBuilder.Entity("Blog.Domain.UserConfModel", b =>
                 {
                     b.Property<string>("LikeTags")
                         .HasColumnType("longtext")
@@ -543,7 +543,7 @@ namespace Blog.Core.Migrations
                     b.ToTable("user_conf_models");
                 });
 
-            modelBuilder.Entity("Blog.Models.UserModel", b =>
+            modelBuilder.Entity("Blog.Domain.UserModel", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Blog.Models;
+namespace Blog.Domain;
 
 [Table("article_models")]
-public partial class ArticleModel
+public partial class ArticleModel:BaseEntity
 {
-    [Key]
-    [Column("id")]
-    public ulong Id { get; set; }
+    // [Key]
+    // [Column("id")]
+    // public ulong Id { get;}
 
     [Column("created_at", TypeName = "timestamp")]
     public DateTime CreatedAt { get; set; }

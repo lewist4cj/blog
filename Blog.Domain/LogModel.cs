@@ -2,14 +2,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using blog.Models.enums.Log;
 
-namespace Blog.Models;
+namespace Blog.Domain;
 
 [Table("log_models")]
-public partial class LogModel
+public partial class LogModel:BaseEntity
 {
-    [Key]
-    [Column("id")]
-    public ulong Id { get; set; }
+    // [Key]
+    // [Column("id")]
+    // public ulong Id { get; }
 
     [Column("created_at", TypeName = "timestamp")]
     public DateTime CreatedAt { get; set; }

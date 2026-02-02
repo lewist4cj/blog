@@ -1,7 +1,7 @@
 using System.Collections;
 using Blog.Common.Utils;
 using Blog.Core.DbContext;
-using Blog.Models;
+using Blog.Domain;
 using blog.Models.enums.Log;
 using blog.Models.enums;
 
@@ -60,20 +60,15 @@ public class RuntimeLogService(BlogDbContext context)
             ServiceName = serviceName,
             Title = Title,
             Level = LogLevelEnum.Info,
-            Content = string.Join("\n", ItemList),
+            Content = string.Join("\n", ItemList.ToArray()),
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
-        // get logs by time
-        const string sql = """
-                           SELECT * FROM Logs 
-                                              WHERE LogType = {0} 
-                                              AND CreatedAt >= DATE_SUB(NOW(), {1})
-                                              ORDER BY UpdatedAt DESC
-                           """;
-        
+        // get logs by time (使用LINQ查询替代原生SQL以提高数据库兼容性)
+        var timeThreshold = GetTimeThreshold(runDateTime);
         var logs = context.LogModels
-            .FromSqlRaw(sql, (sbyte)LogTypeEnum.RuntimeLogType, GetLogsSqlStr(runDateTime))
+            .Where(l => l.LogType == LogTypeEnum.RuntimeLogType && l.CreatedAt >= timeThreshold)
+            .OrderByDescending(l => l.UpdatedAt)
             .ToList();
         if (logs.Count > 0)
         {
@@ -91,6 +86,20 @@ public class RuntimeLogService(BlogDbContext context)
             ItemList.Clear();
     }
 
+    private DateTime GetTimeThreshold(RunDateTimeEnum runDateTime)
+    {
+        return runDateTime switch
+        {
+            RunDateTimeEnum.Hour => DateTime.Now.AddHours(-1),
+            RunDateTimeEnum.Day => DateTime.Now.AddDays(-1),
+            RunDateTimeEnum.Week => DateTime.Now.AddDays(-7),
+            RunDateTimeEnum.Month => DateTime.Now.AddMonths(-1),
+            _ => DateTime.Now.AddHours(-1)
+        };
+    }
+
+    // 已废弃：原生SQL版本（仅作参考）
+    /*
     private string GetLogsSqlStr(RunDateTimeEnum runDateTime)
     {
         switch (runDateTime)
@@ -107,6 +116,7 @@ public class RuntimeLogService(BlogDbContext context)
                 return "INTERVAL 1 HOUR";
         }
     }
+    */
 
 
 }

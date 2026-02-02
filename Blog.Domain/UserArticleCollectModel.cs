@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Blog.Models;
+namespace Blog.Domain;
 
 [Keyless]
 [Table("user_article_collect_models")]
 [Index("UserId", "ArticleId", "CollectId", Name = "idx_name", IsUnique = true)]
-public partial class UserArticleCollectModel
+public partial class UserArticleCollectModel:BaseEntity
 {
     [Column("user_id")]
-    public ulong? UserId { get; set; }
+    public ulong? UserId { get;  }
 
     [Column("article_id")]
     public ulong? ArticleId { get; set; }
