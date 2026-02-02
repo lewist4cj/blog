@@ -1,5 +1,5 @@
 using Blog.Common;
-using Blog.Core.BlogDbContext;
+using Blog.Core.DbContext;
 using blog.Middleware;
 using Blog.Services.Log;
 using Blog.Services.Local;

@@ -1,11 +1,9 @@
-using Blog.Common;
 using Blog.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
-namespace Blog.Core.BlogDbContext;
+namespace Blog.Core.DbContext;
 
-public partial class BlogDbContext : DbContext
+public partial class BlogDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public BlogDbContext()
     {

@@ -4,7 +4,7 @@ using Blog.Services.Local;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Blog.Common.Utils;
-using Blog.Core.BlogDbContext;
+using Blog.Core.DbContext;
 using Blog.Models;
 
 namespace Blog.Services.Log;

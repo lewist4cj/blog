@@ -1,6 +1,6 @@
 using System.Collections;
 using Blog.Common.Utils;
-using Blog.Core.BlogDbContext;
+using Blog.Core.DbContext;
 using Blog.Models;
 using blog.Models.enums.Log;
 using blog.Models.enums;

@@ -10,26 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ad2e893a-21fd-4060-a0ad-c5da0ae46372" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.blog/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.blog/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Api/Controllers/LogController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Controllers/LogController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog.Api/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Core/DbContext/BlogDbContext.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Core/Migrations/20260131163607_InitialCreate.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Core/Migrations/20260131163607_InitialCreate.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Core/Migrations/BlogDbContextModelSnapshot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/ArticleDiggModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/ArticleModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/BannerModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/BaseModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/CategoryModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/CollectModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/CommentModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/GlobalNotificationModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/LogModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/UserArticleCollectModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/UserArticleLookHistoryModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/UserConfModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Models/UserModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Services/Blog.Services.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Blog.Services.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Core/BlogDbContext/BlogDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Core/DbContext/BlogDbContext.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog.Services/Log/ActionLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Log/ActionLogService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog.Services/Log/RuntimeLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Log/RuntimeLogService.cs" afterDir="false" />
     </list>
@@ -154,7 +136,7 @@
       <workItem from="1769864263540" duration="591000" />
       <workItem from="1769865212454" duration="13332000" />
       <workItem from="1769922277559" duration="4579000" />
-      <workItem from="1769955923209" duration="1596000" />
+      <workItem from="1769955923209" duration="2842000" />
     </task>
     <servers />
   </component>
