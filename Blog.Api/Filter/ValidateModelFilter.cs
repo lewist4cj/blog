@@ -1,7 +1,7 @@
 using Blog.Common.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-
+using System.Text.Json.Serialization;
 namespace Blog.Filter;
 
 public abstract class ValidateModelFilter
@@ -13,7 +13,7 @@ public abstract class ValidateModelFilter
             if (!context.ModelState.IsValid)
             {
                 var errors = context.ModelState.Keys
-                    .SelectMany(key => context.ModelState[key].Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
+                    .SelectMany(key => context.ModelState[key]!.Errors.Select(x => new ValidationError(key, x.ErrorMessage)))
                     .ToList();
                     
                 // 使用ApiResult类型返回统一响应
@@ -26,15 +26,10 @@ public abstract class ValidateModelFilter
             }
         }
     }
-    public class ValidationError
+    public class ValidationError(string field, string message)
     {
-        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-        public string Field { get; }
-        public string Message { get; }
-        public ValidationError(string field, string message)
-        {
-            Field = field != string.Empty ? field : null;
-            Message = message;
-        }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Field { get; } = field != string.Empty ? field : null;
+        public string Message { get; } = message;
     }
 }

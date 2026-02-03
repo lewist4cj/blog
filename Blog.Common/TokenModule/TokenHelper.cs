@@ -16,7 +16,7 @@ public static class TokenHepler
         var claim = new[]{
             new Claim("Id",jwtTokenModel.Id.ToString()),
             new Claim("UserName",jwtTokenModel.UserName!),
-            new Claim("Password",jwtTokenModel.Password!)
+            new Claim("NickName",jwtTokenModel.NickName!)
         };
 
         // 生成密钥

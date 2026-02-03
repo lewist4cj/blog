@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Domain;
 
-[Keyless]
 [Table("article_digg_models")]
 [Index("UserId", "ArticleId", Name = "idx_name", IsUnique = true)]
 public partial class ArticleDiggModel:BaseEntity

@@ -6,12 +6,6 @@ public static class WebApplicationExt
 {
     public static void UseEntry(this WebApplication app)
     {
-        // // Configure the HTTP request pipeline.
-        // if (app.Environment.IsDevelopment())
-        // {
-        //     app.UseSwagger();
-        //     app.UseSwaggerUI();
-        // }
 
         app.UseCors("any");
         app.UseLogMiddleware();

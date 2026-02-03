@@ -42,17 +42,17 @@ public class ActionLogService
     
     public LogModel? LogModel { get; set; } = null;
     
-    public static ActionLogService GetActionLogService(HttpContext context)
+    public static ActionLogService GetActionLogService(HttpContext ctx)
     {
-        var log = context.Items["log"];
+        var log = ctx.Items["log"];
         if (log == null)
         {
             // 遵循 HttpContext 使用规范：通过 RequestServices 获取服务实例
-            return context.RequestServices.GetRequiredService<ActionLogService>();
+            return ctx.RequestServices.GetRequiredService<ActionLogService>();
         }
         
 
-        context.Items["saved"] = true;
+        ctx.Items["saved"] = true;
         return (ActionLogService)log;
     }
 
@@ -100,9 +100,9 @@ public class ActionLogService
     /// 
     /// </summary>
     /// <param name="httpContext"></param>
-    public void IsMiddlewareSave(HttpContext httpContext)
+    public void IsMiddlewareSave(HttpContext ctx)
     {
-        var saved = httpContext.Items["saved"];
+        var saved = ctx.Items["saved"];
         if (saved == null)
         {
             return;
@@ -119,15 +119,10 @@ public class ActionLogService
             this.ItemList.Add(
                 $"<div class=\"log_response\"><pre class=\"log_json_body\">{this.ResponseBody}</pre></div>");
         }
-        // TODO insert the record into database
-        if (_context != null)
-        {
-            _context.LogModels.Add(LogModel!);
-            _context.SaveChanges();
-        }
+        this.Save(ctx);
     }
     
-    public long Insert(HttpContext ctx)
+    public long Save(HttpContext ctx)
     {
         var _itemList = new ArrayList();
         if (this.LogModel != null)
@@ -169,20 +164,18 @@ public class ActionLogService
         // setting item list
         var ip = ctx.Connection.RemoteIpAddress.ToString() ?? "unknow";
         var local = LocalService.GetLocalByIp(ip);
-        // 截断过长的地址信息，避免数据库字段长度限制
-        var truncatedAddr = local?.Length > 64 ? local.Substring(0, 64) : local;
+       
         var model  = new LogModel
         {
-            // Id由数据库自动生成，不需要手动设置
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now,
             LogType = LogTypeEnum.ActionLogType,
-            Title = "Action Log",
+            Title = "Action_Log",
             Content = string.Join("\n", _itemList.ToArray()),
             Level = LogLevelEnum.Info,
             UserId = 0,
             Ip = ip,
-            Addr = truncatedAddr,
+            Addr = local,
             IsRead = false,
         };
         // TODO insert the model record into database
@@ -195,7 +188,7 @@ public class ActionLogService
         }
         else
         {
-            throw new InvalidOperationException("DbContext 未正确注入，请检查依赖注入配置");
+            throw new InvalidOperationException("DbContext not injected correctly." );
         }
         LogModel = model;
         ItemList.Clear();

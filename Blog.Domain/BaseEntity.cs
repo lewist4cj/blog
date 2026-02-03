@@ -7,5 +7,6 @@ public class BaseEntity
 {
     [Key]
     [Column("id")]
-    public ulong Id { get;}
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public ulong Id { get; protected set; }
 }

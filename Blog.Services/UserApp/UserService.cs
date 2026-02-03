@@ -6,9 +6,10 @@ namespace Blog.Services.UserApp;
 
 public class UserService(IRepository<UserModel> userRepo):IUserService
 {
-    public async Task<UserModel?> GetUserAsync(string username, string password)
+    public async Task<UserModel?> GetUserAsync(UserModelLoginDto dto)
     {
-        var user = await userRepo.GetAsync(opt => opt.Username == username && opt.Password == password);
+        var md5Str = dto.Password?.ToMD5();
+        var user = await userRepo.GetAsync(opt => opt.Username!.Equals(dto.Username) && opt.Password!.Equals(md5Str));
         return user;
     }
 
@@ -21,8 +22,9 @@ public class UserService(IRepository<UserModel> userRepo):IUserService
     public async Task<bool> CheckPwd(UserModelLoginDto dto)
     {
         var md5Str = dto.Password?.ToMD5();
+        Console.WriteLine("md5_str: " + md5Str);
         var res = await userRepo
-            .GetAsync(p => p.Password.Equals(md5Str) && p.Username.Equals(dto.Username));
+            .GetAsync(p => p.Password!.Equals(md5Str) && p.Username!.Equals(dto.Username));
 
         if (res == null)
         {

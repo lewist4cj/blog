@@ -16,7 +16,7 @@ public class LoginController(RuntimeLogService runtimeLogService, IUserService u
     public async Task<ApiResult> CheckLogin(UserModelLoginDto dto)
     {
         runtimeLogService.AddItemNowTime();
-        runtimeLogService.AddItemInfo("login","check user login");
+        runtimeLogService.AddItemInfo("login info",$"username: {dto.Username},password:{dto.Password}");
         runtimeLogService.Save("LoginController/CheckLogin");
         
         if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
@@ -27,14 +27,30 @@ public class LoginController(RuntimeLogService runtimeLogService, IUserService u
         {
             return ApiResult.Failure(Code.InvalidCredentials);
         }
+        var user = await userService.GetUserAsync(dto);
+        if (user == null)
+        {
+            return ApiResult.Failure(Code.InvalidCredentials);
+        }
 
-        var token = GetToken();
+        var token = GetToken(user.Id, user.Username??"", user.Nickname??"");
         return ApiResult.Success(token);
     }
 
-    public string GetToken()
+    public string GetToken(ulong id, string username, string nickname)
     {
-        var token = AppSettings.Configuration.GetSection("Jwt").Get<JwtTokenModel>();
-        return TokenHepler.GenerateToken(token);
+        var jwtSection = AppSettings.Configuration!.GetSection("Jwt");
+        var tokenModel = jwtSection.Get<JwtTokenModel>();
+        
+        if (tokenModel == null)
+        {
+            throw new InvalidOperationException("JWT configuration is missing from app settings.");
+        }
+        tokenModel.Id = id;
+        tokenModel.UserName = username;
+        tokenModel.NickName = nickname;
+        var token = TokenHepler.GenerateToken(tokenModel);
+
+        return token;
     }
 }

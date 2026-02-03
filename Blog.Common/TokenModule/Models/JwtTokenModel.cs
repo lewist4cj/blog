@@ -10,31 +10,31 @@ public class JwtTokenModel
     /// <summary>
     /// 听众
     /// </summary>
-    public string?  Audience { get; set; }
+    public string?  Audience { get; set; } = "";
 
     /// <summary>
     /// 过期时间
     /// </summary>
-    public int Expire { get; set; }
+    public int Expire { get; set; } = 10;
 
     /// <summary>
     /// 安全密钥
     /// </summary>
-    public string?  Security { get; set; }
+    public string?  Security { get; set; } = "";
 
     /// <summary>
     /// ID
     /// </summary>
-    public int Id { get; set; }
+    public ulong Id { get; set; }
 
     /// <summary>
     /// 用户账号
     /// </summary>
     public string?  UserName { get; set; }
-
     /// <summary>
-    /// 用户名称
+    /// 昵称
     /// </summary>
-    public string?  Password { get; set; }
+    public string? NickName { get; set; }
+
 
 }
