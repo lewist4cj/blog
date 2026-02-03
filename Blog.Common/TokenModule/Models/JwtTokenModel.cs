@@ -1,0 +1,40 @@
+namespace Blog.Common.TokenModule.Models;
+
+public class JwtTokenModel
+{
+    /// <summary>
+    /// 发行人
+    /// </summary>
+    public string? Issuer { get; set; }
+
+    /// <summary>
+    /// 听众
+    /// </summary>
+    public string?  Audience { get; set; }
+
+    /// <summary>
+    /// 过期时间
+    /// </summary>
+    public int Expire { get; set; }
+
+    /// <summary>
+    /// 安全密钥
+    /// </summary>
+    public string?  Security { get; set; }
+
+    /// <summary>
+    /// ID
+    /// </summary>
+    public int Id { get; set; }
+
+    /// <summary>
+    /// 用户账号
+    /// </summary>
+    public string?  UserName { get; set; }
+
+    /// <summary>
+    /// 用户名称
+    /// </summary>
+    public string?  Password { get; set; }
+
+}

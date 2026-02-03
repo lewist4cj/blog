@@ -1,25 +1,40 @@
+using Blog.Common;
+using Blog.Common.TokenModule;
+using Blog.Common.TokenModule.Models;
 using Blog.Common.Utils;
 using Blog.Services.Log;
+using Blog.Services.UserApp;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class LoginController(RuntimeLogService runtimeLogService) : BaseController
+public class LoginController(RuntimeLogService runtimeLogService, IUserService userService) : BaseController
 {
 
-    [HttpGet]
-    public IActionResult Login()
+    [HttpPost]
+    public async Task<ApiResult> CheckLogin(UserModelLoginDto dto)
     {
-        runtimeLogService.AddItemInfo("RunTimeLog","ce");
         runtimeLogService.AddItemNowTime();
-        runtimeLogService.Save("Login");
+        runtimeLogService.AddItemInfo("login","check user login");
+        runtimeLogService.Save("LoginController/CheckLogin");
         
-        return Ok(new ApiResult<string>
+        if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
         {
-            Code = ApiResultCode.Success,
-            Message = "登录成功",
-            Data = "登录成功"
-        });
+            return ApiResult.Failure(Code.ValidationFailed);
+        }
+        if (!await userService.CheckPwd(dto))
+        {
+            return ApiResult.Failure(Code.InvalidCredentials);
+        }
+
+        var token = GetToken();
+        return ApiResult.Success(token);
+    }
+
+    public string GetToken()
+    {
+        var token = AppSettings.Configuration.GetSection("Jwt").Get<JwtTokenModel>();
+        return TokenHepler.GenerateToken(token);
     }
 }

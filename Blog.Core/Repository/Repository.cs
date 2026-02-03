@@ -41,6 +41,18 @@ public class Repository<TEntity>(BlogDbContext context): IRepository<TEntity>
         return await dbSet.FirstOrDefaultAsync(c => c.Id == id);
     }
 
+    public TEntity? Get(Func<TEntity, bool> predicate)
+    {
+        var dbSet = context.Set<TEntity>();
+        return dbSet.FirstOrDefault(predicate);
+    }
+
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        var dbSet = context.Set<TEntity>();
+        return await dbSet.FirstOrDefaultAsync(predicate);
+    }
+
     public TEntity Insert(TEntity entity)
     {
         var dbSet = context.Set<TEntity>();

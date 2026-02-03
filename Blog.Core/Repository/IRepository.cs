@@ -12,6 +12,8 @@ public interface IRepository<TEntity>
     Task<List<TEntity>> GetListAsync(Expression<Func<TEntity,bool>> predicate);
     TEntity? Get(ulong id);
     Task<TEntity?> GetAsync(ulong id);
+    TEntity? Get(Func<TEntity, bool> predicate);
+    Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate);
     TEntity Insert(TEntity entity);
     Task<TEntity> InsertAsync(TEntity entity);
     TEntity Delete(TEntity entity);

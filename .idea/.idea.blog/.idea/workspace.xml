@@ -9,11 +9,51 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad2e893a-21fd-4060-a0ad-c5da0ae46372" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Blog.Api/Extensions/WebApplicationBuilderExt.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Api/Extensions/WebApplicationExt.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Api/Filter/ValidateModelFilter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Api/appsettings.Production.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Common/ErrorCode/Code.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Common/ErrorCode/ErrorCode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Common/MD5Module/MD5Helper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Common/TokenModule/Models/JwtTokenModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Common/TokenModule/TokenHelper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Domain/IocTag.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Extensions/CollectServiceExtension.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Services/BlogProfile.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Services/UserApp/IUserService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Services/UserApp/UserLoginDto/UserModelLoginDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Blog.Services/UserApp/UserService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.blog/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.blog/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.blog/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.blog/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Blog.Api.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Blog.Api.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Controllers/LoginController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Controllers/LoginController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/Controllers/SiteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Controllers/SiteController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Blog.Api/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Core/BlogDbContext/BlogDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Core/DbContext/BlogDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Services/Log/ActionLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Log/ActionLogService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Blog.Services/Log/RuntimeLogService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Log/RuntimeLogService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Api/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Api/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Common/Blog.Common.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Common/Blog.Common.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Common/Utils/Result.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Common/Utils/Result.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Core/Repository/IRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Core/Repository/IRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Core/Repository/Repository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Core/Repository/Repository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/ArticleDiggModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/ArticleDiggModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/ArticleModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/ArticleModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/BannerModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/BannerModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/CategoryModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/CategoryModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/CollectModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/CollectModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/CommentModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/CommentModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/GlobalNotication.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/GlobalNotication.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/LogModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/LogModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/UserArticleCollectModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/UserArticleCollectModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/UserArticleLookHistoryModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/UserArticleLookHistoryModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/UserConfModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/UserConfModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Domain/UserModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Domain/Models/UserModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/Blog.Services.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.Services/Blog.Services.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/UserLoginApp/IUserLoginService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/UserLoginApp/UserLoginDto/UserLoginDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.Services/UserLoginApp/UserLoginService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Blog.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Blog.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/blog.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +67,34 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0a5004058a004fc08fe97d1fb42737be5e618/3c/9874fdf0/TokenValidationParameters.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6087e3e74a364c05b80ab3a4dd76dfa7ff10/bd/45bad310/IServiceCollection.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a1acd902dfc44e8e8fbfd0da5e8701d1cb08/50/9255c661/JwtBearerChallengeContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1d872bc46057829e348ade299703f677f13aaa7d76c6e8792dc97bf195968/HttpContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3bd4df5aff92cabbc4d630be64227073db1b8539b3a1e47786b4b189d7cdb7/DbContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/455e902e2260d6326d6a6c313254991431bcf4dae1801dd022cfb54572169453/ApiControllerAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4d942ca0f0d36dbcda20438e1a697bd3d73da53c804feb7f5040898e3e5e591/JwtBearerOptions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7690ca67887e5f5ab3c8f485deddef5a437f7f2ae3ff89c8a8a65765d9298f4/LambdaExpression.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/90881468902edd1541687085e1d38c9a384961660156efd4e193af62ce0d58e/HttpContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b69d26d8be6c9a66547d914640d41c6447eaf9773d86ffed1706af50cac8/Ok.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c7afd9724cf757c4a8469dba2bdc22ab5ac111c91f431dbfefc992dacb3e8635/ControllerBase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d562c132b2b09bb93469fd291d356db8c62af45767583f4dac8907177e4dec0/AuthorizationMiddleware.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d7585e64179a8a4720fc3f134d32b5209a813c9f0824eba59b3e27e689732/JwtBearerEvents.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/db7395f4add94e6d10e515b3e55373f2821f8323de7dc8e314d78feefacf5584/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f0c16cda8a141e194c9151fd8f6acd0f93ef39e54a2a250baf2e5b2fa1fac6/WebApplication.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Blog.Api/Controllers/SiteController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Api/Filter/ValidateModelFilter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Blog.Common/AppSettings.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Blog.Models/enums/RunDateTimeEnum.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Common/ErrorCode/Code.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Common/ErrorCode/ErrorCode.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Common/TokenModule/Models/JwtTokenModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Common/TokenModule/TokenHelper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Domain/IocTag.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Extensions/CollectServiceExtension.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Services/BlogProfile.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Services/UserApp/IUserService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Blog.Services/UserApp/UserService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/local/share/dotnet/sdk/10.0.102/Sdks/Microsoft.NET.Sdk.Web/Sdk/Sdk.targets" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -44,44 +109,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.blog: http.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Database Script.Blog.sql.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.blog: http.executor": "Run",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
-    ],
-    &quot;RunConfigurationTargetLRU&quot;: [
-      &quot;647ebb6c-da88-4982-8189-974f9131c355&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.blog: http">
-    <configuration name="Blog.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
-      <script-file value="$PROJECT_DIR$/Blog.Api/SQL/Blog.sql" />
-      <script-mode>FILE</script-mode>
-      <data-source id="647ebb6c-da88-4982-8189-974f9131c355" />
-      <method v="2" />
-    </configuration>
     <configuration name="blog: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Blog.Api/Blog.Api.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net10.0" />
@@ -114,11 +167,6 @@
         <option name="Build" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Database Script.Blog.sql" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -132,11 +180,8 @@
       <workItem from="1769690301953" duration="1077000" />
       <workItem from="1769691391535" duration="32842000" />
       <workItem from="1769774507788" duration="13821000" />
-      <workItem from="1769863904958" duration="183000" />
-      <workItem from="1769864263540" duration="591000" />
-      <workItem from="1769865212454" duration="13332000" />
-      <workItem from="1769922277559" duration="4579000" />
-      <workItem from="1769955923209" duration="2842000" />
+      <workItem from="1769839589170" duration="2352000" />
+      <workItem from="1770008315324" duration="40479000" />
     </task>
     <servers />
   </component>
@@ -163,6 +208,19 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Blog.Services/LogMgrApp/Log/ActionLogService.cs</url>
+          <line>42</line>
+          <properties documentPath="$PROJECT_DIR$/Blog.Services/Log/ActionLogService.cs" containingFunctionPresentation="Property 'LogModel'">
+            <startOffsets>
+              <option value="1064" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1068" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
