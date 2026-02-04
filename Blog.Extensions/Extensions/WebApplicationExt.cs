@@ -1,18 +1,22 @@
-using blog.Middleware;
+using Microsoft.AspNetCore.Builder;
+using Blog.Extensions.Middleware;
+using Serilog;
+using Blog.Common;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
-namespace blog.Extensions;
+namespace Blog.Extensions;
 
 public static class WebApplicationExt
 {
     public static void UseEntry(this WebApplication app)
     {
-
         app.UseCors("any");
         app.UseLogMiddleware();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseMapControllers();
-        
+
     }
 
     private static void UseMapControllers(this WebApplication app)

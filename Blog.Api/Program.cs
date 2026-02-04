@@ -1,5 +1,4 @@
-using blog.Extensions;
-using blog.Middleware;
+using Blog.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

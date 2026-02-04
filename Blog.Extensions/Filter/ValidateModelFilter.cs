@@ -2,7 +2,8 @@ using Blog.Common.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json.Serialization;
-namespace Blog.Filter;
+
+namespace Blog.Extensions.Filter;
 
 public abstract class ValidateModelFilter
 {

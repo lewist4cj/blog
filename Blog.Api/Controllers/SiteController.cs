@@ -1,7 +1,7 @@
-using Blog.Api.Filter;
 using Blog.Common;
 using Blog.Common.Utils;
 using Blog.Domain.enums;
+using Blog.Extensions.Filter;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;

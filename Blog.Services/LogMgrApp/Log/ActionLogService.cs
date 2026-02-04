@@ -16,7 +16,8 @@ public class ActionLogService
 
     public ActionLogService()
     {
-        
+        _context = null;
+        _localService = null!;
     }
     public ActionLogService(BlogDbContext context, LocalService localService)
     {
@@ -162,8 +163,8 @@ public class ActionLogService
         }
         
         // setting item list
-        var ip = ctx.Connection.RemoteIpAddress.ToString() ?? "unknow";
-        var local = LocalService.GetLocalByIp(ip);
+        var ip = ctx.Connection.RemoteIpAddress.ToString();
+        var local = _localService.GetLocalByIp(ip);
        
         var model  = new LogModel
         {

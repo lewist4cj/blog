@@ -1,0 +1,36 @@
+
+
+Date：2026-02-04 23:40:33
+LogLevel：Information
+Message：start service register ...
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-04 23:40:33
+LogLevel：Information
+Message：service register complete, total: 
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-04 23:40:33
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-04 23:40:34
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-04 23:40:34
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-04 23:40:34
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-04 23:40:34
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------

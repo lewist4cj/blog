@@ -1,33 +1,81 @@
 using System.Text;
 using Blog.Common;
 using Blog.Common.Utils;
-using Blog.Core.DbContext;
-using Blog.Extensions;
-using Blog.Filter;
-using Blog.Services;
-using Blog.Services.Local;
-using Blog.Services.Log;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using Blog.Common.TokenModule.Models;
 using Blog.Common.RedisModule;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Blog.Services;
+using Blog.Services.Local;
+using Blog.Services.Log;
+using Blog.Core.DbContext;
+using Blog.Extensions.Filter;
+using Serilog;
+using System.IO;
+using Microsoft.Extensions.Logging;
 
-namespace blog.Extensions;
+namespace Blog.Extensions;
 
 public static class WebApplicationBuilderExt
 {
     public static IServiceCollection AddEntry(this IServiceCollection services)
     {
-        // AppSettings Register 
+        // Appsettings Register 
         services.AddSingleton(new AppSettings(services.GetConfiguration()));
-        #region JWT Authentication
+        
+        // 初始化 Serilog 配置
+        string SerilogOutputTemplate = "{NewLine}{NewLine}Date：{Timestamp:yyyy-MM-dd HH:mm:ss}{NewLine}LogLevel：{Level}{NewLine}Message：{Message}{NewLine}{Exception}" + new string('-', 100);
+        
+        // 确保日志目录存在
+        var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+        if (!Directory.Exists(logDirectory))
+        {
+            Directory.CreateDirectory(logDirectory);
+        }
+        
+        var logFilePath = Path.Combine(logDirectory, "log_.log");
+        
+        // 使用 appsettings.json 配置，但要确保配置已经加载
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console(outputTemplate: SerilogOutputTemplate)
+            .WriteTo.File(logFilePath,
+                rollingInterval: RollingInterval.Day,
+                outputTemplate: SerilogOutputTemplate,
+                retainedFileCountLimit: 31,
+                retainedFileTimeLimit: TimeSpan.FromDays(2),
+                rollOnFileSizeLimit: true,
+                fileSizeLimitBytes: 52428800 // 50MB
+            )
+            .CreateLogger();
+        
+        // Serilog Register
+        services.AddLogging(builder => 
+        {
+            builder.ClearProviders(); // 清除其他日志提供者
+            builder.AddSerilog(Log.Logger, dispose: true);
+        });
+        
+        // Jwt Authentication configruation 
+        services.AddJwtAuthentication();
+        // Service Register
+        services.AddRegister();
+
+        return services;
+    }
+
+    
+    private static void AddJwtAuthentication(this IServiceCollection services)
+    {
         var tokenModel = AppSettings.Configuration?.GetSection("Jwt").Get<JwtTokenModel>();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {
-                
+
                 var appEnvironment = AppSettings.Configuration!["AppEnvironment"] ?? "Production";
                 opt.RequireHttpsMetadata = appEnvironment != "Development";
                 opt.TokenValidationParameters = new()
@@ -60,18 +108,17 @@ public static class WebApplicationBuilderExt
                     }
                 };
             });
-        #endregion
-
-        #region Add services register
-
+    }
+    private static void AddRegister(this IServiceCollection services)
+    {
         services.AddControllers(opts =>
-        {
-            opts.Filters.Add<ValidateModelFilter.ValidateModelAttribute>();
-        }).AddJsonOptions(opts =>
-        {
-            opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            opts.JsonSerializerOptions.WriteIndented = false;
-        });
+       {
+           opts.Filters.Add<ValidateModelFilter.ValidateModelAttribute>();
+       }).AddJsonOptions(opts =>
+       {
+           opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+           opts.JsonSerializerOptions.WriteIndented = false;
+       });
 
         services.AddHttpContextAccessor();
 
@@ -81,7 +128,7 @@ public static class WebApplicationBuilderExt
         services.AddRepositoryRegister();
         services.AddServiceRegister();
         services.AddSingleton<LocalService>();
-        
+
         services.AddScoped<ActionLogService>();
         services.AddScoped<RuntimeLogService>();
         services.AddDbContext<BlogDbContext>(opt =>
@@ -92,14 +139,13 @@ public static class WebApplicationBuilderExt
                 // disable QueryTrackingBehavior to improve performance
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
-        #endregion
-        return services;
     }
-
     private static IConfiguration GetConfiguration(this IServiceCollection services)
     {
         var config = services.BuildServiceProvider().GetService<IConfiguration>()!;
         return config;
     }
-    
+
+  
+
 }

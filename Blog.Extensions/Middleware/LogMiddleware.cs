@@ -1,7 +1,8 @@
-using System.IO;
 using Blog.Services.Log;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
-namespace blog.Middleware;
+namespace Blog.Extensions.Middleware;
 
 public class LogMiddleware(RequestDelegate next)
 {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
-namespace Blog.Api.Filter;
+namespace Blog.Extensions.Filter;
 
 public class AuthorizationFilterAttribute : AuthorizeAttribute
 {
