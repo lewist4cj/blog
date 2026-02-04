@@ -1,6 +1,7 @@
 using System.Text;
 using Blog.Common;
-using Blog.Common.TokenModule.Models;
+using Blog.Common.TokenModule;
+using Blog.Common.Utils;
 using Blog.Core.DbContext;
 using Blog.Extensions;
 using Blog.Filter;
@@ -10,6 +11,7 @@ using Blog.Services.Log;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json;
 
 namespace blog.Extensions;
 
@@ -38,11 +40,20 @@ public static class WebApplicationBuilderExt
                 {
                     OnChallenge = context =>
                     {
-                        // 此处代码终止
+                        // if no unauthorized request, challenge to return 401
                         context.HandleResponse();
-                        var res = "{\"code\":203,\"error\":\"no authorization\"}";
+                        var res = JsonSerializer.Serialize(ApiResult.Failure(Code.Unauthorized));
                         context.Response.ContentType = "application/json";
-                        context.Response.StatusCode = StatusCodes.Status203NonAuthoritative;
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.WriteAsync(res);
+                        return Task.FromResult(0);
+                    },
+                    OnForbidden = context =>
+                    {
+                        // the client will get 403 Forbidden if the user does not have permission
+                        var res = JsonSerializer.Serialize(ApiResult.Failure(Code.Forbidden));
+                        context.Response.ContentType = "application/json";
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         context.Response.WriteAsync(res);
                         return Task.FromResult(0);
                     }
@@ -57,7 +68,7 @@ public static class WebApplicationBuilderExt
             opts.Filters.Add<ValidateModelFilter.ValidateModelAttribute>();
         }).AddJsonOptions(opts =>
         {
-            opts.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+            opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             opts.JsonSerializerOptions.WriteIndented = false;
         });
         

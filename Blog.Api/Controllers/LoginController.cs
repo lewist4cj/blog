@@ -1,14 +1,12 @@
 using Blog.Common;
 using Blog.Common.TokenModule;
-using Blog.Common.TokenModule.Models;
 using Blog.Common.Utils;
+using Blog.Domain;
 using Blog.Services.Log;
 using Blog.Services.UserApp;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;
-[Route("api/[controller]/[action]")]
-[ApiController]
 public class LoginController(RuntimeLogService runtimeLogService, IUserService userService) : BaseController
 {
 
@@ -33,11 +31,11 @@ public class LoginController(RuntimeLogService runtimeLogService, IUserService u
             return ApiResult.Failure(Code.InvalidCredentials);
         }
 
-        var token = GetToken(user.Id, user.Username??"", user.Nickname??"");
+        var token = GetToken(user);
         return ApiResult.Success(token);
     }
 
-    public string GetToken(ulong id, string username, string nickname)
+    public string GetToken(UserModel user)
     {
         var jwtSection = AppSettings.Configuration!.GetSection("Jwt");
         var tokenModel = jwtSection.Get<JwtTokenModel>();
@@ -46,9 +44,10 @@ public class LoginController(RuntimeLogService runtimeLogService, IUserService u
         {
             throw new InvalidOperationException("JWT configuration is missing from app settings.");
         }
-        tokenModel.Id = id;
-        tokenModel.UserName = username;
-        tokenModel.NickName = nickname;
+        tokenModel.Id = user.Id;
+        tokenModel.UserName = user.Username;
+        tokenModel.NickName = user.Nickname;
+        tokenModel.Role = user.Role;
         var token = TokenHepler.GenerateToken(tokenModel);
 
         return token;

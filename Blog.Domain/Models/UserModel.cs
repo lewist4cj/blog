@@ -51,5 +51,5 @@ public partial class UserModel:BaseEntity
     public string? OpenId { get; set; }
 
     [Column("role")]
-    public sbyte? Role { get; set; }
+    public sbyte Role { get; set; }
 }

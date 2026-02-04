@@ -1,5 +1,4 @@
-namespace Blog.Common.TokenModule.Models;
-
+namespace Blog.Common.TokenModule;
 public class JwtTokenModel
 {
     /// <summary>
@@ -35,6 +34,9 @@ public class JwtTokenModel
     /// 昵称
     /// </summary>
     public string? NickName { get; set; }
-
-
+    
+    /// <summary>
+    /// 用户角色
+    /// </summary>
+    public sbyte Role { get; set; }
 }

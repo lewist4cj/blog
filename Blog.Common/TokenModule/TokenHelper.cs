@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Blog.Common.TokenModule.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Blog.Common.TokenModule;
@@ -12,11 +11,14 @@ public static class TokenHepler
     {
         if (jwtTokenModel == null) 
             return "JwtTokenModel object is null"; 
-
-        var claim = new[]{
-            new Claim("Id",jwtTokenModel.Id.ToString()),
-            new Claim("UserName",jwtTokenModel.UserName!),
-            new Claim("NickName",jwtTokenModel.NickName!)
+        var id = jwtTokenModel.Id;
+        var username = jwtTokenModel.UserName??"";
+        // var nickname = jwtTokenModel.NickName ?? "";
+        var role = jwtTokenModel.Role;
+        var claims = new[]{
+            new Claim("Id",id.ToString()),
+            new Claim("UserName",username!),
+            new Claim("Role", role.ToString())
         };
 
         // 生成密钥
@@ -29,7 +31,7 @@ public static class TokenHepler
             audience: jwtTokenModel.Audience,
             expires: DateTime.Now.AddMinutes(jwtTokenModel.Expire),
             signingCredentials: signingCredential,
-            claims: claim
+            claims: claims
         );
 
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);

@@ -1,12 +1,11 @@
 using Blog.Common.Utils;
 using Blog.Services.Log;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;
-[Route("api/[controller]/[action]")]
-[ApiController]
-public class SiteController : ControllerBase
+[Authorize(Roles = "3" ,AuthenticationSchemes = "Bearer")]
+public class SiteController : BaseController
 {
     // private readonly ActionLogService _actionLogService = actionLogService;
 
