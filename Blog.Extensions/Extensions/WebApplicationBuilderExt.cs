@@ -16,7 +16,6 @@ using Blog.Services.Log;
 using Blog.Core.DbContext;
 using Blog.Extensions.Filter;
 using Serilog;
-using System.IO;
 using Microsoft.Extensions.Logging;
 
 namespace Blog.Extensions;
@@ -27,11 +26,20 @@ public static class WebApplicationBuilderExt
     {
         // Appsettings Register 
         services.AddSingleton(new AppSettings(services.GetConfiguration()));
-        
-        // 初始化 Serilog 配置
+        // initialize serilog configuration
+        services.AddSerilog();
+        // Jwt Authentication configuration 
+        services.AddJwtAuthentication();
+        // Service Register
+        services.AddRegister();
+
+        return services;
+    }
+
+    private static void AddSerilog(this IServiceCollection services)
+    {
         string SerilogOutputTemplate = "{NewLine}{NewLine}Date：{Timestamp:yyyy-MM-dd HH:mm:ss}{NewLine}LogLevel：{Level}{NewLine}Message：{Message}{NewLine}{Exception}" + new string('-', 100);
         
-        // 确保日志目录存在
         var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
         if (!Directory.Exists(logDirectory))
         {
@@ -60,14 +68,7 @@ public static class WebApplicationBuilderExt
             builder.AddSerilog(Log.Logger, dispose: true);
         });
         
-        // Jwt Authentication configruation 
-        services.AddJwtAuthentication();
-        // Service Register
-        services.AddRegister();
-
-        return services;
     }
-
     
     private static void AddJwtAuthentication(this IServiceCollection services)
     {
