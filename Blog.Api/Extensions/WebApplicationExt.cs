@@ -10,9 +10,7 @@ public static class WebApplicationExt
         app.UseCors("any");
         app.UseLogMiddleware();
         app.UseAuthentication();
-
         app.UseAuthorization();
-
         app.UseMapControllers();
         
     }

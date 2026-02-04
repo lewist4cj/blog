@@ -1,5 +1,6 @@
 using Blog.Common;
 using Blog.Common.TokenModule;
+using Blog.Common.TokenModule.Models;
 using Blog.Common.Utils;
 using Blog.Domain;
 using Blog.Services.Log;

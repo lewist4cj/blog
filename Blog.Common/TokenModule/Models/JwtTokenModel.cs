@@ -1,24 +1,30 @@
-namespace Blog.Common.TokenModule;
-public class JwtTokenModel
+using System.ComponentModel.DataAnnotations;
+
+namespace Blog.Common.TokenModule.Models;
+
+public class JwtTokenModel : IValidatableObject
 {
     /// <summary>
     /// 发行人
     /// </summary>
+    [Required(ErrorMessage = "Jwt Issuer is required.")]
     public string? Issuer { get; set; }
 
     /// <summary>
     /// 听众
     /// </summary>
+    [Required(ErrorMessage = "Jwt Audience is required.")]
     public string?  Audience { get; set; } = "";
 
     /// <summary>
     /// 过期时间
     /// </summary>
-    public int Expire { get; set; } = 10;
+    public int Expires { get; set; } = 10;
 
     /// <summary>
     /// 安全密钥
     /// </summary>
+    [Required(ErrorMessage = "Jwt Security key is required.")]
     public string?  Security { get; set; } = "";
 
     /// <summary>
@@ -30,6 +36,7 @@ public class JwtTokenModel
     /// 用户账号
     /// </summary>
     public string?  UserName { get; set; }
+    
     /// <summary>
     /// 昵称
     /// </summary>
@@ -38,5 +45,18 @@ public class JwtTokenModel
     /// <summary>
     /// 用户角色
     /// </summary>
-    public sbyte Role { get; set; }
+    public sbyte? Role { get; set; }
+    
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        var results = new List<ValidationResult>();
+        
+        // 验证Expire值的合理性
+        if (Expires <= 0)
+        {
+            results.Add(new ValidationResult("Expire value must be greater than 0.", [nameof(Expires)]));
+        }
+        
+        return results;
+    }
 }

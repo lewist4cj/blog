@@ -1,4 +1,4 @@
-namespace Blog.Domain;
+namespace Blog.Common;
 
 public interface ITag
 {

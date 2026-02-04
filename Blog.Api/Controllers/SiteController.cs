@@ -1,20 +1,20 @@
+using Blog.Api.Filter;
+using Blog.Common;
 using Blog.Common.Utils;
-using Blog.Services.Log;
-using Microsoft.AspNetCore.Authorization;
+using Blog.Domain.enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;
-[Authorize(Roles = "3" ,AuthenticationSchemes = "Bearer")]
-public class SiteController : BaseController
+[AuthorizationFilter(Role:RoleEnum.SuperAdmin,AuthenticationSchemes = "Bearer")]
+public class SiteController(IRedisWorker redis) : BaseController
 {
-    // private readonly ActionLogService _actionLogService = actionLogService;
-
     [HttpGet]
     public ApiResult SiteInfo()
     { 
-       var log =   ActionLogService.GetActionLogService(HttpContext);
-       log.AddItemInfo("test_csharp_site", "test_csharp_val");
-       log.Save(HttpContext);
+    //    var log =   ActionLogService.GetActionLogService(HttpContext);
+    //    log.AddItemInfo("test_csharp_site", "test_csharp_val");
+    //    log.Save(HttpContext);
+        redis.SetString("test_csharp_site", "test_csharp_val",TimeSpan.FromSeconds(30));
        return ApiResult.Success();
     }
 }

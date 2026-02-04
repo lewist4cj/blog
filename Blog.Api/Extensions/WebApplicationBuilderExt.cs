@@ -1,6 +1,5 @@
 using System.Text;
 using Blog.Common;
-using Blog.Common.TokenModule;
 using Blog.Common.Utils;
 using Blog.Core.DbContext;
 using Blog.Extensions;
@@ -12,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using Blog.Common.TokenModule.Models;
+using Blog.Common.RedisModule;
 
 namespace blog.Extensions;
 
@@ -26,7 +27,7 @@ public static class WebApplicationBuilderExt
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {
-                // 从appsettings.json读取自定义环境配置
+                
                 var appEnvironment = AppSettings.Configuration!["AppEnvironment"] ?? "Production";
                 opt.RequireHttpsMetadata = appEnvironment != "Development";
                 opt.TokenValidationParameters = new()
@@ -71,13 +72,12 @@ public static class WebApplicationBuilderExt
             opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             opts.JsonSerializerOptions.WriteIndented = false;
         });
-        
-
 
         services.AddHttpContextAccessor();
 
         // Note: Current version is 12.0. For version 13.0+, params should accept Type[] array
         services.AddAutoMapper(typeof(BlogProfile));
+        services.AddSingleton<RedisCore>();
         services.AddRepositoryRegister();
         services.AddServiceRegister();
         services.AddSingleton<LocalService>();

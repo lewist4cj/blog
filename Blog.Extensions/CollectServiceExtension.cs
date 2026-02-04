@@ -1,5 +1,7 @@
 using System.Reflection;
-using Blog.Domain;
+using Blog.Common;
+using Blog.Common.Utils;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 namespace Blog.Extensions;
 
@@ -16,18 +18,25 @@ public static class CollectServiceExtension
 
     public static IServiceCollection AddServiceRegister(this IServiceCollection servicesCollection)
     {
-        var assService = Assembly.Load("Blog.Services");
-        var implementTypes = assService.GetTypes()
-            .Where(item => item.IsAssignableTo(typeof(ITag))
-                           && item is { IsAbstract: false, IsInterface: false });
-        foreach (var implementType in implementTypes)
+        var namspaceName = AppSettings.Configuration?.GetSection("IocTags").Get<IocTagsConfig>();
+        var list = namspaceName?.ValidateAndReturn().List!;
+        list.ForEach(item =>
         {
-            var interfaceType = implementType
-                .GetInterfaces()
-                .FirstOrDefault(item => item != typeof(ITag))!;
+            var ass = Assembly.Load(item);
+            Console.WriteLine($"加载命名空间：{item}");
+            var implementTypes = ass.GetTypes()
+                .Where(item => item.IsAssignableTo(typeof(ITag))
+                               && item is { IsAbstract: false, IsInterface: false });
+            foreach (var implementType in implementTypes)
+            {
+                var interfaceType = implementType
+                    .GetInterfaces()
+                    .FirstOrDefault(item => item != typeof(ITag))!;
+                     servicesCollection.AddTransient(interfaceType, implementType);
 
-            servicesCollection.AddTransient(interfaceType, implementType);
+            }
         }
+        );
         return servicesCollection;
     }
 }

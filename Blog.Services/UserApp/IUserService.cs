@@ -1,3 +1,4 @@
+using Blog.Common;
 using Blog.Domain;
 
 namespace Blog.Services.UserApp;
