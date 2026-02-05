@@ -176,7 +176,12 @@ public static class WebApplicationBuilderExt
         services.AddControllers(opts =>
        {
            opts.Filters.Add<ValidateModelFilter.ValidateModelAttribute>();
-       }).AddJsonOptions(opts =>
+       })
+       .ConfigureApiBehaviorOptions(options =>
+       {
+           options.SuppressModelStateInvalidFilter = true;
+       })
+       .AddJsonOptions(opts =>
        {
            opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
            opts.JsonSerializerOptions.WriteIndented = false;

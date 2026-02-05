@@ -6,7 +6,7 @@ public class ApiResult
 {
 
     public uint Code { get; set; }
- 
+
     public string Message { get; set; }
 
     public object? Data { get; set; } = null;
@@ -17,7 +17,7 @@ public class ApiResult
         this.Message = message;
         this.Data = data;
     }
-    
+
     public ApiResult(string message)
     {
         this.Code = 200;
@@ -31,7 +31,7 @@ public class ApiResult
         this.Message = "Success";
         this.Data = data;
     }
-    
+
     public ApiResult(ErrorCode code)
     {
         this.Code = code.Code;
@@ -45,11 +45,19 @@ public class ApiResult
         this.Message = message;
         this.Data = data;
     }
-    
- 
+
+
     public static ApiResult Success(object data) => new(data);
 
     public static ApiResult Success() => new("success");
 
     public static ApiResult Failure(ErrorCode code) => new(code);
+    public static ApiResult Failure(ErrorCode code, object errors)
+    {
+        return new ApiResult(400u, code.Message, errors!);
+    }
+    public static ApiResult Failure(string message, object errors)
+    {
+        return new ApiResult(400u, message, errors!);
+    }
 }

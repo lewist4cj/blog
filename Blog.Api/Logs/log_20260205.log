@@ -554,3 +554,243 @@ Date：2026-02-05 18:48:54
 LogLevel：Information
 Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - 400 null "application/problem+json; charset=utf-8" 453.7147ms
 ----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:02
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:03
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:03
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:03
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:03
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:07
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:08
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:08
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:08
+LogLevel：Information
+Message：Executing "BadRequestObjectResult", writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:08
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 14.6461ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:08
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:21:08
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - 400 null "application/problem+json; charset=utf-8" 528.6931ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:19
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:20
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:20
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:20
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:20
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:22
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:22
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:22
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:22
+LogLevel：Information
+Message：Executing "BadRequestObjectResult", writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:22
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 14.1512ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:22
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:22
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - 400 null "application/problem+json; charset=utf-8" 410.6662ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:59
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:59
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:59
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:59
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:26:59
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:27:00
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:27:01
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:27:01
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:27:01
+LogLevel：Information
+Message：Executing "BadRequestObjectResult", writing value of type '"Microsoft.AspNetCore.Mvc.ValidationProblemDetails"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:27:01
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 15.5802ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:27:01
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:27:01
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - 400 null "application/problem+json; charset=utf-8" 452.8321ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:01
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:01
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:01
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:01
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:01
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:04
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:04
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:04
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:10
+LogLevel：Information
+Message：Executing JsonResult, writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:13
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 9088.4832ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:13
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 19:29:13
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - 400 null "application/json; charset=utf-8" 9509.6456ms
+----------------------------------------------------------------------------------------------------
