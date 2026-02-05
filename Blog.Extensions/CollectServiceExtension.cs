@@ -21,9 +21,7 @@ public static class CollectServiceExtension
 
     public static IServiceCollection AddServiceRegister(this IServiceCollection servicesCollection)
     {
-        // 获取日志实例，记录加载完成的日志
-        Log.Information("start service register ...");
-        
+
         var namspaceName = AppSettings.Configuration?.GetSection("IocTags").Get<IocTagsConfig>();
         var list = namspaceName?.ValidateAndReturn().List!;
         list.ForEach(item =>
@@ -42,8 +40,6 @@ public static class CollectServiceExtension
             }
         }
         );
-        Log.Information("service register complete, total: ",list.Count);
-
         return servicesCollection;
     }
 }

@@ -17,6 +17,7 @@ using Blog.Core.DbContext;
 using Blog.Extensions.Filter;
 using Serilog;
 using Microsoft.Extensions.Logging;
+using Blog.Extensions.Config;
 
 namespace Blog.Extensions;
 
@@ -24,6 +25,8 @@ public static class WebApplicationBuilderExt
 {
     public static IServiceCollection AddEntry(this IServiceCollection services)
     {
+        services.AddTransient(typeof(SiteMgr),typeof(SiteMgr));
+        services.AddTransient(typeof(OtherMgr),typeof(OtherMgr));
         // Appsettings Register 
         services.AddSingleton(new AppSettings(services.GetConfiguration()));
         // initialize serilog configuration
@@ -32,7 +35,6 @@ public static class WebApplicationBuilderExt
         services.AddJwtAuthentication();
         // Service Register
         services.AddRegister();
-
         return services;
     }
 
@@ -40,18 +42,19 @@ public static class WebApplicationBuilderExt
     {
         string SerilogOutputTemplate = "{NewLine}{NewLine}Date：{Timestamp:yyyy-MM-dd HH:mm:ss}{NewLine}LogLevel：{Level}{NewLine}Message：{Message}{NewLine}{Exception}" + new string('-', 100);
 
-        var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
-        if (!Directory.Exists(logDirectory))
-        {
-            Directory.CreateDirectory(logDirectory);
-        }
+        var logPath = AppSettings.app("Serilogs","Path") ?? "Logs";
+      
+        // var logDirectory = Path.Combine(Directory.GetCurrentDirectory(),logPath);
+        // if (!Directory.Exists(logDirectory))
+        // {
+        //     Directory.CreateDirectory(logDirectory);
+        // }
 
-        var logFilePath = Path.Combine(logDirectory, "log_.log");
-
-        // 使用 appsettings.json 配置，但要确保配置已经加载
+        // var logFilePath = Path.Combine(logDirectory, "log_.log");
+        
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console(outputTemplate: SerilogOutputTemplate)
-            .WriteTo.File(logFilePath,
+            .WriteTo.File(logPath,
                 rollingInterval: RollingInterval.Day,
                 outputTemplate: SerilogOutputTemplate,
                 retainedFileCountLimit: 31,
@@ -64,7 +67,7 @@ public static class WebApplicationBuilderExt
         // Serilog Register
         services.AddLogging(builder =>
         {
-            builder.ClearProviders(); // 清除其他日志提供者
+            builder.ClearProviders(); // clear other logger
             builder.AddSerilog(Log.Logger, dispose: true);
         });
 
