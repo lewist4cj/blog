@@ -5,7 +5,7 @@ using Blog.Extensions.Filter;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers;
-[AuthorizationFilter(Role:RoleEnum.SuperAdmin,AuthenticationSchemes = "Bearer")]
+[AuthorizationFilter(Role:RoleEnum.SuperAdmin)]
 public class SiteController(IRedisWorker redis) : BaseController
 {
     [HttpGet]

@@ -41,11 +41,7 @@ public class ApiResult
         this.Message = message;
         this.Data = null;
     }
-    
-    /// <summary>
-    /// 构造函数 - 成功响应带数据
-    /// </summary>
-    /// <param name="data">响应数据</param>
+
     public ApiResult(object data)
     {
         this.Code = 200;
@@ -53,23 +49,13 @@ public class ApiResult
         this.Data = data;
     }
     
-    /// <summary>
-    /// 构造函数 - 错误响应
-    /// </summary>
-    /// <param name="code">错误码</param>
     public ApiResult(ErrorCode code)
     {
         this.Code = code.Code;
         this.Message = code.Message;
         this.Data = null;
     }
-    
-    /// <summary>
-    /// 构造函数 - 自定义错误响应
-    /// </summary>
-    /// <param name="code">状态码</param>
-    /// <param name="message">错误消息</param>
-    /// <param name="data">错误数据</param>
+
     public ApiResult(uint code, string message, object data)
     {
         this.Code = code;
@@ -78,18 +64,18 @@ public class ApiResult
     }
     
     /// <summary>
-    /// 创建成功响应
+    /// response success
     /// </summary>
-    /// <param name="data">数据</param>
+    /// <param name="data">data</param>
     /// <returns>成功结果</returns>
     public static ApiResult Success(object data) => new(data);
 
     public static ApiResult Success() => new("success");
 
     /// <summary>
-    /// 创建失败响应
+    /// response failure
     /// </summary>
-    /// <param name="code">错误码</param>
+    /// <param name="code">error code</param>
     /// <returns>失败结果</returns>
     public static ApiResult Failure(ErrorCode code) => new(code);
 }
