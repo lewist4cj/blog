@@ -12,7 +12,7 @@ namespace blog.Controllers;
 [AuthorizationFilter(RoleEnum.SuperAdmin)]  // Only allow SuperAdmin access
 public class LogController(ILogService logService): BaseController 
 {
-    [HttpGet(Name = "list")]
+    [HttpGet("list")]
     public async Task<ApiResult> GetLogModels(int pageIndex, int pageSize)
     {
        var res = await logService.GetLogModelsAsync(pageIndex, pageSize);

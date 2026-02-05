@@ -39,15 +39,15 @@ public static class WebApplicationBuilderExt
     private static void AddSerilog(this IServiceCollection services)
     {
         string SerilogOutputTemplate = "{NewLine}{NewLine}Date：{Timestamp:yyyy-MM-dd HH:mm:ss}{NewLine}LogLevel：{Level}{NewLine}Message：{Message}{NewLine}{Exception}" + new string('-', 100);
-        
+
         var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
         if (!Directory.Exists(logDirectory))
         {
             Directory.CreateDirectory(logDirectory);
         }
-        
+
         var logFilePath = Path.Combine(logDirectory, "log_.log");
-        
+
         // 使用 appsettings.json 配置，但要确保配置已经加载
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console(outputTemplate: SerilogOutputTemplate)
@@ -60,56 +60,114 @@ public static class WebApplicationBuilderExt
                 fileSizeLimitBytes: 52428800 // 50MB
             )
             .CreateLogger();
-        
+
         // Serilog Register
-        services.AddLogging(builder => 
+        services.AddLogging(builder =>
         {
             builder.ClearProviders(); // 清除其他日志提供者
             builder.AddSerilog(Log.Logger, dispose: true);
         });
-        
+
     }
-    
+
     private static void AddJwtAuthentication(this IServiceCollection services)
     {
         var tokenModel = AppSettings.Configuration?.GetSection("Jwt").Get<JwtTokenModel>();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {
-
                 var appEnvironment = AppSettings.Configuration!["AppEnvironment"] ?? "Production";
                 opt.RequireHttpsMetadata = appEnvironment != "Development";
                 opt.TokenValidationParameters = new()
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenModel?.Security!)),
                     ValidIssuer = tokenModel?.Issuer,
-                    ValidAudience = tokenModel?.Audience
+                    ValidAudience = tokenModel?.Audience,
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                 };
 
                 opt.Events = new JwtBearerEvents
                 {
-                    OnChallenge = context =>
+                    OnMessageReceived = async ctx =>
                     {
-                        // if no unauthorized request, challenge to return 401
-                        context.HandleResponse();
-                        var res = JsonSerializer.Serialize(ApiResult.Failure(Code.Unauthorized));
-                        context.Response.ContentType = "application/json";
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        context.Response.WriteAsync(res);
-                        return Task.FromResult(0);
+                        await HandleTokenBlacklistCheck(ctx, services);
                     },
-                    OnForbidden = context =>
+                    OnAuthenticationFailed = async ctx =>
+                    {
+                        if (ctx.Exception is SecurityTokenExpiredException)
+                        {
+                            await WriteJsonResponse(ctx.Response, ApiResult.Failure(Code.TokenExpired), StatusCodes.Status401Unauthorized);
+                            return;
+                        }
+                        
+                        await WriteJsonResponse(ctx.Response, ApiResult.Failure(Code.Unauthorized), StatusCodes.Status401Unauthorized);
+                    },
+
+                    OnChallenge = ctx =>
+                    {
+                        ctx.HandleResponse();
+                        return Task.CompletedTask;
+                    },
+                    OnForbidden = async ctx =>
                     {
                         // the client will get 403 Forbidden if the user does not have permission
-                        var res = JsonSerializer.Serialize(ApiResult.Failure(Code.Forbidden));
-                        context.Response.ContentType = "application/json";
-                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                        context.Response.WriteAsync(res);
-                        return Task.FromResult(0);
-                    }
+                        await WriteJsonResponse(ctx.Response, ApiResult.Failure(Code.Forbidden), StatusCodes.Status403Forbidden);
+                    },
                 };
             });
     }
+
+    /// <summary>
+    /// Checks if the token is in the blacklist and handles the response accordingly
+    /// </summary>
+    /// <param name="ctx">The message received context</param>
+    /// <param name="services">The service collection</param>
+    private static async Task HandleTokenBlacklistCheck(MessageReceivedContext ctx, IServiceCollection services)
+    {
+        // Check token presence in the blacklist.
+        var token = ctx.Request.Headers.Authorization.FirstOrDefault();
+        if (!string.IsNullOrEmpty(token) && token.StartsWith("Bearer "))
+        {
+            var actualToken = token["Bearer ".Length..].Trim();
+            var redisWorker = services.BuildServiceProvider().GetRequiredService<IRedisWorker>();
+            var redisBlack = redisWorker.GetBlackString(actualToken);
+            if (redisBlack != null)
+            {
+                // Determine the appropriate error code based on blacklist type
+                var errorCode = redisBlack switch
+                {
+                    "User" => Code.UserBlackEnumType,
+                    "Admin" => Code.AdminBlackEnumType,
+                    "Device" => Code.DeviceBackEnumType,
+                    _ => Code.UserBlackEnumType
+                };
+
+                // Return the error response
+                await WriteJsonResponse(ctx.Response, ApiResult.Failure(errorCode), StatusCodes.Status200OK);
+                ctx.Fail("");
+                return;
+            }
+        }
+
+        await Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Writes a JSON response with the specified status code
+    /// </summary>
+    /// <param name="response">The HTTP response</param>
+    /// <param name="result">The API result to serialize</param>
+    /// <param name="statusCode">The HTTP status code</param>
+    private static async Task WriteJsonResponse(HttpResponse response, ApiResult result, int statusCode)
+    {
+        response.ContentType = "application/json";
+        response.StatusCode = statusCode;
+        var json = JsonSerializer.Serialize(result);
+        await response.WriteAsync(json);
+    }
+
     private static void AddRegister(this IServiceCollection services)
     {
         services.AddControllers(opts =>
@@ -147,6 +205,6 @@ public static class WebApplicationBuilderExt
         return config;
     }
 
-  
+
 
 }

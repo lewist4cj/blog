@@ -1,3 +1,5 @@
+using Blog.Common.TokenModule;
+
 namespace Blog.Common;
 
 public interface IRedisWorker: ITag
@@ -6,4 +8,6 @@ public interface IRedisWorker: ITag
     Task<string?> GetStringAsync(string key);
     void SetString(string key, string value, TimeSpan expiry = default );
     Task SetStringAsync(string key, string value, TimeSpan expiry = default);
+    void SetBlackString(string key,TokenBlackEnum value, TimeSpan expiry = default);
+    string? GetBlackString(string key);
 }

@@ -22,6 +22,11 @@ public static class Code
     public static readonly ErrorCode Forbidden = new(403, "Forbidden");
     
     /// <summary>
+    /// 令牌已过期
+    /// </summary>
+    public static readonly ErrorCode TokenExpired = new(401, "Token Expired");
+    
+    /// <summary>
     /// 资源未找到
     /// </summary>
     public static readonly ErrorCode NotFound = new(404, "Not Found");
@@ -59,5 +64,11 @@ public static class Code
     /// 数据验证失败
     /// </summary>
     public static readonly ErrorCode ValidationFailed = new(1003, "Data validation failed");
+
+    public static readonly ErrorCode UserBlackEnumType = new(1004, "User account closed.");
+
+    public static readonly ErrorCode AdminBlackEnumType = new(1006, "dot not allow to login");
+
+    public static readonly ErrorCode DeviceBackEnumType = new(1007, " device dot not allow to login");
     #endregion
 }

@@ -2,7 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Blog.Common.TokenModule.Models;
-using Blog.Common.Utils;
+using Blog.Extensions.Validation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Blog.Common.TokenModule;
@@ -22,7 +23,7 @@ public static class TokenHepler
             new Claim("Id", jwtTokenModel.Id.ToString()),
             new Claim("UserName", jwtTokenModel.UserName ?? ""),
             new Claim("NickName", jwtTokenModel.NickName ?? ""),
-            new Claim("Role", jwtTokenModel.Role.ToString() ?? "0")
+            new Claim("Role", (jwtTokenModel.Role?.ToString() ?? "0"))
         };
 
         
@@ -34,7 +35,7 @@ public static class TokenHepler
         var token = new JwtSecurityToken(
             issuer: jwtTokenModel.Issuer,
             audience: jwtTokenModel.Audience,
-            expires: DateTime.Now.AddMinutes(jwtTokenModel.Expires),
+            expires: DateTime.Now.AddHours(jwtTokenModel.Expires),
             signingCredentials: signingCredential,
             claims: claims
         );
@@ -42,5 +43,26 @@ public static class TokenHepler
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
 
         return accessToken;
+    }
+
+     public static SecurityToken GetSecurityToken(string token)
+    {
+        var jwtSection = AppSettings.Configuration!.GetSection("Jwt");
+        var tokenModel = jwtSection.Get<JwtTokenModel>()!;
+        tokenModel.ValidateAndReturn();
+        JwtSecurityTokenHandler tokenHandler = new();
+        TokenValidationParameters parameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = tokenModel.Issuer,
+            ValidAudience = tokenModel.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenModel.Security!))
+        };
+        tokenHandler.ValidateToken(token, parameters, out var securityToken);
+        return securityToken;
+
     }
 }

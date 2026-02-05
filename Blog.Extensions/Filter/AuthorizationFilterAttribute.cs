@@ -19,8 +19,17 @@ public class AuthorizationFilterAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = context.HttpContext.User;
-        var claimsIdentity = (ClaimsIdentity?)user.Identity;
         
+        // ensure user is authenticated
+        if (!user.Identity!.IsAuthenticated)
+        {
+            var res = ApiResult.Failure(Code.Unauthorized);
+            context.Result = new JsonResult(res) { StatusCode = 401 }; 
+            return;
+        }
+
+        // get the ClaimsIdentity
+        var claimsIdentity = user.Identity as ClaimsIdentity;
         if (claimsIdentity?.Claims == null || !claimsIdentity.Claims.Any())
         {
             var res = ApiResult.Failure(Code.Forbidden);
@@ -33,26 +42,27 @@ public class AuthorizationFilterAttribute : Attribute, IAuthorizationFilter
         if (roleClaim == null)
         {
             var res = ApiResult.Failure(Code.Forbidden);
-            context.Result = new JsonResult(res) { StatusCode = 403 }; // 返回403
+            context.Result = new JsonResult(res) { StatusCode = 403 }; 
             return;
         }
 
+        // try parse the role value
         if (!int.TryParse(roleClaim.Value, out int userRoleValue))
         {
             var res = ApiResult.Failure(Code.Forbidden);
-            context.Result = new JsonResult(res) { StatusCode = 403 }; // 返回403
+            context.Result = new JsonResult(res) { StatusCode = 403 }; 
             return;
         }
 
-        // check if user role is sufficient
+        // check if the user has the required role
         if (userRoleValue < (int)_role)
         {
             var res = ApiResult.Failure(Code.Forbidden);
-            context.Result = new JsonResult(res) { StatusCode = 403 }; // 返回403
+            context.Result = new JsonResult(res) { StatusCode = 403 }; 
             return;
         }
 
-        // set user role to HttpContext
+        // setting the role to HttpContext
         context.HttpContext.Items["Role"] = roleClaim.Value;
     }
 }

@@ -1,6 +1,7 @@
 using System.Reflection;
 using Blog.Common;
 using Blog.Common.Utils;
+using Blog.Extensions.Validation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

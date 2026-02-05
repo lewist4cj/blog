@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Blog.Extensions.Middleware;
-using Serilog;
-using Blog.Common;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace Blog.Extensions;
 

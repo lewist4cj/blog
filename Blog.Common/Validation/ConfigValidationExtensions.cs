@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Configuration;
 
-namespace Blog.Common.Utils;
+namespace Blog.Extensions.Validation;
 
 public static class ConfigValidationExtensions
 {
