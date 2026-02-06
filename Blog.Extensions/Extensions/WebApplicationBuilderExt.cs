@@ -26,7 +26,7 @@ public static class WebApplicationBuilderExt
     public static IServiceCollection AddEntry(this IServiceCollection services)
     {
         services.AddTransient(typeof(SiteMgr),typeof(SiteMgr));
-        services.AddTransient(typeof(OtherMgr),typeof(OtherMgr));
+        services.AddTransient(typeof(OtherSiteMgr),typeof(OtherSiteMgr));
         // Appsettings Register 
         services.AddSingleton(new AppSettings(services.GetConfiguration()));
         // initialize serilog configuration

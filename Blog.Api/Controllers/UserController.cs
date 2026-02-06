@@ -1,5 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Blog.Common;
 using Blog.Common.TokenModule;
 using Blog.Common.TokenModule.Models;
@@ -9,8 +7,6 @@ using Blog.Extensions.Validation;
 using Blog.Services.Log;
 using Blog.Services.UserApp;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.Tokens.Experimental;
 
 namespace blog.Controllers;
 
@@ -50,7 +46,7 @@ public class UserController(RuntimeLogService runtimeLogService,
     [HttpGet("unregister")]
     public async Task<ApiResult> Unregister()
     {
-        // 获取请求中的token数据，并将token加入黑名单中
+        // get the token from the request header and add it to the blacklist
         var authHeader = HttpContext.Request.Headers.Authorization.FirstOrDefault();
         if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
         {
@@ -60,14 +56,13 @@ public class UserController(RuntimeLogService runtimeLogService,
         var token = authHeader.Substring("Bearer ".Length).Trim();
         var tokenHandler = TokenHepler.GetSecurityToken(token);
         
-        // 计算从当前时间到令牌过期时间的剩余时间
+        // if the remaining time is less than or equal to zero, then the token has expired. so we dot need to add it to the blacklist.
         var remainingTime = tokenHandler.ValidTo - DateTime.UtcNow;
         if (remainingTime <= TimeSpan.Zero)
         {
-            // 如果令牌已经过期，则不需要加入黑名单
             return ApiResult.Success("Unregistered successfully.");
         }
-        
+        // add the token to the blacklist, because the token has not expired.
         redisWorker.SetBlackString(token, TokenBlackEnum.User, remainingTime);
 
         return ApiResult.Success("Unregistered successfully.");
@@ -76,7 +71,7 @@ public class UserController(RuntimeLogService runtimeLogService,
     {
         var jwtSection = AppSettings.Configuration!.GetSection("Jwt");
         var tokenModel = jwtSection.Get<JwtTokenModel>()!;
-        tokenModel.ValidateAndReturn();
+        tokenModel.Validate();
         tokenModel.Id = user.Id;
         tokenModel.UserName = user.Username;
         tokenModel.NickName = user.Nickname;

@@ -49,7 +49,7 @@ public static class TokenHepler
     {
         var jwtSection = AppSettings.Configuration!.GetSection("Jwt");
         var tokenModel = jwtSection.Get<JwtTokenModel>()!;
-        tokenModel.ValidateAndReturn();
+        tokenModel.Validate();
         JwtSecurityTokenHandler tokenHandler = new();
         TokenValidationParameters parameters = new()
         {

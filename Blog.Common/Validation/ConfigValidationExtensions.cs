@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Configuration;
+using Blog.Common.Utils;
 
 namespace Blog.Extensions.Validation;
 
@@ -59,14 +60,35 @@ public static class ConfigValidationExtensions
     }
     
     /// <summary>
-    /// valiate configuration object, if validation fails, throw an exception
+    /// 验证配置对象，如果验证失败则返回错误的 ApiResult
     /// </summary>
-    /// <typeparam name="T">configuration type</typeparam>
-    /// <param name="obj">target the obj</param>
-    /// <param name="configName">configuration name, used to be error messages</param>
-    public static T ValidateAndReturn<T>(this T obj, string configName = "Configuration") where T : IValidatableObject
+    /// <param name="obj">要验证的对象</param>
+    /// <param name="configName">配置名称，用于错误消息</param>
+    /// <returns>验证成功返回配置对象，失败返回错误信息</returns>
+    public static ApiResult Validate(this IValidatableObject obj, string configName = "Configuration")
     {
-        obj.ValidateOrThrow(configName);
-        return obj;
+        if (obj == null)
+        {
+            var errorMessage = $"{configName} object is null";
+            return ApiResult.Failure(Common.Code.BadRequest, errorMessage);
+        }
+
+        var validationContext = new ValidationContext(obj);
+        var validationResults = new List<ValidationResult>();
+
+        bool isValid = Validator.TryValidateObject(obj, validationContext, validationResults, true);
+
+        if (!isValid)
+        {
+            var errorMessage = string.Join("; ", validationResults.Where(vr => vr != null).Select(vr => vr.ErrorMessage));
+            var errors = validationResults
+                .Where(vr => vr != null)
+                .Select(vr => new { Field = vr.MemberNames.FirstOrDefault(), Message = vr.ErrorMessage })
+                .ToArray();
+            
+            return ApiResult.Failure(Common.Code.BadRequest, errors);
+        }
+
+        return ApiResult.Success(obj);
     }
 }

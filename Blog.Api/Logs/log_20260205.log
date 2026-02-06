@@ -794,3 +794,1025 @@ Date：2026-02-05 19:29:13
 LogLevel：Information
 Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - 400 null "application/json; charset=utf-8" 9509.6456ms
 ----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:35:59
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:36:00
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:36:00
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:36:00
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:36:00
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:32
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:33
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:33
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:33
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:33
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:54
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "POST" "http"://"127.0.0.1:5051""""/api/user/login""" - "application/json" 53
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:54
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.UserController.CheckLogin (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:54
+LogLevel：Information
+Message：Route matched with "{action = \"CheckLogin\", controller = \"User\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Blog.Common.Utils.ApiResult] CheckLogin(Blog.Services.UserApp.UserModelLoginDto)" on controller "blog.Controllers.UserController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Executed DbCommand ("14"ms) [Parameters=["@__timeThreshold_0='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SELECT `l`.`id`, `l`.`addr`, `l`.`content`, `l`.`created_at`, `l`.`ip`, `l`.`is_read`, `l`.`level`, `l`.`log_type`, `l`.`login_status`, `l`.`login_type`, `l`.`pwd`, `l`.`service_name`, `l`.`title`, `l`.`updated_at`, `l`.`user_id`, `l`.`user_name`
+FROM `log_models` AS `l`
+WHERE (`l`.`log_type` = 3) AND (`l`.`created_at` >= @__timeThreshold_0)
+ORDER BY `l`.`updated_at` DESC"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Executed DbCommand ("1"ms) [Parameters=["@p0='?' (Size = 64), @p1='?' (Size = 4000), @p2='?' (DbType = DateTime), @p3='?' (Size = 32), @p4='?' (DbType = Boolean), @p5='?' (DbType = Int32), @p6='?' (DbType = Int32), @p7='?' (DbType = Boolean), @p8='?' (DbType = SByte), @p9='?' (Size = 32), @p10='?' (Size = 32), @p11='?' (Size = 32), @p12='?' (DbType = UInt64), @p13='?' (Size = 32)"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO `log_models` (`addr`, `content`, `created_at`, `ip`, `is_read`, `level`, `log_type`, `login_status`, `login_type`, `pwd`, `service_name`, `title`, `user_id`, `user_name`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13);
+SELECT `id`, `updated_at`
+FROM `log_models`
+WHERE ROW_COUNT() = 1 AND `id` = LAST_INSERT_ID();"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Executed DbCommand ("5"ms) [Parameters=["@__md5Str_0='?' (Size = 64), @__dto_Username_1='?' (Size = 32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT `u`.`id`, `u`.`abstract`, `u`.`avatar`, `u`.`code_age`, `u`.`created_at`, `u`.`email`, `u`.`nickname`, `u`.`open_id`, `u`.`password`, `u`.`register_src`, `u`.`role`, `u`.`updated_at`, `u`.`username`
+FROM `user_models` AS `u`
+WHERE (`u`.`password` = @__md5Str_0) AND (`u`.`username` = @__dto_Username_1)
+LIMIT 1"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Executed DbCommand ("24"ms) [Parameters=["@__dto_Username_0='?' (Size = 32), @__md5Str_1='?' (Size = 64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT `u`.`id`, `u`.`abstract`, `u`.`avatar`, `u`.`code_age`, `u`.`created_at`, `u`.`email`, `u`.`nickname`, `u`.`open_id`, `u`.`password`, `u`.`register_src`, `u`.`role`, `u`.`updated_at`, `u`.`username`
+FROM `user_models` AS `u`
+WHERE (`u`.`username` = @__dto_Username_0) AND (`u`.`password` = @__md5Str_1)
+LIMIT 1"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Executed action "blog.Controllers.UserController.CheckLogin (Blog.Api)" in 779.8915ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.UserController.CheckLogin (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:57:55
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "POST" "http"://"127.0.0.1:5051""""/api/user/login""" - 200 null "application/json; charset=utf-8" 1024.0102ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/log/list""?pageIndex=1&pageSize=10" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.LogController.GetLogModels (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Route matched with "{action = \"GetLogModels\", controller = \"Log\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Blog.Common.Utils.ApiResult] GetLogModels(Int32, Int32)" on controller "blog.Controllers.LogController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Warning
+Message：The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Warning
+Message：The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Executed DbCommand ("1"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT `l`.`id`, `l`.`addr`, `l`.`content`, `l`.`created_at`, `l`.`ip`, `l`.`is_read`, `l`.`level`, `l`.`log_type`, `l`.`login_status`, `l`.`login_type`, `l`.`pwd`, `l`.`service_name`, `l`.`title`, `l`.`updated_at`, `l`.`user_id`, `l`.`user_name`
+FROM `log_models` AS `l`
+LIMIT @__p_1 OFFSET @__p_0"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Executed action "blog.Controllers.LogController.GetLogModels (Blog.Api)" in 166.6751ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.LogController.GetLogModels (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:33
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/log/list""?pageIndex=1&pageSize=10" - 200 null "application/json; charset=utf-8" 328.2072ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:36
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:36
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 22:58:36
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=site" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Executing JsonResult, writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 706855.5456ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""" - 499 null "application/json; charset=utf-8" 706913.6179ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 262.875ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:12:44
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=site" - 200 null "application/json; charset=utf-8" 326.5327ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:12
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:12
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:12
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:19
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:20
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 8267.662ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:20
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:20
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - 200 null "application/json; charset=utf-8" 8365.9573ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:43
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:43
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:13:43
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:32
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:32
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:32
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:32
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:32
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:33
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:33
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:14:33
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:16
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:16
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:16
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:16
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:16
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:39
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:40
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:40
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:40
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:40
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:58
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:58
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:58
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:58
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:15:58
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:01
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:01
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:01
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:36
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:36
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:36
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:36
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:36
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:43
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:43
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:16:43
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:45
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:45
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:45
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:45
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:45
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:51
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:52
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:17:52
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:19:59
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:20:00
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:20:00
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:20:00
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:20:00
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:20:06
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:20:07
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:20:07
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:37
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:37
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:37
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:37
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:37
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:40
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:41
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:21:41
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:23
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:23
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:23
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:23
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:23
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:27
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:27
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:24:27
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:40
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:41
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:41
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:41
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:41
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:41
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:41
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:25:41
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:27:59
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:27:59
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:27:59
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:27:59
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:27:59
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:28:07
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:28:07
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:28:07
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:39
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:39
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:39
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:39
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:39
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:43
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "POST" "http"://"127.0.0.1:5051""""/api/user/login""" - "application/json" 53
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:43
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.UserController.CheckLogin (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:43
+LogLevel：Information
+Message：Route matched with "{action = \"CheckLogin\", controller = \"User\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[Blog.Common.Utils.ApiResult] CheckLogin(Blog.Services.UserApp.UserModelLoginDto)" on controller "blog.Controllers.UserController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Executed DbCommand ("14"ms) [Parameters=["@__timeThreshold_0='?' (DbType = DateTime)"], CommandType='Text', CommandTimeout='30']"
+""SELECT `l`.`id`, `l`.`addr`, `l`.`content`, `l`.`created_at`, `l`.`ip`, `l`.`is_read`, `l`.`level`, `l`.`log_type`, `l`.`login_status`, `l`.`login_type`, `l`.`pwd`, `l`.`service_name`, `l`.`title`, `l`.`updated_at`, `l`.`user_id`, `l`.`user_name`
+FROM `log_models` AS `l`
+WHERE (`l`.`log_type` = 3) AND (`l`.`created_at` >= @__timeThreshold_0)
+ORDER BY `l`.`updated_at` DESC"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Executed DbCommand ("1"ms) [Parameters=["@p14='?' (DbType = UInt64), @p0='?' (Size = 64), @p1='?' (Size = 4000), @p2='?' (DbType = DateTime), @p3='?' (Size = 32), @p4='?' (DbType = Boolean), @p5='?' (DbType = Int32), @p6='?' (DbType = Int32), @p7='?' (DbType = Boolean), @p8='?' (DbType = SByte), @p9='?' (Size = 32), @p10='?' (Size = 32), @p11='?' (Size = 32), @p12='?' (DbType = UInt64), @p13='?' (Size = 32)"], CommandType='Text', CommandTimeout='30']"
+""UPDATE `log_models` SET `addr` = @p0, `content` = @p1, `created_at` = @p2, `ip` = @p3, `is_read` = @p4, `level` = @p5, `log_type` = @p6, `login_status` = @p7, `login_type` = @p8, `pwd` = @p9, `service_name` = @p10, `title` = @p11, `user_id` = @p12, `user_name` = @p13
+WHERE `id` = @p14;
+SELECT `updated_at`
+FROM `log_models`
+WHERE ROW_COUNT() = 1 AND `id` = @p14;"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Executed DbCommand ("30"ms) [Parameters=["@__md5Str_0='?' (Size = 64), @__dto_Username_1='?' (Size = 32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT `u`.`id`, `u`.`abstract`, `u`.`avatar`, `u`.`code_age`, `u`.`created_at`, `u`.`email`, `u`.`nickname`, `u`.`open_id`, `u`.`password`, `u`.`register_src`, `u`.`role`, `u`.`updated_at`, `u`.`username`
+FROM `user_models` AS `u`
+WHERE (`u`.`password` = @__md5Str_0) AND (`u`.`username` = @__dto_Username_1)
+LIMIT 1"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Executed DbCommand ("22"ms) [Parameters=["@__dto_Username_0='?' (Size = 32), @__md5Str_1='?' (Size = 64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT `u`.`id`, `u`.`abstract`, `u`.`avatar`, `u`.`code_age`, `u`.`created_at`, `u`.`email`, `u`.`nickname`, `u`.`open_id`, `u`.`password`, `u`.`register_src`, `u`.`role`, `u`.`updated_at`, `u`.`username`
+FROM `user_models` AS `u`
+WHERE (`u`.`username` = @__dto_Username_0) AND (`u`.`password` = @__md5Str_1)
+LIMIT 1"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Executed action "blog.Controllers.UserController.CheckLogin (Blog.Api)" in 711.4043ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.UserController.CheckLogin (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:29:44
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "POST" "http"://"127.0.0.1:5051""""/api/user/login""" - 200 null "application/json; charset=utf-8" 955.3064ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:02
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:03
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:03
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:03
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:03
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 5.3471ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:03
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:03
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - 200 null "application/json; charset=utf-8" 104.7777ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:29
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:29
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:29
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:49
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:49
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 19587.6058ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:49
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:30:49
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - 200 null "application/json; charset=utf-8" 19769.1913ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:40
+LogLevel：Information
+Message：User profile is available. Using '"/Users/lsy/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:40
+LogLevel：Information
+Message：Now listening on: "http://localhost:5051"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:40
+LogLevel：Information
+Message：Application started. Press Ctrl+C to shut down.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:40
+LogLevel：Information
+Message：Hosting environment: "Development"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:40
+LogLevel：Information
+Message：Content root path: "/Users/lsy/workspace/csharp/blog/Blog.Api"
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:41
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:42
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:42
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:42
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:42
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 12.7017ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:42
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:42
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - 200 null "application/json; charset=utf-8" 440.393ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:59
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:59
+LogLevel：Information
+Message：Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: 'Fp1EB_gG41NGRDokKgqCXe--zDM0w6Kx5RRqUczjV4k'. , KeyId: \n'.
+Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'.
+Exceptions caught:
+ '[PII of type 'System.Text.StringBuilder' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:59
+LogLevel：Information
+Message："Bearer" was not authenticated. Failure message: "IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: 'Fp1EB_gG41NGRDokKgqCXe--zDM0w6Kx5RRqUczjV4k'. , KeyId: \n'.
+Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'.
+Exceptions caught:
+ '[PII of type 'System.Text.StringBuilder' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details."
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:59
+LogLevel：Information
+Message："Bearer" was not authenticated. Failure message: "IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: 'Fp1EB_gG41NGRDokKgqCXe--zDM0w6Kx5RRqUczjV4k'. , KeyId: \n'.
+Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'.
+Exceptions caught:
+ '[PII of type 'System.Text.StringBuilder' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details."
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:59
+LogLevel：Information
+Message：Authorization failed. "These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user."
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:59
+LogLevel：Information
+Message：AuthenticationScheme: "Bearer" was challenged.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:32:59
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - 401 null "application/json" 159.4014ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:33:10
+LogLevel：Information
+Message：Request starting "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - null null
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:33:10
+LogLevel：Information
+Message：Executing endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:33:10
+LogLevel：Information
+Message：Route matched with "{action = \"SiteInfo\", controller = \"Site\"}". Executing controller action with signature "Blog.Common.Utils.ApiResult SiteInfo(System.String)" on controller "blog.Controllers.SiteController" ("Blog.Api").
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:33:10
+LogLevel：Information
+Message：Executing "ObjectResult", writing value of type '"Blog.Common.Utils.ApiResult"'.
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:33:10
+LogLevel：Information
+Message：Executed action "blog.Controllers.SiteController.SiteInfo (Blog.Api)" in 5.9529ms
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:33:10
+LogLevel：Information
+Message：Executed endpoint '"blog.Controllers.SiteController.SiteInfo (Blog.Api)"'
+----------------------------------------------------------------------------------------------------
+
+Date：2026-02-05 23:33:10
+LogLevel：Information
+Message：Request finished "HTTP/1.1" "GET" "http"://"127.0.0.1:5051""""/api/site/info""?name=qq" - 200 null "application/json; charset=utf-8" 82.2483ms
+----------------------------------------------------------------------------------------------------

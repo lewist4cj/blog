@@ -23,7 +23,8 @@ public static class CollectServiceExtension
     {
 
         var namspaceName = AppSettings.Configuration?.GetSection("IocTags").Get<IocTagsConfig>();
-        var list = namspaceName?.ValidateAndReturn().List!;
+        namspaceName!.Validate();
+        var list = namspaceName!.List!;
         list.ForEach(item =>
         {
             var ass = Assembly.Load(item);

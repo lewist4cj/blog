@@ -2,22 +2,17 @@ using Blog.Common;
 using Blog.Common.Utils;
 using Blog.Domain.enums;
 using Blog.Extensions.Config;
-using Blog.Extensions.Filter;
+using Blog.Extensions.Validation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StackExchange.Redis;
 
 namespace blog.Controllers;
-public class SiteController(SiteMgr siteMgr) : BaseController
+[Authorize(AuthenticationSchemes = "Bearer")]
+public class SiteController(SiteMgr siteMgr, OtherSiteMgr otherSiteMgr) : BaseController 
 {
     [HttpGet("info")]
     public ApiResult SiteInfo(string name)
-    { 
-    //    var log =   ActionLogService.GetActionLogService(HttpContext);
-    //    log.AddItemInfo("test_csharp_site", "test_csharp_val");
-    //    log.Save(HttpContext);
-        // redis.SetString("test_csharp_site", "test_csharp_val",TimeSpan.FromSeconds(30));
-        var title = siteMgr.aboutSettings?.Bilibli;
-
+    {
         if (name == "site")
             return ApiResult.Success(siteMgr.siteSettings!);
 
@@ -29,16 +24,36 @@ public class SiteController(SiteMgr siteMgr) : BaseController
 
         switch (name)
         {
-            case "title":
-                return ApiResult.Success(title);
-            case "logo":
-                return ApiResult.Success(siteMgr.siteSettings?.Logo);
-            case "beian":
-                return ApiResult.Success(siteMgr.siteSettings?.BeiAn);
-            case "isBlogMode":
-                return ApiResult.Success(siteMgr.siteSettings?.IsBlogMode);
+            case "email":
+                var email = otherSiteMgr.emailSettings!;
+                return ApiResult.Success(email);
+            case "qq":
+                var qqSettings = otherSiteMgr.qqSettings!;
+                return ApiResult.Success(qqSettings);
+            case "qiNiu":
+                var beiAn = otherSiteMgr.qiNiuSettings!;
+                return ApiResult.Success(beiAn);
+            case "ai":
+                var ai = otherSiteMgr.aiSettings!;
+                return ApiResult.Success(ai);
+            default:
+                return ApiResult.Failure(Code.NotFound);
         }
+    }
 
-       return ApiResult.Success();
+    [HttpGet("redirection")]
+    public ApiResult Redirection()
+    {
+        var qqSettings = otherSiteMgr.qqSettings;
+        var validationResult = qqSettings.Validate();
+        
+        // 如果验证失败，直接返回错误
+        if (validationResult.Code != 200)
+        {
+            return validationResult;
+        }
+        
+        var url = qqSettings.GetRedirectUrl();
+        return ApiResult.Success(url);
     }
 }

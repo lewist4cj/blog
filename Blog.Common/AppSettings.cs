@@ -10,10 +10,10 @@ public class AppSettings
 {
     public AppSettings(string contentPath)
     {
-        var Path = "appsettings.json";
+        // var Path = "appsettings.json";
 
         //如果你把配置文件 是 根据环境变量来分开了，可以这样写
-        //Path = $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json";
+        var Path = $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json";
 
         Configuration = new ConfigurationBuilder()
             .SetBasePath(contentPath)
