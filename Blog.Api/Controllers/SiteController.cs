@@ -4,6 +4,7 @@ using Blog.Domain.enums;
 using Blog.Extensions;
 using Blog.Extensions.Config;
 using Blog.Extensions.Validation;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -11,7 +12,7 @@ using System.Text.Json;
 namespace blog.Controllers;
 
 [Authorize(AuthenticationSchemes = "Bearer")]
-public class SiteController: BaseController
+public class SiteController(ILogger<SiteController> _logger) : BaseController
 {
     [HttpGet("info")]
     public ApiResult SiteInfo(string name)
@@ -56,7 +57,6 @@ public class SiteController: BaseController
         var qqSettings = otherSiteMgr.qqSettings;
         var validationResult = qqSettings!.Validate();
 
-        // 如果验证失败，直接返回错误
         if (validationResult.Code != 200)
         {
             return validationResult;
@@ -66,52 +66,28 @@ public class SiteController: BaseController
         return ApiResult.Success(url!);
     }
 
-    [HttpGet("get-site-setting/{name}")]
-    public async Task<ApiResult> GetSiteSetting(string name)
-    {
-        var siteMgr = AppSettings.Configuration!.GetSection("SiteMgr").Get<SiteMgr>() ?? new SiteMgr();
-        
-        // 使用 SiteMgr 中的新方法判断是否为根目录或多节点情况
-        if (siteMgr.IsRootNode(name))
-        {
-            return ApiResult.Success(siteMgr);
-        }
-
-        // 获取指定节点的配置
-        var resp = siteMgr.GetNodeByName(name);
-        
-        if (resp == null)
-        {
-            return ApiResult.Failure(Code.NotFound, $"Setting node '{name}' not found");
-        }
-
-        return ApiResult.Success(resp);
-    }
-
-    [HttpPut("update")]
+    [HttpPut("info")]
     public async Task<ApiResult> UpdateSiteSetting(string name)
     {
         if (name == "site")
         {
-            // 将请求中的body绑定到siteSetting对象中
             var siteMgr = new SiteMgr();
 
-            // 使用自定义的 BindTo 方法将请求体绑定到 siteSetting 对象
             if (!await this.BindTo(siteMgr))
             {
                 return ApiResult.Failure(Code.BadRequest, "Request body is empty or invalid");
             }
-            
+
             var result = await SaveConfigToFile("SiteMgr", siteMgr);
             if (!result)
             {
                 return ApiResult.Failure(Code.InternalServerError, "Failed to save settings to configuration file");
             }
-            
+
             return ApiResult.Success("Site settings updated and saved successfully");
         }
 
-        // 检查用户权限
+        // check the user role
         var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
         _ = int.TryParse(role, out int userRoleValue);
         if (userRoleValue < (int)RoleEnum.SuperAdmin)
@@ -157,41 +133,68 @@ public class SiteController: BaseController
 
     }
 
+    [HttpPut("update")]
+    public ApiResult UpdateSiteInfo(SiteMgr siteMgr)
+    {
+        var exists = System.IO.File.Exists(siteMgr.ProjectSettings!.Fontend);
+        if (!exists)
+        {
+            _logger.LogError($"File not exists {siteMgr.ProjectSettings.Fontend}");
+            return ApiResult.Failure(Code.FileNotExist);
+        }
+
+        var htmlDocument = new HtmlDocument();
+        htmlDocument.Load("./uploads/index.html");
+
+        var titleNode = htmlDocument.DocumentNode.SelectSingleNode("//title");
+        titleNode.InnerHtml = siteMgr.ProjectSettings.Title!;
+        var linkIcon = htmlDocument.DocumentNode.SelectSingleNode("//link[@rel='icon']");
+        if (linkIcon == null)
+        {
+            HtmlNode htmlNode = htmlDocument.CreateElement("link");
+            htmlNode.SetAttributeValue("rel", "icon");
+            htmlNode.SetAttributeValue("href", siteMgr.ProjectSettings.Icon!);
+
+        }
+        linkIcon?.SetAttributeValue("href", siteMgr.ProjectSettings.Icon!);
+
+        htmlDocument.Save(siteMgr.ProjectSettings.Fontend!);
+
+        return ApiResult.Success("Settings updated and saved successfully");
+    }
+
     private async Task<bool> SaveConfigToFile(string sectionPath, object settingValue)
     {
         try
         {
-            // 获取配置文件路径
-            var configPath = GetConfigPath();
-            if (string.IsNullOrEmpty(configPath)) return false;
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var configPath = string.IsNullOrEmpty(environment)
+                ? "appsettings.json"
+                : $"appsettings.{environment}.json";
 
-            // 解析配置路径
             var pathParts = sectionPath.Split(':');
             if (pathParts.Length == 0) return false;
 
-            // 读取现有配置
             var jsonContent = await System.IO.File.ReadAllTextAsync(configPath);
             var jsonObject = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonContent) ?? [];
 
-            // 检查 settingValue 是否为复杂类型（即非简单类型如 string, int, bool 等）
+            // Check if settingValue is a complex type (i.e., not a simple type such as string, int, bool, etc.)
             if (IsComplexType(settingValue))
             {
-                // 将复杂对象序列化为字典形式，然后合并到配置中
                 var complexObjJson = JsonSerializer.Serialize(settingValue);
                 var complexObjDict = JsonSerializer.Deserialize<Dictionary<string, object>>(complexObjJson) ?? [];
-                
-                // 将复杂对象的属性合并到目标节点
+
                 NavigateAndSetValue(jsonObject, pathParts, complexObjDict);
             }
             else
             {
-                // 对于简单类型，直接设置值
                 NavigateAndSetValue(jsonObject, pathParts, settingValue);
             }
 
-            // 序列化并写入文件
-            var options = new JsonSerializerOptions 
-            { 
+            // Serialize and write to a file
+            // 
+            var options = new JsonSerializerOptions
+            {
                 WriteIndented = true,  // 这个选项确保输出格式化为多行
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -220,15 +223,15 @@ public class SiteController: BaseController
     private static bool IsComplexType(object obj)
     {
         if (obj == null) return false;
-        
+
         var type = obj.GetType();
-        
+
         // 简单类型包括：基本数据类型和它们的可空版本
-        if (type.IsPrimitive || 
-            type == typeof(string) || 
-            type == typeof(DateTime) || 
-            type == typeof(DateTimeOffset) || 
-            type == typeof(TimeSpan) || 
+        if (type.IsPrimitive ||
+            type == typeof(string) ||
+            type == typeof(DateTime) ||
+            type == typeof(DateTimeOffset) ||
+            type == typeof(TimeSpan) ||
             type == typeof(Guid) ||
             type == typeof(decimal) ||
             type.IsEnum ||
@@ -236,16 +239,16 @@ public class SiteController: BaseController
         {
             return false;
         }
-        
+
         // 处理常见集合类型
-        if (type.IsArray || 
-            type.GetInterface("IEnumerable") != null && 
+        if (type.IsArray ||
+            type.GetInterface("IEnumerable") != null &&
             type != typeof(string))
         {
             // 对于集合，检查元素是否为简单类型
             return !IsSimpleCollection(obj);
         }
-        
+
         // 其他类型认为是复杂类型
         return true;
     }
@@ -258,20 +261,20 @@ public class SiteController: BaseController
     private static bool IsSimpleCollection(object collection)
     {
         if (collection == null) return true;
-        
+
         var enumerable = collection as System.Collections.IEnumerable;
         if (enumerable == null) return true;
 
         foreach (var item in enumerable)
         {
             if (item == null) continue;
-            
+
             var itemType = item.GetType();
-            if (itemType.IsPrimitive || 
-                itemType == typeof(string) || 
-                itemType == typeof(DateTime) || 
-                itemType == typeof(DateTimeOffset) || 
-                itemType == typeof(TimeSpan) || 
+            if (itemType.IsPrimitive ||
+                itemType == typeof(string) ||
+                itemType == typeof(DateTime) ||
+                itemType == typeof(DateTimeOffset) ||
+                itemType == typeof(TimeSpan) ||
                 itemType == typeof(Guid) ||
                 itemType == typeof(decimal) ||
                 itemType.IsEnum ||
@@ -284,7 +287,7 @@ public class SiteController: BaseController
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -327,17 +330,6 @@ public class SiteController: BaseController
 
         // 设置最后一个路径部分的值
         dict[pathParts[^1]] = value;
-    }
-
-    private string? GetConfigPath()
-    {
-        // 如果你把配置文件是根据环境变量来分开了，可以这样写
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        var path = string.IsNullOrEmpty(environment) 
-            ? "appsettings.json" 
-            : $"appsettings.{environment}.json";
-        
-        return path;
     }
 }
 
