@@ -1,6 +1,6 @@
 namespace Blog.Extensions.Config;
 
-public class SiteSettings
+public class SiteSettings:SettingsValidator
 {
     public string? Title { get; set; }
     public string? Logo { get; set; }
@@ -9,21 +9,21 @@ public class SiteSettings
 
 }
 
-public class ProjectSettings
+public class ProjectSettings:SettingsValidator
 {
     public string? Title { get; set; }
     public string? Icon { get; set; }
     public string? Fontend { get; set; }
 }
 
-public class SeoSettings
+public class SeoSettings:SettingsValidator
 {
     public string? Keywords { get; set; }
     public string? Description { get; set; }
     public string? Author { get; set; }
 }
 
-public class AboutSettings
+public class AboutSettings:SettingsValidator
 {
     public string? SiteDate { get; set; }
     public string? SiteVersion { get; set; }
@@ -43,17 +43,17 @@ public class LoginSettings
     public string? Captcha { get; set; }
 }
 
-public class ComponentSettings
+public class ComponentSettings:SettingsValidator
 {
     public List<ComponentItems> Items { get; set; } = [];
 }
-public class ComponentItems
+public class ComponentItems:SettingsValidator
 {
     public string? ComponentName { get; set; }
     public bool Enable { get; set; }
 }
 
-public class ArticleSettings
+public class ArticleSettings:SettingsValidator
 {
     public bool Examine { get; set; }
 }

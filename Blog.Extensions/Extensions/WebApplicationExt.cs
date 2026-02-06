@@ -1,23 +1,21 @@
 using Microsoft.AspNetCore.Builder;
 using Blog.Extensions.Middleware;
 
-namespace Blog.Extensions;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class WebApplicationExt
 {
-    public static void UseEntry(this WebApplication app)
+    public static WebApplication UseEntry(this WebApplication app)
     {
-        app.UseCors("any");
-        app.UseLogMiddleware();
+        // GlobalExceptionMiddleware - Must be placed before UseMiddleware<LogMiddleware>
+        app.UseMiddleware<GlobalExceptionMiddleware>();
+
+        app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseMapControllers();
-
-    }
-
-    private static void UseMapControllers(this WebApplication app)
-    {
+        app.UseMiddleware<LogMiddleware>();
         app.MapControllers();
 
+        return app;
     }
 }

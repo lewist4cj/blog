@@ -1,27 +1,35 @@
 using Blog.Common;
 using Blog.Common.Utils;
 using Blog.Domain.enums;
+using Blog.Extensions;
 using Blog.Extensions.Config;
 using Blog.Extensions.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace blog.Controllers;
+
 [Authorize(AuthenticationSchemes = "Bearer")]
-public class SiteController(SiteMgr siteMgr, OtherSiteMgr otherSiteMgr) : BaseController 
+public class SiteController: BaseController
 {
     [HttpGet("info")]
     public ApiResult SiteInfo(string name)
     {
+
         if (name == "site")
-            return ApiResult.Success(siteMgr.siteSettings!);
+        {
+            var siteMgr = AppSettings.Configuration!.GetSection("SiteMgr").Get<SiteMgr>()!;
+            return ApiResult.Success(siteMgr);
+        }
+
 
         // check the role of the user. if the user is not admin, return failure.
         var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
         _ = int.TryParse(role, out int userRoleValue);
         if (userRoleValue < (int)RoleEnum.SuperAdmin)
             return ApiResult.Failure(Code.Forbidden);
-
+        var otherSiteMgr = AppSettings.Configuration!.GetSection("OtherSiteMgr").Get<OtherSiteMgr>()!;
         switch (name)
         {
             case "email":
@@ -44,16 +52,292 @@ public class SiteController(SiteMgr siteMgr, OtherSiteMgr otherSiteMgr) : BaseCo
     [HttpGet("redirection")]
     public ApiResult Redirection()
     {
+        var otherSiteMgr = AppSettings.Configuration!.GetSection("OtherSiteMgr").Get<OtherSiteMgr>()!;
         var qqSettings = otherSiteMgr.qqSettings;
-        var validationResult = qqSettings.Validate();
-        
+        var validationResult = qqSettings!.Validate();
+
         // 如果验证失败，直接返回错误
         if (validationResult.Code != 200)
         {
             return validationResult;
         }
+
+        var url = qqSettings!.GetRedirectUrl();
+        return ApiResult.Success(url!);
+    }
+
+    [HttpGet("get-site-setting/{name}")]
+    public async Task<ApiResult> GetSiteSetting(string name)
+    {
+        var siteMgr = AppSettings.Configuration!.GetSection("SiteMgr").Get<SiteMgr>() ?? new SiteMgr();
         
-        var url = qqSettings.GetRedirectUrl();
-        return ApiResult.Success(url);
+        // 使用 SiteMgr 中的新方法判断是否为根目录或多节点情况
+        if (siteMgr.IsRootNode(name))
+        {
+            return ApiResult.Success(siteMgr);
+        }
+
+        // 获取指定节点的配置
+        var resp = siteMgr.GetNodeByName(name);
+        
+        if (resp == null)
+        {
+            return ApiResult.Failure(Code.NotFound, $"Setting node '{name}' not found");
+        }
+
+        return ApiResult.Success(resp);
+    }
+
+    [HttpPut("update")]
+    public async Task<ApiResult> UpdateSiteSetting(string name)
+    {
+        if (name == "site")
+        {
+            // 将请求中的body绑定到siteSetting对象中
+            var siteMgr = new SiteMgr();
+
+            // 使用自定义的 BindTo 方法将请求体绑定到 siteSetting 对象
+            if (!await this.BindTo(siteMgr))
+            {
+                return ApiResult.Failure(Code.BadRequest, "Request body is empty or invalid");
+            }
+            
+            var result = await SaveConfigToFile("SiteMgr", siteMgr);
+            if (!result)
+            {
+                return ApiResult.Failure(Code.InternalServerError, "Failed to save settings to configuration file");
+            }
+            
+            return ApiResult.Success("Site settings updated and saved successfully");
+        }
+
+        // 检查用户权限
+        var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+        _ = int.TryParse(role, out int userRoleValue);
+        if (userRoleValue < (int)RoleEnum.SuperAdmin)
+            return ApiResult.Failure(Code.Forbidden);
+        var otherSiteMgr = AppSettings.Configuration!.GetSection("OtherSiteMgr").Get<OtherSiteMgr>()!;
+
+        object? resp = null;
+        switch (name)
+        {
+            case "email":
+                await this.BindTo(otherSiteMgr.emailSettings!);
+                resp = otherSiteMgr.emailSettings!;
+                break;
+            case "qq":
+                await this.BindTo(otherSiteMgr.qqSettings!);
+                resp = otherSiteMgr.emailSettings!;
+                break;
+            case "qiNiu":
+                await this.BindTo(otherSiteMgr.qiNiuSettings!);
+                resp = otherSiteMgr.emailSettings!;
+                break;
+            case "ai":
+                await this.BindTo(otherSiteMgr.aiSettings!);
+                resp = otherSiteMgr.aiSettings!;
+                break;
+            default:
+                return ApiResult.Failure(Code.NotFound);
+        }
+
+        switch (name)
+        {
+            case "email":
+            case "qq":
+            case "qiNiu":
+            case "ai":
+                var typeName = resp.GetType().Name;
+                var sectionPath = $"OtherSiteMgr:{typeName}";
+                await SaveConfigToFile(sectionPath, resp);
+                return ApiResult.Success("Settings updated and saved successfully");
+            default:
+                return ApiResult.Failure(Code.NotFound);
+        }
+
+    }
+
+    private async Task<bool> SaveConfigToFile(string sectionPath, object settingValue)
+    {
+        try
+        {
+            // 获取配置文件路径
+            var configPath = GetConfigPath();
+            if (string.IsNullOrEmpty(configPath)) return false;
+
+            // 解析配置路径
+            var pathParts = sectionPath.Split(':');
+            if (pathParts.Length == 0) return false;
+
+            // 读取现有配置
+            var jsonContent = await System.IO.File.ReadAllTextAsync(configPath);
+            var jsonObject = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonContent) ?? [];
+
+            // 检查 settingValue 是否为复杂类型（即非简单类型如 string, int, bool 等）
+            if (IsComplexType(settingValue))
+            {
+                // 将复杂对象序列化为字典形式，然后合并到配置中
+                var complexObjJson = JsonSerializer.Serialize(settingValue);
+                var complexObjDict = JsonSerializer.Deserialize<Dictionary<string, object>>(complexObjJson) ?? [];
+                
+                // 将复杂对象的属性合并到目标节点
+                NavigateAndSetValue(jsonObject, pathParts, complexObjDict);
+            }
+            else
+            {
+                // 对于简单类型，直接设置值
+                NavigateAndSetValue(jsonObject, pathParts, settingValue);
+            }
+
+            // 序列化并写入文件
+            var options = new JsonSerializerOptions 
+            { 
+                WriteIndented = true,  // 这个选项确保输出格式化为多行
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+            };
+            options.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+            options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            var updatedJson = JsonSerializer.Serialize(jsonObject, options);
+
+            await System.IO.File.WriteAllTextAsync(configPath, updatedJson);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving config: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 判断对象是否为复杂类型（非简单类型）
+    /// </summary>
+    /// <param name="obj">要判断的对象</param>
+    /// <returns>如果是复杂类型返回true，否则返回false</returns>
+    private static bool IsComplexType(object obj)
+    {
+        if (obj == null) return false;
+        
+        var type = obj.GetType();
+        
+        // 简单类型包括：基本数据类型和它们的可空版本
+        if (type.IsPrimitive || 
+            type == typeof(string) || 
+            type == typeof(DateTime) || 
+            type == typeof(DateTimeOffset) || 
+            type == typeof(TimeSpan) || 
+            type == typeof(Guid) ||
+            type == typeof(decimal) ||
+            type.IsEnum ||
+            Nullable.GetUnderlyingType(type) != null) // 可空类型
+        {
+            return false;
+        }
+        
+        // 处理常见集合类型
+        if (type.IsArray || 
+            type.GetInterface("IEnumerable") != null && 
+            type != typeof(string))
+        {
+            // 对于集合，检查元素是否为简单类型
+            return !IsSimpleCollection(obj);
+        }
+        
+        // 其他类型认为是复杂类型
+        return true;
+    }
+
+    /// <summary>
+    /// 判断是否为简单类型的集合
+    /// </summary>
+    /// <param name="collection">要检查的集合</param>
+    /// <returns>如果是简单类型集合返回true，否则返回false</returns>
+    private static bool IsSimpleCollection(object collection)
+    {
+        if (collection == null) return true;
+        
+        var enumerable = collection as System.Collections.IEnumerable;
+        if (enumerable == null) return true;
+
+        foreach (var item in enumerable)
+        {
+            if (item == null) continue;
+            
+            var itemType = item.GetType();
+            if (itemType.IsPrimitive || 
+                itemType == typeof(string) || 
+                itemType == typeof(DateTime) || 
+                itemType == typeof(DateTimeOffset) || 
+                itemType == typeof(TimeSpan) || 
+                itemType == typeof(Guid) ||
+                itemType == typeof(decimal) ||
+                itemType.IsEnum ||
+                Nullable.GetUnderlyingType(itemType) != null)
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    private void NavigateAndSetValue(IDictionary<string, object> dict, string[] pathParts, object value)
+    {
+        // 遍历路径直到倒数第二个部分
+        for (int i = 0; i < pathParts.Length - 1; i++)
+        {
+            var key = pathParts[i];
+            if (!dict!.ContainsKey(key))
+            {
+                // 如果路径不存在，创建新对象
+                var newDict = new Dictionary<string, object>();
+                dict[key] = newDict;
+                dict = newDict;
+            }
+            else
+            {
+                // 如果路径存在且是JsonElement，需要转换为字典
+                if (dict[key] is JsonElement element)
+                {
+                    var jsonString = element.GetRawText();
+                    var subDict = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
+                    dict[key] = subDict!;
+                    dict = subDict!;
+                }
+                else if (dict[key] is Dictionary<string, object> subDict)
+                {
+                    dict = subDict;
+                }
+                else
+                {
+                    // 如果路径存在但不是对象，替换为新对象
+                    var newDict = new Dictionary<string, object>();
+                    dict[key] = newDict;
+                    dict = newDict;
+                }
+            }
+        }
+
+        // 设置最后一个路径部分的值
+        dict[pathParts[^1]] = value;
+    }
+
+    private string? GetConfigPath()
+    {
+        // 如果你把配置文件是根据环境变量来分开了，可以这样写
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        var path = string.IsNullOrEmpty(environment) 
+            ? "appsettings.json" 
+            : $"appsettings.{environment}.json";
+        
+        return path;
     }
 }
+

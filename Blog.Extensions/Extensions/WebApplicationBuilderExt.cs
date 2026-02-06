@@ -17,7 +17,8 @@ using Blog.Core.DbContext;
 using Blog.Extensions.Filter;
 using Serilog;
 using Microsoft.Extensions.Logging;
-using Blog.Extensions.Config;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
 
 namespace Blog.Extensions;
 
@@ -25,8 +26,6 @@ public static class WebApplicationBuilderExt
 {
     public static IServiceCollection AddEntry(this IServiceCollection services)
     {
-        services.AddTransient(typeof(SiteMgr),typeof(SiteMgr));
-        services.AddTransient(typeof(OtherSiteMgr),typeof(OtherSiteMgr));
         // Appsettings Register 
         services.AddSingleton(new AppSettings(services.GetConfiguration()));
         // initialize serilog configuration
@@ -42,8 +41,8 @@ public static class WebApplicationBuilderExt
     {
         string SerilogOutputTemplate = "{NewLine}{NewLine}Date：{Timestamp:yyyy-MM-dd HH:mm:ss}{NewLine}LogLevel：{Level}{NewLine}Message：{Message}{NewLine}{Exception}" + new string('-', 100);
 
-        var logPath = AppSettings.app("Serilogs","Path") ?? "Logs";
-      
+        var logPath = AppSettings.app("Serilogs", "Path") ?? "Logs";
+
         // var logDirectory = Path.Combine(Directory.GetCurrentDirectory(),logPath);
         // if (!Directory.Exists(logDirectory))
         // {
@@ -51,7 +50,7 @@ public static class WebApplicationBuilderExt
         // }
 
         // var logFilePath = Path.Combine(logDirectory, "log_.log");
-        
+
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console(outputTemplate: SerilogOutputTemplate)
             .WriteTo.File(logPath,
@@ -104,7 +103,7 @@ public static class WebApplicationBuilderExt
                             await WriteJsonResponse(ctx.Response, ApiResult.Failure(Code.TokenExpired), StatusCodes.Status401Unauthorized);
                             return;
                         }
-                        
+
                         await WriteJsonResponse(ctx.Response, ApiResult.Failure(Code.Unauthorized), StatusCodes.Status401Unauthorized);
                     },
 
@@ -183,8 +182,17 @@ public static class WebApplicationBuilderExt
        })
        .AddJsonOptions(opts =>
        {
+           // 设置属性名为驼峰命名（camelCase），例如 "PropertyName" 会序列化为 "propertyName"
            opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-           opts.JsonSerializerOptions.WriteIndented = false;
+           
+           // 设置字典键为驼峰命名，确保字典类型的键也使用小写开头的驼峰格式
+           opts.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+           
+           // 设置属性名称大小写不敏感，反序列化时可以接受任意大小写的属性名
+           opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+           opts.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+           opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+           opts.JsonSerializerOptions.WriteIndented = true;
        });
 
         services.AddHttpContextAccessor();

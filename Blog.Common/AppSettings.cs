@@ -32,7 +32,7 @@ public class AppSettings
     }
 
     public static IConfiguration? Configuration { get; set; }
-    private static string contentPath { get; set; }
+    private static string? contentPath { get; set; }
 
     /// <summary>
     ///     封装要操作的字符
