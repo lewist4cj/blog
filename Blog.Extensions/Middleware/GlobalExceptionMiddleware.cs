@@ -5,6 +5,8 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Blog.Common.Utils;
 using Blog.Common;
+using MySqlConnector;
+using StackExchange.Redis;
 
 namespace Blog.Extensions.Middleware
 {
@@ -52,8 +54,16 @@ namespace Blog.Extensions.Middleware
                     result = ApiResult.Failure(Code.BadRequest, exception.Message);
                     statusCode = StatusCodes.Status400BadRequest;
                     break;
+                case MySqlException:
+                    result = ApiResult.Failure(Code.MySqlAccessDenied, exception.Message);
+                    statusCode = StatusCodes.Status400BadRequest;
+                    break;
+                case RedisConnectionException:
+                    result = ApiResult.Failure(Code.RedisAccessDenied, exception.Message);
+                    statusCode = StatusCodes.Status400BadRequest;
+                    break;
                 default:
-                    result = ApiResult.Failure(Code.InternalServerError);
+                    result = ApiResult.Failure(Code.InternalServerError, exception.Message);
                     statusCode = StatusCodes.Status500InternalServerError;
                     break;
             }

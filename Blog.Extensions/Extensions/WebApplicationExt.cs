@@ -9,12 +9,12 @@ public static class WebApplicationExt
     {
         // GlobalExceptionMiddleware - Must be placed before UseMiddleware<LogMiddleware>
         app.UseMiddleware<GlobalExceptionMiddleware>();
-
         app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseMiddleware<LogMiddleware>();
         app.MapControllers();
+        app.UseStaticFiles();
 
         return app;
     }

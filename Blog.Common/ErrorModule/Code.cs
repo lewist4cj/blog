@@ -30,6 +30,7 @@ public static class Code
     /// 资源未找到
     /// </summary>
     public static readonly ErrorCode NotFound = new(404, "Not Found");
+
     #endregion
     
     #region 服务器错误码 (5xx)
@@ -59,16 +60,20 @@ public static class Code
     /// 用户名或密码错误
     /// </summary>
     public static readonly ErrorCode InvalidCredentials = new(1002, "Invalid username or password");
+    public static readonly ErrorCode FileNotExists = new (1003, "File not exists");
+
     
     /// <summary>
     /// 数据验证失败
     /// </summary>
-    public static readonly ErrorCode ValidationFailed = new(1003, "Data validation failed");
+    public static readonly ErrorCode ValidationFailed = new(2003, "Data validation failed");
 
-    public static readonly ErrorCode UserBlackEnumType = new(1004, "User account closed.");
+    public static readonly ErrorCode UserBlackEnumType = new(2004, "User account closed.");
 
-    public static readonly ErrorCode AdminBlackEnumType = new(1006, "dot not allow to login");
+    public static readonly ErrorCode AdminBlackEnumType = new(2006, "dot not allow to login");
 
-    public static readonly ErrorCode DeviceBackEnumType = new(1007, " device dot not allow to login");
+    public static readonly ErrorCode DeviceBackEnumType = new(2007, " device dot not allow to login");
+    public static readonly ErrorCode MySqlAccessDenied  = new(2008, "mysql exception occurred");
+    public static readonly ErrorCode RedisAccessDenied  = new(2009, "redis exception occurred");
     #endregion
 }

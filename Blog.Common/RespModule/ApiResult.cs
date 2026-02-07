@@ -54,10 +54,10 @@ public class ApiResult
     public static ApiResult Failure(ErrorCode code) => new(code);
     public static ApiResult Failure(ErrorCode code, object errors)
     {
-        return new ApiResult(400u, code.Message, errors!);
+        return new ApiResult(code.Code, code.Message, errors!);
     }
     public static ApiResult Failure(string message, object errors)
     {
-        return new ApiResult(400u, message, errors!);
+        return new ApiResult(500u, message, errors!);
     }
 }

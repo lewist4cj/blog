@@ -140,11 +140,11 @@ public class SiteController(ILogger<SiteController> _logger) : BaseController
         if (!exists)
         {
             _logger.LogError($"File not exists {siteMgr.ProjectSettings.Fontend}");
-            return ApiResult.Failure(Code.FileNotExist);
+            return ApiResult.Failure(Code.FileNotExists);
         }
 
         var htmlDocument = new HtmlDocument();
-        htmlDocument.Load("./uploads/index.html");
+        htmlDocument.Load("./wwwroot/uploads/index.html");
 
         var titleNode = htmlDocument.DocumentNode.SelectSingleNode("//title");
         titleNode.InnerHtml = siteMgr.ProjectSettings.Title!;
@@ -157,7 +157,26 @@ public class SiteController(ILogger<SiteController> _logger) : BaseController
 
         }
         linkIcon?.SetAttributeValue("href", siteMgr.ProjectSettings.Icon!);
+        var metaKeywords = htmlDocument.DocumentNode.SelectSingleNode("//meta[@name='keywords']");
+        if (metaKeywords == null)
+        {
+            HtmlNode htmlNode = htmlDocument.CreateElement("meta");
+            htmlNode.SetAttributeValue("name", "keywords");
+            htmlNode.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords!);
 
+        }
+        metaKeywords?.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords!);
+        var metaDesc = htmlDocument.DocumentNode.SelectSingleNode("//meta[@name='description']");
+        if (metaDesc == null)
+        {
+            HtmlNode htmlNode = htmlDocument.CreateElement("meta");
+            htmlNode.SetAttributeValue("name", "description");
+            htmlNode.SetAttributeValue("content", siteMgr.SeoSettings?.Description!);
+
+        }
+        metaDesc?.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords!);
+
+        // save data into the html file. 
         htmlDocument.Save(siteMgr.ProjectSettings.Fontend!);
 
         return ApiResult.Success("Settings updated and saved successfully");
