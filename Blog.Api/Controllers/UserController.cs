@@ -8,7 +8,7 @@ using Blog.Services.Log;
 using Blog.Services.UserApp;
 using Microsoft.AspNetCore.Mvc;
 
-namespace blog.Controllers;
+namespace Blog.Api.Controllers;
 
 public class UserController(RuntimeLogService runtimeLogService,
  IUserService userService, ILogger<UserController> logger, IRedisWorker redisWorker,

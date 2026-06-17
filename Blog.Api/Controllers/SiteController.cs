@@ -9,7 +9,7 @@ using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace blog.Controllers;
+namespace Blog.Api.Controllers;
 
 [Authorize(AuthenticationSchemes = "Bearer")]
 public class SiteController(IConfiguration configuration, ISiteConfigService siteConfigService) : BaseController
@@ -131,51 +131,51 @@ public class SiteController(IConfiguration configuration, ISiteConfigService sit
     {
         var htmlDocument = new HtmlDocument();
         htmlDocument.Load("./wwwroot/uploads/index.html");
+        var docNode = htmlDocument.DocumentNode;
 
-        var titleNode = htmlDocument.DocumentNode.SelectSingleNode("//title");
+        var titleNode = docNode.SelectSingleNode("//title");
         if (titleNode != null)
-            titleNode.InnerHtml = siteMgr.ProjectSettings.Title!;
+            titleNode.InnerHtml = siteMgr.ProjectSettings!.Title!;
 
-        var linkIcon = htmlDocument.DocumentNode.SelectSingleNode("//link[@rel='icon']");
+        var linkIcon = docNode.SelectSingleNode("//link[@rel='icon']");
         if (linkIcon == null)
         {
             var htmlNode = htmlDocument.CreateElement("link");
             htmlNode.SetAttributeValue("rel", "icon");
-            htmlNode.SetAttributeValue("href", siteMgr.ProjectSettings.Icon!);
-            htmlDocument.DocumentNode.ChildNodes.Add(htmlNode);
+            htmlNode.SetAttributeValue("href", siteMgr.ProjectSettings!.Icon!);
+            docNode.ChildNodes.Add(htmlNode);
         }
         else
         {
-            linkIcon.SetAttributeValue("href", siteMgr.ProjectSettings.Icon!);
+            linkIcon.SetAttributeValue("href", siteMgr.ProjectSettings!.Icon!);
         }
 
-        var metaKeywords = htmlDocument.DocumentNode.SelectSingleNode("//meta[@name='keywords']");
+        var metaKeywords = docNode.SelectSingleNode("//meta[@name='keywords']");
         if (metaKeywords == null)
         {
             var htmlNode = htmlDocument.CreateElement("meta");
             htmlNode.SetAttributeValue("name", "keywords");
-            htmlNode.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords!);
-            htmlDocument.DocumentNode.ChildNodes.Add(htmlNode);
+            htmlNode.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords ?? "");
+            docNode.ChildNodes.Add(htmlNode);
         }
         else
         {
-            metaKeywords.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords!);
+            metaKeywords.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords ?? "");
         }
 
-        var metaDesc = htmlDocument.DocumentNode.SelectSingleNode("//meta[@name='description']");
+        var metaDesc = docNode.SelectSingleNode("//meta[@name='description']");
         if (metaDesc == null)
         {
             var htmlNode = htmlDocument.CreateElement("meta");
             htmlNode.SetAttributeValue("name", "description");
-            htmlNode.SetAttributeValue("content", siteMgr.SeoSettings?.Description!);
-            htmlDocument.DocumentNode.ChildNodes.Add(htmlNode);
+            htmlNode.SetAttributeValue("content", siteMgr.SeoSettings?.Description ?? "");
+            docNode.ChildNodes.Add(htmlNode);
         }
         else
         {
-            metaDesc.SetAttributeValue("content", siteMgr.SeoSettings?.Description!);
+            metaDesc.SetAttributeValue("content", siteMgr.SeoSettings?.Description ?? "");
         }
 
-        // save data into the html file. 
         htmlDocument.Save("./wwwroot/uploads/index.html");
 
         return ApiResult.Success("Settings updated and saved successfully");

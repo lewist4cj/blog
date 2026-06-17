@@ -1,10 +1,9 @@
 
-using blog.Controllers;
 using Blog.Common;
 using Blog.Common.Utils;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Blog.Controllers;
+namespace Blog.Api.Controllers;
 
 public class UploadsController : BaseController
 {

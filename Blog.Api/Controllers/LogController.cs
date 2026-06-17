@@ -7,7 +7,7 @@ using Blog.Services.LogMgrApp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace blog.Controllers;
+namespace Blog.Api.Controllers;
 [Authorize(AuthenticationSchemes = "Bearer")]
 [AuthorizationFilter(RoleEnum.SuperAdmin)]  // Only allow SuperAdmin access
 public class LogController(ILogService logService): BaseController 
