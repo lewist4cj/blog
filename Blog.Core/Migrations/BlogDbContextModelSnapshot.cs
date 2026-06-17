@@ -3,8 +3,8 @@ using System;
 using Blog.Core.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,17 +17,20 @@ namespace Blog.Core.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("utf8mb4_0900_ai_ci")
                 .HasAnnotation("ProductVersion", "8.0.23")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Blog.Domain.ArticleDiggModel", b =>
                 {
-                    b.Property<ulong?>("ArticleId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("id");
+
+                    b.Property<decimal?>("ArticleId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("article_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -36,9 +39,11 @@ namespace Blog.Core.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
+
+                    b.HasKey("Id");
 
                     b.HasIndex(new[] { "UserId", "ArticleId" }, "idx_name")
                         .IsUnique();
@@ -48,12 +53,10 @@ namespace Blog.Core.Migrations
 
             modelBuilder.Entity("Blog.Domain.ArticleModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
 
                     b.Property<long?>("CollectCount")
                         .HasColumnType("bigint")
@@ -64,15 +67,15 @@ namespace Blog.Core.Migrations
                         .HasColumnName("comment_count");
 
                     b.Property<string>("Content")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<ulong?>("ContentId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("ContentId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("content_id");
 
                     b.Property<string>("Cover")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("cover");
 
                     b.Property<DateTime>("CreatedAt")
@@ -82,11 +85,11 @@ namespace Blog.Core.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Desc")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("desc");
 
                     b.Property<bool?>("EnableComment")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasColumnName("enable_comment");
 
                     b.Property<long?>("LikeCount")
@@ -102,42 +105,37 @@ namespace Blog.Core.Migrations
                         .HasColumnName("status");
 
                     b.Property<string>("TagList")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("tag_list");
 
                     b.Property<string>("Title")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("article_models");
                 });
 
             modelBuilder.Entity("Blog.Domain.BannerModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
-
                     b.Property<string>("Cover")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("cover");
 
                     b.Property<DateTime>("CreatedAt")
@@ -147,31 +145,26 @@ namespace Blog.Core.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Href")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("href");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("banner_models");
                 });
 
             modelBuilder.Entity("Blog.Domain.CategoryModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -181,39 +174,34 @@ namespace Blog.Core.Migrations
 
                     b.Property<string>("Title")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("category_models");
                 });
 
             modelBuilder.Entity("Blog.Domain.CollectModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
 
                     b.Property<string>("Abstract")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("abstract");
 
                     b.Property<long?>("ArticleCount")
@@ -222,7 +210,7 @@ namespace Blog.Core.Migrations
 
                     b.Property<string>("Cover")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("cover");
 
                     b.Property<DateTime>("CreatedAt")
@@ -233,43 +221,38 @@ namespace Blog.Core.Migrations
 
                     b.Property<string>("Title")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("collect_models");
                 });
 
             modelBuilder.Entity("Blog.Domain.CommentModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
-
-                    b.Property<ulong?>("ArticleId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("ArticleId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("article_id");
 
                     b.Property<string>("Content")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("content");
 
                     b.Property<DateTime>("CreatedAt")
@@ -282,44 +265,39 @@ namespace Blog.Core.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("digg_count");
 
-                    b.Property<ulong?>("ParentId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("ParentId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("parent_id");
 
-                    b.Property<ulong?>("RootParentId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("RootParentId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("root_parent_id");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("comment_models");
                 });
 
             modelBuilder.Entity("Blog.Domain.GlobalNotication", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
 
                     b.Property<string>("Content")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("character varying(64)")
                         .HasColumnName("content");
 
                     b.Property<DateTime>("CreatedAt")
@@ -330,49 +308,44 @@ namespace Blog.Core.Migrations
 
                     b.Property<string>("Href")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("href");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("icon");
 
                     b.Property<string>("Title")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("global_notications");
                 });
 
             modelBuilder.Entity("Blog.Domain.LogModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
 
                     b.Property<string>("Addr")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("character varying(64)")
                         .HasColumnName("addr");
 
                     b.Property<string>("Content")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("content");
 
                     b.Property<DateTime>("CreatedAt")
@@ -383,75 +356,110 @@ namespace Blog.Core.Migrations
 
                     b.Property<string>("Ip")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("ip");
 
                     b.Property<bool?>("IsRead")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasColumnName("is_read");
 
                     b.Property<int?>("Level")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("level");
 
                     b.Property<int?>("LogType")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("log_type");
 
                     b.Property<bool?>("LoginStatus")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasColumnName("login_status");
 
-                    b.Property<sbyte?>("LoginType")
-                        .HasColumnType("tinyint")
+                    b.Property<short?>("LoginType")
+                        .HasColumnType("smallint")
                         .HasColumnName("login_type");
 
                     b.Property<string>("Pwd")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("pwd");
 
                     b.Property<string>("ServiceName")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("service_name");
 
                     b.Property<string>("Title")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("user_name");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("log_models");
                 });
 
+            modelBuilder.Entity("Blog.Domain.SiteConfigModel", b =>
+                {
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ConfigValue")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("config_value");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Section")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("section");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("site_configs");
+                });
+
             modelBuilder.Entity("Blog.Domain.UserArticleCollectModel", b =>
                 {
-                    b.Property<ulong?>("ArticleId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("id");
+
+                    b.Property<decimal?>("ArticleId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("article_id");
 
-                    b.Property<ulong?>("CollectId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("CollectId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("collect_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -460,27 +468,28 @@ namespace Blog.Core.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
 
+                    b.HasKey("Id");
+
                     b.HasIndex(new[] { "UserId", "ArticleId", "CollectId" }, "idx_name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("idx_name1");
 
                     b.ToTable("user_article_collect_models");
                 });
 
             modelBuilder.Entity("Blog.Domain.UserArticleLookHistoryModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
-
-                    b.Property<ulong?>("ArticleId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("ArticleId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("article_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -490,52 +499,56 @@ namespace Blog.Core.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("user_article_look_history_models");
                 });
 
             modelBuilder.Entity("Blog.Domain.UserConfModel", b =>
                 {
+                    b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("id");
+
                     b.Property<string>("LikeTags")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("like_tags");
 
                     b.Property<bool?>("PublishCollections")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasColumnName("publish_collections");
 
                     b.Property<bool?>("PublishFans")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasColumnName("publish_fans");
 
                     b.Property<bool?>("PublishFollowings")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasColumnName("publish_followings");
 
-                    b.Property<ulong?>("ThemeStyleId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("ThemeStyleId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("theme_style_id");
 
                     b.Property<DateTime?>("UpdateUsernameDate")
                         .HasColumnType("datetime(3)")
                         .HasColumnName("update_username_date");
 
-                    b.Property<ulong?>("UserId")
-                        .HasColumnType("bigint unsigned")
+                    b.Property<decimal?>("UserId")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("user_id");
+
+                    b.HasKey("Id");
 
                     b.HasIndex(new[] { "UserId" }, "uni_user_conf_models_user_id")
                         .IsUnique();
@@ -545,21 +558,19 @@ namespace Blog.Core.Migrations
 
             modelBuilder.Entity("Blog.Domain.UserModel", b =>
                 {
-                    b.Property<ulong>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
 
                     b.Property<string>("Abstract")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("abstract");
 
                     b.Property<string>("Avatar")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("avatar");
 
                     b.Property<long?>("CodeAge")
@@ -574,47 +585,44 @@ namespace Blog.Core.Migrations
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("email");
 
                     b.Property<string>("Nickname")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("nickname");
 
                     b.Property<string>("OpenId")
                         .HasMaxLength(126)
-                        .HasColumnType("varchar(126)")
+                        .HasColumnType("character varying(126)")
                         .HasColumnName("open_id");
 
                     b.Property<string>("Password")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64)")
+                        .HasColumnType("character varying(64)")
                         .HasColumnName("password");
 
-                    b.Property<sbyte?>("RegisterSrc")
-                        .HasColumnType("tinyint")
+                    b.Property<short?>("RegisterSrc")
+                        .HasColumnType("smallint")
                         .HasColumnName("register_src");
 
-                    b.Property<sbyte?>("Role")
-                        .HasColumnType("tinyint")
+                    b.Property<short>("Role")
+                        .HasColumnType("smallint")
                         .HasColumnName("role");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdatedAt"));
-
                     b.Property<string>("Username")
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("username");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.HasKey("Id");
 
                     b.ToTable("user_models");
                 });

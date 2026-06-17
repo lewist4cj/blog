@@ -45,9 +45,9 @@ public static class TokenHepler
         return accessToken;
     }
 
-     public static SecurityToken GetSecurityToken(string token)
+     public static SecurityToken GetSecurityToken(string token, IConfiguration configuration)
     {
-        var jwtSection = AppSettings.Configuration!.GetSection("Jwt");
+        var jwtSection = configuration.GetSection("Jwt");
         var tokenModel = jwtSection.Get<JwtTokenModel>()!;
         tokenModel.Validate();
         JwtSecurityTokenHandler tokenHandler = new();

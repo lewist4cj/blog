@@ -73,7 +73,7 @@ public static class Code
     public static readonly ErrorCode AdminBlackEnumType = new(2006, "dot not allow to login");
 
     public static readonly ErrorCode DeviceBackEnumType = new(2007, " device dot not allow to login");
-    public static readonly ErrorCode MySqlAccessDenied  = new(2008, "mysql exception occurred");
+    public static readonly ErrorCode DbAccessDenied  = new(2008, "database exception occurred");
     public static readonly ErrorCode RedisAccessDenied  = new(2009, "redis exception occurred");
     #endregion
 }

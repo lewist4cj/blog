@@ -12,7 +12,7 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
         var dbSet = context.Set<TEntity>();
         return dbSet.ToList();
     }
-    public List<TEntity> GetList(Func<TEntity, bool> predicate)
+    public List<TEntity> GetList(Expression<Func<TEntity, bool>> predicate)
     {
         var dbSet = context.Set<TEntity>();
         return dbSet.Where(predicate).ToList();
@@ -26,6 +26,14 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
     {
         var dbSet = context.Set<TEntity>();
         return await dbSet.Where(predicate).ToListAsync();
+    }
+
+    public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? predicate = null)
+    {
+        var dbSet = context.Set<TEntity>();
+        if (predicate != null)
+            return await dbSet.CountAsync(predicate);
+        return await dbSet.CountAsync();
     }
 
     public List<TEntity> GetList(int pageIndex, int pageSize)
@@ -52,7 +60,7 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
         return await dbSet.FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public TEntity? Get(Func<TEntity, bool> predicate)
+    public TEntity? Get(Expression<Func<TEntity, bool>> predicate)
     {
         var dbSet = context.Set<TEntity>();
         return dbSet.FirstOrDefault(predicate);
@@ -68,7 +76,6 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
     {
         var dbSet = context.Set<TEntity>();
         var res = dbSet.Add(entity).Entity;
-        context.SaveChanges();
         return res;
     }
 
@@ -76,7 +83,6 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
     {
         var dbSet = context.Set<TEntity>();
         var res = (await dbSet.AddAsync(entity)).Entity;
-        await context.SaveChangesAsync();
         return res;
     }
 
@@ -84,7 +90,6 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
     {
         var dbSet = context.Set<TEntity>();
         var res = dbSet.Remove(entity).Entity;
-        context.SaveChanges();
         return res;
     }
 
@@ -92,7 +97,6 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
     {
         var dbSet = context.Set<TEntity>();
         var res = dbSet.Remove(entity).Entity;
-        await context.SaveChangesAsync();
         return res;
     }
 
@@ -100,7 +104,6 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
     {
         var dbSet = context.Set<TEntity>();
         var res = dbSet.Update(entity).Entity;
-        context.SaveChanges();
         return res;
     }
 
@@ -108,7 +111,11 @@ public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> w
     {
         var dbSet = context.Set<TEntity>();
         var res = dbSet.Update(entity).Entity;
-        await context.SaveChangesAsync();
         return res;
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.SaveChangesAsync(cancellationToken);
     }
 }

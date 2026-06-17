@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Blog.Common.TokenModule.Models;
 
@@ -17,8 +18,9 @@ public class JwtTokenModel : IValidatableObject
     public string?  Audience { get; set; } = "";
 
     /// <summary>
-    /// 过期时间
+    /// 过期时间（小时）
     /// </summary>
+    [JsonPropertyName("Expire")]
     public int Expires { get; set; } = 10;
 
     /// <summary>

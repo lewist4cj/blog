@@ -11,14 +11,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace blog.Controllers;
 
 public class UserController(RuntimeLogService runtimeLogService,
- IUserService userService, ILogger<UserController> logger, IRedisWorker redisWorker) : BaseController
+ IUserService userService, ILogger<UserController> logger, IRedisWorker redisWorker,
+ IConfiguration configuration) : BaseController
 {
 
     [HttpPost("login")]
     public async Task<ApiResult> CheckLogin(UserModelLoginDto dto)
     {
         runtimeLogService.AddItemNowTime();
-        runtimeLogService.AddItemInfo("login info", $"username: {dto.Username},password:{dto.Password}");
+        runtimeLogService.AddItemInfo("login info", $"username: {dto.Username}");
         runtimeLogService.Save("UserController/CheckLogin");
 
         if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
@@ -54,7 +55,7 @@ public class UserController(RuntimeLogService runtimeLogService,
         }
 
         var token = authHeader.Substring("Bearer ".Length).Trim();
-        var tokenHandler = TokenHepler.GetSecurityToken(token);
+        var tokenHandler = TokenHepler.GetSecurityToken(token, configuration);
         
         // if the remaining time is less than or equal to zero, then the token has expired. so we dot need to add it to the blacklist.
         var remainingTime = tokenHandler.ValidTo - DateTime.UtcNow;

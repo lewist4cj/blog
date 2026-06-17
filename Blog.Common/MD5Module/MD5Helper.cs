@@ -8,7 +8,7 @@ public static class MD5Helper
     public static string ToMD5(this string origin)
     {
         var md5 = MD5.Create();
-        var bytes = md5.ComputeHash(Encoding.Default.GetBytes(origin));
+        var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(origin));
         var str = BitConverter.ToString(bytes).Replace("-", "");
         return str;
     }

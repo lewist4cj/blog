@@ -1,11 +1,9 @@
-using Blog.Extensions;
+using Blog.Api.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEntry();
+builder.Services.AddEntry(builder.Configuration);
 var app = builder.Build();
-
-// 注册全局异常处理中间件
 
 app.UseEntry();
 app.Run();

@@ -1,5 +1,6 @@
 using Blog.Common.Utils;
 using Blog.Extensions.Validation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
@@ -9,14 +10,10 @@ public class RedisCore
 {
     private ConnectionMultiplexer? _connect;
 
-    public IDatabase Db { get; }
-    public RedisCore(ILogger<RedisCore> logger)
+    public IDatabase Db { get; private set; } = null!;
+    public RedisCore(IConfiguration configuration, ILogger<RedisCore> logger)
     {
-        if (AppSettings.Configuration == null)
-        {
-            throw new Exception("AppSettings.Configuration is null");
-        }
-        var redisModle = AppSettings.Configuration.GetValidatedConfig<RedisModle>("Redis");
+        var redisModle = configuration.GetValidatedConfig<RedisModle>("Redis");
         redisModle.ValidateOrThrow("redis model is null");
         var connectionString = $"{redisModle.Host}:{redisModle.Port},password={redisModle.Password}";
         try

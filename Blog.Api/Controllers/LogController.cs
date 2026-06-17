@@ -2,7 +2,7 @@ using Blog.Common.Utils;
 using Blog.Core.Repository;
 using Blog.Domain;
 using Blog.Domain.enums;
-using Blog.Extensions.Filter;
+using Blog.Api.Filter;
 using Blog.Services.LogMgrApp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
