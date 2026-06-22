@@ -5,27 +5,37 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Blog.Api</RootNamespace>
 
-    <!-- 单文件独立发布配置 -->
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
-    <PublishTrimmed>true</PublishTrimmed>
-    <!-- 包含原生库以便单文件运行 -->
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <!-- 启用 Native AOT -->
     <PublishAot>true</PublishAot>
+    <!-- 运行时标识（未指定时默认 win-x64） -->
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+
+    <!-- === 体积优化 === -->
+    <!-- 去掉调试符号（省 ~270MB PDB + ~4MB exe） -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <!-- 移除 ICU 国际化数据（省 ~10MB） -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- 合并相同方法体（省 ~2MB） -->
+    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+    <!-- 更激进裁剪 -->
+    <OptimizationPreferTrimming>true</OptimizationPreferTrimming>
+
     <!-- 抑制裁剪分析误报 -->
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
   </PropertyGroup>
+
   <ItemGroup>
     <RdXmlFile Include="rd.xml" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="SqlSugarCore" Version="5.1.4.214" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Blog.Services\Blog.Services.csproj" />
     <ProjectReference Include="..\Blog.Core\Blog.Core.csproj" />
