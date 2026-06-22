@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Blog.Common;
 using Blog.Common.Utils;
 using Blog.Domain.Config;
@@ -41,10 +40,10 @@ public static class SiteEndpoints
         var otherSiteMgr = await siteConfigService.GetOtherSiteMgrAsync();
         return name switch
         {
-            "email" => ApiResult.Success(otherSiteMgr.EmailSettings),
-            "qq" => ApiResult.Success(otherSiteMgr.QqSettings),
-            "qiNiu" => ApiResult.Success(otherSiteMgr.QiNiuSettings),
-            "ai" => ApiResult.Success(otherSiteMgr.AiSettings),
+            "email" => ApiResult.Success(otherSiteMgr.EmailSettings!),
+            "qq" => ApiResult.Success(otherSiteMgr.QqSettings!),
+            "qiNiu" => ApiResult.Success(otherSiteMgr.QiNiuSettings!),
+            "ai" => ApiResult.Success(otherSiteMgr.AiSettings!),
             _ => ApiResult.Failure(Code.NotFound)
         };
     }
@@ -57,7 +56,7 @@ public static class SiteEndpoints
         if (validationResult.Code != 200)
             return validationResult;
 
-        var url = qqSettings.GetRedirectUrl();
+        var url = qqSettings!.GetRedirectUrl();
         return ApiResult.Success(url!);
     }
 
@@ -115,47 +114,16 @@ public static class SiteEndpoints
         var docNode = htmlDocument.DocumentNode;
 
         var titleNode = docNode.SelectSingleNode("//title");
-        if (titleNode != null)
-            titleNode.InnerHtml = siteMgr.ProjectSettings!.Title!;
+        titleNode.InnerHtml = siteMgr.ProjectSettings!.Title!;
 
         var linkIcon = docNode.SelectSingleNode("//link[@rel='icon']");
-        if (linkIcon == null)
-        {
-            var htmlNode = htmlDocument.CreateElement("link");
-            htmlNode.SetAttributeValue("rel", "icon");
-            htmlNode.SetAttributeValue("href", siteMgr.ProjectSettings!.Icon!);
-            docNode.ChildNodes.Add(htmlNode);
-        }
-        else
-        {
-            linkIcon.SetAttributeValue("href", siteMgr.ProjectSettings!.Icon!);
-        }
+        linkIcon.SetAttributeValue("href", siteMgr.ProjectSettings!.Icon!);
 
         var metaKeywords = docNode.SelectSingleNode("//meta[@name='keywords']");
-        if (metaKeywords == null)
-        {
-            var meta = htmlDocument.CreateElement("meta");
-            meta.SetAttributeValue("name", "keywords");
-            meta.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords ?? "");
-            docNode.ChildNodes.Add(meta);
-        }
-        else
-        {
-            metaKeywords.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords ?? "");
-        }
+        metaKeywords.SetAttributeValue("content", siteMgr.SeoSettings?.Keywords ?? "");
 
         var metaDesc = docNode.SelectSingleNode("//meta[@name='description']");
-        if (metaDesc == null)
-        {
-            var meta = htmlDocument.CreateElement("meta");
-            meta.SetAttributeValue("name", "description");
-            meta.SetAttributeValue("content", siteMgr.SeoSettings?.Description ?? "");
-            docNode.ChildNodes.Add(meta);
-        }
-        else
-        {
-            metaDesc.SetAttributeValue("content", siteMgr.SeoSettings?.Description ?? "");
-        }
+        metaDesc.SetAttributeValue("content", siteMgr.SeoSettings?.Description ?? "");
 
         htmlDocument.Save("./wwwroot/uploads/index.html");
         return ApiResult.Success("Settings updated and saved successfully");

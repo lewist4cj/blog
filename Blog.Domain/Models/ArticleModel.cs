@@ -23,6 +23,9 @@ public class ArticleModel : BaseEntity
     [SugarColumn(ColumnName = "content_id")]
     public ulong? ContentId { get; set; }
 
+    [SugarColumn(ColumnName = "category_id")]
+    public ulong? CategoryId { get; set; }
+
     [SugarColumn(ColumnName = "tag_list")]
     public string? TagList { get; set; }
 
@@ -49,4 +52,10 @@ public class ArticleModel : BaseEntity
 
     [SugarColumn(ColumnName = "status")]
     public long? Status { get; set; }
+
+    [SugarColumn(ColumnName = "user_top")]
+    public bool? UserTop { get; set; }
+
+    [SugarColumn(ColumnName = "admin_top")]
+    public bool? AdminTop { get; set; }
 }

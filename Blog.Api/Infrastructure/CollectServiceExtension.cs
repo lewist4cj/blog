@@ -1,6 +1,7 @@
 using Blog.Common;
 using Blog.Common.RedisModule;
 using Blog.Core.Repository;
+using Blog.Services.ArticleApp;
 using Blog.Services.ConfigMgrApp;
 using Blog.Services.LogMgrApp;
 using Blog.Services.UserApp;
@@ -25,6 +26,7 @@ public static class CollectServiceExtension
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ILogService, LogService>();
         services.AddScoped<ISiteConfigService, SiteConfigService>();
+        services.AddScoped<IArticleService, ArticleService>();
 
         // Blog.Common 层
         services.AddScoped<IRedisWorker, RedisWorker>();

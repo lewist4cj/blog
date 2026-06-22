@@ -2,13 +2,10 @@ using System.Text.Json.Serialization;
 using Blog.Common.RespModule;
 using Blog.Common.Utils;
 using Blog.Domain.Config;
+using Blog.Domain.Dtos;
 
 namespace Blog.Domain.JsonContext;
 
-/// <summary>
-/// AOT 安全的 JSON 序列化上下文（源码生成）
-/// 所有在 AOT 模式下需要序列化的类型必须在此注册
-/// </summary>
 [JsonSerializable(typeof(ApiResult))]
 [JsonSerializable(typeof(PageResult<LogModel>))]
 [JsonSerializable(typeof(LogModel))]
@@ -26,6 +23,15 @@ namespace Blog.Domain.JsonContext;
 [JsonSerializable(typeof(AiSettings))]
 [JsonSerializable(typeof(QqSettings))]
 [JsonSerializable(typeof(QiNiuSettings))]
+// Article
+[JsonSerializable(typeof(ArticleListItem))]
+[JsonSerializable(typeof(ArticleDetail))]
+[JsonSerializable(typeof(ArticleAddRequest))]
+[JsonSerializable(typeof(ArticleEditRequest))]
+[JsonSerializable(typeof(ArticleExamineRequest))]
+[JsonSerializable(typeof(ArticleCollectRequest))]
+[JsonSerializable(typeof(ArticleQuery))]
+[JsonSerializable(typeof(SelectOption))]
 public partial class DomainJsonContext : JsonSerializerContext
 {
 }

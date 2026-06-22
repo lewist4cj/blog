@@ -2,6 +2,7 @@ using System.Text;
 using Blog.Common;
 using Blog.Common.Utils;
 using Blog.Domain.JsonContext;
+using Blog.Api.JsonContext;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using Blog.Common.TokenModule.Models;
@@ -13,6 +14,7 @@ using Blog.Core.SqlSugar;
 using Serilog;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Blog.Common.Database;
 using Blog.Core.Sync;
 using Blog.Core.UnitOfWork;
@@ -161,7 +163,8 @@ public static class WebApplicationBuilderExt
         // Minimal API JSON 序列化配置（使用源码生成上下文，AOT 兼容）
         services.ConfigureHttpJsonOptions(opts =>
         {
-            opts.SerializerOptions.TypeInfoResolver = DomainJsonContext.Default;
+            opts.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
+                DomainJsonContext.Default, AppJsonContext.Default);
             opts.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             opts.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             opts.SerializerOptions.PropertyNameCaseInsensitive = true;
