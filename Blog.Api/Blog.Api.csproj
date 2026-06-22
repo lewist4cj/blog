@@ -10,8 +10,10 @@
     <!-- 运行时标识（未指定时默认 win-x64） -->
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
 
-    <!-- === 体积优化 === -->
-    <!-- 去掉调试符号（省 ~270MB PDB + ~4MB exe） -->
+    <!-- ============================================ -->
+    <!-- 体积优化                                      -->
+    <!-- ============================================ -->
+    <!-- 去掉调试符号（省 ~270MB PDB） -->
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <!-- 移除 ICU 国际化数据（省 ~10MB） -->
@@ -20,9 +22,21 @@
     <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
     <!-- 更激进裁剪 -->
     <OptimizationPreferTrimming>true</OptimizationPreferTrimming>
+    <!-- Trimmer 链接模式（link = 移除未使用代码） -->
+    <TrimMode>link</TrimMode>
+    <!-- 禁用堆栈字符串生成（省 ~2MB，异常不受影响） -->
+    <StackTraceSupport>false</StackTraceSupport>
+    <!-- 禁用事件源（省 ~1MB） -->
+    <EventSourceSupport>false</EventSourceSupport>
 
     <!-- 抑制裁剪分析误报 -->
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+
+    <!-- ============================================ -->
+    <!-- 发布路径                                      -->
+    <!-- ============================================ -->
+    <!-- 发布到项目根目录下的 publish/ 文件夹 -->
+    <PublishDir>$(MSBuildProjectDirectory)\..\publish\</PublishDir>
   </PropertyGroup>
 
   <ItemGroup>
