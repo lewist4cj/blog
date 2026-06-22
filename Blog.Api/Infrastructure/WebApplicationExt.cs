@@ -1,6 +1,7 @@
 using Blog.Api.Endpoints;
 using Blog.Api.Middleware;
-using Blog.Domain.Dtos;
+using Blog.Core.SqlSugar;
+using SqlSugar;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,13 @@ public static class WebApplicationExt
         app.UseAuthorization();
         app.UseMiddleware<LogMiddleware>();
         app.UseStaticFiles();
+
+        // CodeFirst 自动同步数据库表结构
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ISqlSugarClient>();
+            SqlSugarSetup.InitDatabase(db);
+        }
 
         // Minimal API endpoints
         var api = app.MapGroup("/api");

@@ -1,4 +1,5 @@
 using Blog.Common.Database;
+using Blog.Domain;
 using SqlSugar;
 
 namespace Blog.Core.SqlSugar;
@@ -51,5 +52,28 @@ public static class SqlSugarSetup
         }
 
         return new SqlSugarClient(config);
+    }
+
+    /// <summary>
+    /// CodeFirst 自动同步数据库表结构
+    /// 在应用启动时调用，确保所有实体对应的表存在
+    /// </summary>
+    public static void InitDatabase(ISqlSugarClient db)
+    {
+        db.CodeFirst.InitTables(
+            typeof(ArticleModel),
+            typeof(ArticleDiggModel),
+            typeof(BannerModel),
+            typeof(CategoryModel),
+            typeof(CollectModel),
+            typeof(CommentModel),
+            typeof(GlobalNotication),
+            typeof(LogModel),
+            typeof(SiteConfigModel),
+            typeof(UserArticleCollectModel),
+            typeof(UserArticleLookHistoryModel),
+            typeof(UserConfModel),
+            typeof(UserModel)
+        );
     }
 }

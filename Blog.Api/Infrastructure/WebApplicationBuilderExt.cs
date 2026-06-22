@@ -13,7 +13,6 @@ using Blog.Services.Log;
 using Blog.Core.SqlSugar;
 using Serilog;
 using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Blog.Common.Database;
 using Blog.Core.Sync;
@@ -29,7 +28,7 @@ public static class WebApplicationBuilderExt
         services.AddSingleton(new AppSettings(configuration));
         services.AddSerilog(configuration);
         services.AddJwtAuthentication(configuration);
-        services.AddRegister(configuration);
+        services.AddRegister();
 
         services.AddCors(options =>
         {
@@ -87,9 +86,9 @@ public static class WebApplicationBuilderExt
                 opt.RequireHttpsMetadata = appEnvironment != "Development";
                 opt.TokenValidationParameters = new()
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenModel?.Security!)),
-                    ValidIssuer = tokenModel?.Issuer,
-                    ValidAudience = tokenModel?.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenModel.Security!)),
+                    ValidIssuer = tokenModel.Issuer,
+                    ValidAudience = tokenModel.Audience,
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
@@ -145,7 +144,6 @@ public static class WebApplicationBuilderExt
 
                 await WriteJsonResponse(ctx.Response, ApiResult.Failure(errorCode), StatusCodes.Status200OK);
                 ctx.Fail("");
-                return;
             }
         }
     }
@@ -158,7 +156,7 @@ public static class WebApplicationBuilderExt
         await response.WriteAsync(json);
     }
 
-    private static void AddRegister(this IServiceCollection services, IConfiguration configuration)
+    private static void AddRegister(this IServiceCollection services)
     {
         // Minimal API JSON 序列化配置（使用源码生成上下文，AOT 兼容）
         services.ConfigureHttpJsonOptions(opts =>
@@ -194,9 +192,7 @@ public static class WebApplicationBuilderExt
         {
             var config = sp.GetRequiredService<IConfiguration>();
             var settings = new DatabaseSettings();
-#pragma warning disable IL2026 // DatabaseSettings 类型通过属性访问保留
             config.GetSection("Database").Bind(settings);
-#pragma warning restore IL2026
             if (string.IsNullOrEmpty(settings.DefaultConnection))
                 settings.DefaultConnection = config.GetConnectionString("DefaultConnection")!;
             return settings;
