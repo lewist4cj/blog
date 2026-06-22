@@ -11,6 +11,7 @@ on:
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
+  DOTNET_SDK_VERSION: "10.0.301"
 
 jobs:
   build:
@@ -19,10 +20,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET SDK 10.0
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "10.0.x"
+      - name: Install .NET SDK ${{ env.DOTNET_SDK_VERSION }}
+        run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin \
+            --channel 10.0 \
+            --install-dir "$HOME/.dotnet"
+          echo "$HOME/.dotnet" >> "$GITHUB_PATH"
+          echo "DOTNET_ROOT=$HOME/.dotnet" >> "$GITHUB_ENV"
+
+      - name: Verify SDK
+        run: dotnet --version
 
       - name: Install NativeAOT prerequisites
         run: |
@@ -30,7 +37,6 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             clang \
             zlib1g-dev
-          # 验证 clang 可用
           clang --version
 
       - name: Restore dependencies
