@@ -4,7 +4,7 @@ using Blog.Domain;
 namespace Blog.Core.Repository;
 
 public interface IRepository<TEntity>
-    where TEntity: BaseEntity
+    where TEntity: BaseEntity, new()
 {
     TEntity Delete(TEntity entity);
     Task<TEntity> DeleteAsync(TEntity entity);

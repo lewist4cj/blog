@@ -1,24 +1,17 @@
 using System.Text;
 using Blog.Common;
 using Blog.Common.Utils;
-using Blog.Domain.Config;
 using Blog.Domain.JsonContext;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using Blog.Common.TokenModule.Models;
 using Blog.Common.RedisModule;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
-using Blog.Services;
 using Blog.Services.Local;
 using Blog.Services.Log;
-using Blog.Services.ConfigMgrApp;
 using Blog.Core.SqlSugar;
 using Blog.Api.Filter;
 using Serilog;
-using Microsoft.Extensions.Logging;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using Blog.Common.Database;
@@ -52,15 +45,15 @@ public static class WebApplicationBuilderExt
 
     private static void AddSerilog(this IServiceCollection services, IConfiguration configuration)
     {
-        string SerilogOutputTemplate = "{NewLine}{NewLine}Date：{Timestamp:yyyy-MM-dd HH:mm:ss}{NewLine}LogLevel：{Level}{NewLine}Message：{Message}{NewLine}{Exception}" + new string('-', 100);
+        string serilogOutputTemplate = "{NewLine}{NewLine}Date：{Timestamp:yyyy-MM-dd HH:mm:ss}{NewLine}LogLevel：{Level}{NewLine}Message：{Message}{NewLine}{Exception}" + new string('-', 100);
 
         var logPath = configuration["Serilog:Path"] ?? "Logs";
 
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console(outputTemplate: SerilogOutputTemplate)
+            .WriteTo.Console(outputTemplate: serilogOutputTemplate)
             .WriteTo.File(logPath,
                 rollingInterval: RollingInterval.Day,
-                outputTemplate: SerilogOutputTemplate,
+                outputTemplate: serilogOutputTemplate,
                 retainedFileCountLimit: 31,
                 retainedFileTimeLimit: TimeSpan.FromDays(2),
                 rollOnFileSizeLimit: true,
