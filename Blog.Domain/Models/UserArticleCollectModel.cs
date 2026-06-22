@@ -8,15 +8,12 @@ namespace Blog.Domain;
 [SugarIndex("idx_name", nameof(CollectId), OrderByType.Asc, false)]
 public class UserArticleCollectModel : BaseEntity
 {
-    [SugarColumn(ColumnName = "user_id")]
     public ulong? UserId { get; set; }
 
-    [SugarColumn(ColumnName = "article_id")]
     public ulong? ArticleId { get; set; }
 
-    [SugarColumn(ColumnName = "collect_id")]
     public ulong? CollectId { get; set; }
 
-    [SugarColumn(ColumnName = "created_at", ColumnDataType = "timestamp")]
+    [SugarColumn(ColumnDataType = "timestamp")]
     public DateTime CreatedAt { get; set; }
 }

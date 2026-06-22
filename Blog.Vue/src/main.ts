@@ -1,12 +1,21 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import 'nprogress/nprogress.css'
 
 import App from './App.vue'
 import router from './router'
+import { useUserStore } from '@/stores/user'
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(ElementPlus)
+
+// 初始化用户信息
+const store = useUserStore()
+store.loadUserInfo()
 
 app.mount('#app')

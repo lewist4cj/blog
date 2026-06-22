@@ -12,18 +12,17 @@ public class SiteConfigModel : BaseEntity
     /// <summary>
     /// 配置节名称，例如 SiteMgr、OtherSiteMgr:EmailSettings
     /// </summary>
-    [SugarColumn(ColumnName = "section", Length = 128)]
+    [SugarColumn(Length = 128)]
     public string Section { get; set; } = string.Empty;
 
     /// <summary>
     /// 配置 JSON 内容
     /// </summary>
-    [SugarColumn(ColumnName = "config_value")]
     public string ConfigValue { get; set; } = string.Empty;
 
-    [SugarColumn(ColumnName = "created_at", ColumnDataType = "timestamp")]
+    [SugarColumn(ColumnDataType = "timestamp")]
     public DateTime CreatedAt { get; set; }
 
-    [SugarColumn(ColumnName = "updated_at", ColumnDataType = "timestamp")]
+    [SugarColumn(ColumnDataType = "timestamp")]
     public DateTime UpdatedAt { get; set; }
 }

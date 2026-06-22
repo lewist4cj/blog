@@ -158,11 +158,19 @@ public static class WebApplicationBuilderExt
 
     private static void AddRegister(this IServiceCollection services)
     {
-        // Minimal API JSON 序列化配置（使用源码生成上下文，AOT 兼容）
+        // Minimal API JSON 序列化配置
+        // 开发调试时使用反射（自动处理所有类型，无需手动注册）
+        // 发布时使用源码生成上下文（AOT 兼容）
         services.ConfigureHttpJsonOptions(opts =>
         {
+#if DEBUG
+#pragma warning disable IL3050 // 开发模式使用反射 JSON，AOT 发布走 #else 分支
+            opts.SerializerOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
+#pragma warning restore IL3050
+#else
             opts.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
                 DomainJsonContext.Default, AppJsonContext.Default);
+#endif
             opts.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             opts.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             opts.SerializerOptions.PropertyNameCaseInsensitive = true;

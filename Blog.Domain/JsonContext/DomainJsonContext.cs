@@ -6,8 +6,11 @@ using Blog.Domain.Dtos;
 
 namespace Blog.Domain.JsonContext;
 
+// 开发调试时使用 DefaultJsonTypeInfoResolver（反射），无需手动注册类型。
+// 以下注册仅 AOT 发布时需要——如遇缺失类型请在此补充。
 [JsonSerializable(typeof(ApiResult))]
 [JsonSerializable(typeof(PageResult<LogModel>))]
+[JsonSerializable(typeof(PageList<ArticleListItem>))]
 [JsonSerializable(typeof(LogModel))]
 [JsonSerializable(typeof(UserModelLoginDto))]
 [JsonSerializable(typeof(SiteMgr))]
@@ -32,6 +35,7 @@ namespace Blog.Domain.JsonContext;
 [JsonSerializable(typeof(ArticleCollectRequest))]
 [JsonSerializable(typeof(ArticleQuery))]
 [JsonSerializable(typeof(SelectOption))]
+[JsonSerializable(typeof(List<SelectOption>))]
 public partial class DomainJsonContext : JsonSerializerContext
 {
 }

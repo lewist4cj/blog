@@ -49,7 +49,7 @@ public static class CategoryEndpoints
             .Skip((page - 1) * limit).Take(limit)
             .ToListAsync();
 
-        return ApiResult.Success(new { list, count = total });
+        return ApiResult.Success(new CategoryListResult { List = list, Count = total });
     }
 
     private static async Task<ApiResult> GetCategoryOptions(ISqlSugarClient db)
@@ -101,6 +101,12 @@ public static class CategoryEndpoints
         var claim = ctx.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
         return ulong.TryParse(claim, out var id) ? id : null;
     }
+}
+
+public class CategoryListResult
+{
+    public List<CategoryView> List { get; set; } = new();
+    public int Count { get; set; }
 }
 
 public class CategoryView

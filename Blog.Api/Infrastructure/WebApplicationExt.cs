@@ -17,10 +17,17 @@ public static class WebApplicationExt
         app.UseStaticFiles();
 
         // CodeFirst 自动同步数据库表结构
-        using (var scope = app.Services.CreateScope())
+        try
         {
-            var db = scope.ServiceProvider.GetRequiredService<ISqlSugarClient>();
-            SqlSugarSetup.InitDatabase(db);
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ISqlSugarClient>();
+                SqlSugarSetup.InitDatabase(db);
+            }
+        }
+        catch (Exception ex)
+        {
+            app.Logger.LogWarning(ex, "数据库同步跳过（PostgreSQL 未就绪）");
         }
 
         // Minimal API endpoints
