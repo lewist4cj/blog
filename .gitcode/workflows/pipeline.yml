@@ -8,35 +8,15 @@ jobs:
   build:
     runs-on: euleros-2.10.1
     steps:
-      - uses: checkout-action@0.0.1
+      - run: git clone https://gitcode.com/lewist4cj/blog-server.git .
 
-      - name: Install .NET SDK 10.0
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin \
-            --channel 10.0 \
-            --install-dir "$HOME/.dotnet"
+      - run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir "$HOME/.dotnet"
           export PATH="$HOME/.dotnet:$PATH"
-          echo "dotnet version: $(dotnet --version)"
+          echo "dotnet: $(dotnet --version)"
 
-      - name: Install AOT prerequisites
-        run: |
-          sudo yum install -y clang zlib-devel
-          clang --version
-
-      - name: Publish Native AOT
-        run: |
+      - run: |
           export PATH="$HOME/.dotnet:$PATH"
           dotnet restore
-          dotnet publish Blog.Api/Blog.Api.csproj \
-            -c Release \
-            -r linux-x64 \
-            --self-contained \
-            -o ./publish
+          dotnet publish Blog.Api/Blog.Api.csproj -c Release -r linux-x64 --self-contained -o ./publish
           ls -lh ./publish/
-          file ./publish/Blog.Api
-
-      - name: Upload artifact
-        uses: upload-artifact@v0.0.1
-        with:
-          name: blog-server-aot-linux-x64
-          path: ./publish/
