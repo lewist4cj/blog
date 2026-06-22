@@ -127,7 +127,7 @@ public class SiteController(IConfiguration configuration, ISiteConfigService sit
     }
 
     [HttpPut("update")]
-    public ApiResult UpdateSiteInfo(SiteMgr siteMgr)
+    public ApiResult UpdateSiteInfo([FromBody]SiteMgr siteMgr)
     {
         var htmlDocument = new HtmlDocument();
         htmlDocument.Load("./wwwroot/uploads/index.html");

@@ -17,7 +17,7 @@ public class UserController(RuntimeLogService runtimeLogService,
 {
 
     [HttpPost("login")]
-    public async Task<ApiResult> CheckLogin(UserModelLoginDto dto)
+    public async Task<ApiResult> CheckLogin([FromBody]UserModelLoginDto dto)
     {
         runtimeLogService.AddItemNowTime();
         runtimeLogService.AddItemInfo("login info", $"username: {dto.Username}");

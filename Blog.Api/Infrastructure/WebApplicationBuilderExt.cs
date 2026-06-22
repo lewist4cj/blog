@@ -166,6 +166,8 @@ public static class WebApplicationBuilderExt
         .ConfigureApiBehaviorOptions(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
+            // Native AOT：禁用参数绑定推断（避免 ModelMetadata.IsConvertibleType 异常）
+            options.SuppressInferBindingSourcesForParameters = true;
         })
         .AddJsonOptions(opts =>
         {
