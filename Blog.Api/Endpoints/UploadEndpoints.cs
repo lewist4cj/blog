@@ -1,17 +1,21 @@
-
 using Blog.Common;
 using Blog.Common.Utils;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Blog.Api.Controllers;
+namespace Blog.Api.Endpoints;
 
-public class UploadsController : BaseController
+public static class UploadEndpoints
 {
-    private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".zip", ".rar", ".pdf", ".doc", ".docx" };
+    private static readonly string[] AllowedExtensions =
+        [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".zip", ".rar", ".pdf", ".doc", ".docx"];
     private const long MaxFileSize = 50 * 1024 * 1024; // 50MB
 
-    [HttpPost("upload")]
-    public async Task<ApiResult> Upload(IFormFile? file)
+    public static RouteGroupBuilder MapUploadEndpoints(this RouteGroupBuilder group)
+    {
+        group.MapPost("/upload", Upload);
+        return group;
+    }
+
+    private static async Task<ApiResult> Upload(IFormFile? file)
     {
         if (file == null || file.Length == 0)
             return ApiResult.Failure(Code.BadRequest, "No file uploaded or file is empty");

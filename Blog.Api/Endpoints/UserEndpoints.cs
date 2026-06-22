@@ -6,33 +6,39 @@ using Blog.Domain;
 using Blog.Extensions.Validation;
 using Blog.Services.Log;
 using Blog.Services.UserApp;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace Blog.Api.Controllers;
+namespace Blog.Api.Endpoints;
 
-public class UserController(RuntimeLogService runtimeLogService,
-    IUserService userService, ILogger<UserController> logger, IRedisWorker redisWorker,
-    IOptions<JwtTokenModel> jwtOptions) : BaseController
+public static class UserEndpoints
 {
+    public static RouteGroupBuilder MapUserEndpoints(this RouteGroupBuilder group)
+    {
+        group.MapPost("/login", Login);
+        group.MapGet("/unregister", Unregister).RequireAuthorization();
+        return group;
+    }
 
-    [HttpPost("login")]
-    public async Task<ApiResult> CheckLogin([FromBody]UserModelLoginDto dto)
+    private static async Task<ApiResult> Login(
+        UserModelLoginDto dto,
+        RuntimeLogService runtimeLogService,
+        IUserService userService,
+        ILogger<Program> logger,
+        IOptions<JwtTokenModel> jwtOptions)
     {
         runtimeLogService.AddItemNowTime();
         runtimeLogService.AddItemInfo("login info", $"username: {dto.Username}");
-        runtimeLogService.Save("UserController/CheckLogin");
+        runtimeLogService.Save("UserEndpoints/Login");
 
         if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
-        {
             return ApiResult.Failure(Code.ValidationFailed);
-        }
+
         if (!await userService.CheckPwd(dto))
         {
             logger.LogInformation("the username or password is incorrect");
-
             return ApiResult.Failure(Code.InvalidCredentials);
         }
+
         var user = await userService.GetUserAsync(dto);
         if (user == null)
         {
@@ -40,36 +46,31 @@ public class UserController(RuntimeLogService runtimeLogService,
             return ApiResult.Failure(Code.InvalidCredentials);
         }
 
-        var token = GetToken(user);
+        var token = GetToken(user, jwtOptions);
         return ApiResult.Success(token);
     }
 
-
-    [HttpGet("unregister")]
-    public async Task<ApiResult> Unregister()
+    private static async Task<ApiResult> Unregister(
+        HttpContext httpContext,
+        IRedisWorker redisWorker,
+        IOptions<JwtTokenModel> jwtOptions)
     {
-        // get the token from the request header and add it to the blacklist
-        var authHeader = HttpContext.Request.Headers.Authorization.FirstOrDefault();
+        var authHeader = httpContext.Request.Headers.Authorization.FirstOrDefault();
         if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
-        {
             return ApiResult.Failure(Code.BadRequest);
-        }
 
-        var token = authHeader.Substring("Bearer ".Length).Trim();
+        var token = authHeader["Bearer ".Length..].Trim();
         var tokenHandler = TokenHepler.GetSecurityToken(token, jwtOptions.Value);
 
-        // if the remaining time is less than or equal to zero, then the token has expired. so we dot need to add it to the blacklist.
         var remainingTime = tokenHandler.ValidTo - DateTime.UtcNow;
         if (remainingTime <= TimeSpan.Zero)
-        {
             return ApiResult.Success("Unregistered successfully.");
-        }
-        // add the token to the blacklist, because the token has not expired.
-        redisWorker.SetBlackString(token, TokenBlackEnum.User, remainingTime);
 
+        redisWorker.SetBlackString(token, TokenBlackEnum.User, remainingTime);
         return ApiResult.Success("Unregistered successfully.");
     }
-    private string GetToken(UserModel user)
+
+    private static string GetToken(UserModel user, IOptions<JwtTokenModel> jwtOptions)
     {
         var tokenModel = jwtOptions.Value;
         tokenModel.Validate();
@@ -77,10 +78,6 @@ public class UserController(RuntimeLogService runtimeLogService,
         tokenModel.UserName = user.Username;
         tokenModel.NickName = user.Nickname;
         tokenModel.Role = user.Role;
-        var token = TokenHepler.GenerateToken(tokenModel);
-
-        return token;
+        return TokenHepler.GenerateToken(tokenModel);
     }
-
-
 }

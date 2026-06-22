@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Blog.Common.RespModule;
 using Blog.Common.Utils;
 using Blog.Domain.Config;
 
@@ -9,6 +10,9 @@ namespace Blog.Domain.JsonContext;
 /// 所有在 AOT 模式下需要序列化的类型必须在此注册
 /// </summary>
 [JsonSerializable(typeof(ApiResult))]
+[JsonSerializable(typeof(PageResult<LogModel>))]
+[JsonSerializable(typeof(LogModel))]
+[JsonSerializable(typeof(UserModelLoginDto))]
 [JsonSerializable(typeof(SiteMgr))]
 [JsonSerializable(typeof(OtherSiteMgr))]
 [JsonSerializable(typeof(SiteSettings))]

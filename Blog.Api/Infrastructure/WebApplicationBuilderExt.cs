@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Blog.Services.Local;
 using Blog.Services.Log;
 using Blog.Core.SqlSugar;
-using Blog.Api.Filter;
 using Serilog;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
@@ -159,29 +158,18 @@ public static class WebApplicationBuilderExt
 
     private static void AddRegister(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers(opts =>
+        // Minimal API JSON 序列化配置（使用源码生成上下文，AOT 兼容）
+        services.ConfigureHttpJsonOptions(opts =>
         {
-            opts.Filters.Add<ValidateModelFilter.ValidateModelAttribute>();
-        })
-        .ConfigureApiBehaviorOptions(options =>
-        {
-            options.SuppressModelStateInvalidFilter = true;
-            // Native AOT：禁用参数绑定推断（避免 ModelMetadata.IsConvertibleType 异常）
-            options.SuppressInferBindingSourcesForParameters = true;
-        })
-        .AddJsonOptions(opts =>
-        {
-            opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            opts.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-            opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            opts.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-            // JsonStringEnumConverter 非泛型在 AOT 中有理论风险，但全局 MVC 枚举类型均通过实体引用得到保留
-#pragma warning disable IL3050
-            opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-#pragma warning restore IL3050
-            opts.JsonSerializerOptions.WriteIndented = true;
+            opts.SerializerOptions.TypeInfoResolver = DomainJsonContext.Default;
+            opts.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            opts.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+            opts.SerializerOptions.PropertyNameCaseInsensitive = true;
+            opts.SerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            opts.SerializerOptions.WriteIndented = true;
         });
 
+        services.AddAuthorization();
         services.AddHttpContextAccessor();
 
         services.AddSingleton<RedisCore>();
