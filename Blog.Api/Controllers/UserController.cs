@@ -7,12 +7,13 @@ using Blog.Extensions.Validation;
 using Blog.Services.Log;
 using Blog.Services.UserApp;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Blog.Api.Controllers;
 
 public class UserController(RuntimeLogService runtimeLogService,
- IUserService userService, ILogger<UserController> logger, IRedisWorker redisWorker,
- IConfiguration configuration) : BaseController
+    IUserService userService, ILogger<UserController> logger, IRedisWorker redisWorker,
+    IOptions<JwtTokenModel> jwtOptions) : BaseController
 {
 
     [HttpPost("login")]
@@ -42,8 +43,8 @@ public class UserController(RuntimeLogService runtimeLogService,
         var token = GetToken(user);
         return ApiResult.Success(token);
     }
-    
-    
+
+
     [HttpGet("unregister")]
     public async Task<ApiResult> Unregister()
     {
@@ -55,8 +56,8 @@ public class UserController(RuntimeLogService runtimeLogService,
         }
 
         var token = authHeader.Substring("Bearer ".Length).Trim();
-        var tokenHandler = TokenHepler.GetSecurityToken(token, configuration);
-        
+        var tokenHandler = TokenHepler.GetSecurityToken(token, jwtOptions.Value);
+
         // if the remaining time is less than or equal to zero, then the token has expired. so we dot need to add it to the blacklist.
         var remainingTime = tokenHandler.ValidTo - DateTime.UtcNow;
         if (remainingTime <= TimeSpan.Zero)
@@ -70,8 +71,7 @@ public class UserController(RuntimeLogService runtimeLogService,
     }
     private string GetToken(UserModel user)
     {
-        var jwtSection = AppSettings.Configuration!.GetSection("Jwt");
-        var tokenModel = jwtSection.Get<JwtTokenModel>()!;
+        var tokenModel = jwtOptions.Value;
         tokenModel.Validate();
         tokenModel.Id = user.Id;
         tokenModel.UserName = user.Username;
@@ -82,5 +82,5 @@ public class UserController(RuntimeLogService runtimeLogService,
         return token;
     }
 
-   
+
 }

@@ -1,30 +1,29 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using SqlSugar;
 
 namespace Blog.Domain;
 
-[Table("user_conf_models")]
-[Index("UserId", Name = "uni_user_conf_models_user_id", IsUnique = true)]
-public partial class UserConfModel:BaseEntity
+[SugarTable("user_conf_models")]
+[SugarIndex("uni_user_conf_models_user_id", nameof(UserId), OrderByType.Asc, true)]
+public class UserConfModel : BaseEntity
 {
-    [Column("user_id")]
+    [SugarColumn(ColumnName = "user_id")]
     public ulong? UserId { get; set; }
 
-    [Column("like_tags")]
+    [SugarColumn(ColumnName = "like_tags")]
     public string? LikeTags { get; set; }
 
-    [Column("update_username_date", TypeName = "datetime(3)")]
+    [SugarColumn(ColumnName = "update_username_date", ColumnDataType = "datetime(3)")]
     public DateTime? UpdateUsernameDate { get; set; }
 
-    [Column("publish_collections")]
+    [SugarColumn(ColumnName = "publish_collections")]
     public bool? PublishCollections { get; set; }
 
-    [Column("publish_followings")]
+    [SugarColumn(ColumnName = "publish_followings")]
     public bool? PublishFollowings { get; set; }
 
-    [Column("publish_fans")]
+    [SugarColumn(ColumnName = "publish_fans")]
     public bool? PublishFans { get; set; }
 
-    [Column("theme_style_id")]
+    [SugarColumn(ColumnName = "theme_style_id")]
     public ulong? ThemeStyleId { get; set; }
 }

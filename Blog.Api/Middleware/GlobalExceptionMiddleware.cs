@@ -1,5 +1,6 @@
 using Blog.Common.RespModule;
 using Blog.Common.Utils;
+using Blog.Domain.JsonContext;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -80,7 +81,7 @@ public class GlobalExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
 
-        var jsonResponse = JsonSerializer.Serialize(result);
+        var jsonResponse = JsonSerializer.Serialize(result, typeof(ApiResult), DomainJsonContext.Default);
         await context.Response.WriteAsync(jsonResponse);
     }
 }

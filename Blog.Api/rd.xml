@@ -1,0 +1,11 @@
+<Directives>
+    <Application>
+        <!-- SqlSugar AOT 反射保留 -->
+        <Assembly Name="SqlSugar" Dynamic="Required All" />
+        <Assembly Name="Blog.Api" Dynamic="Required All" />
+        <Assembly Name="Blog.Core" Dynamic="Required All" />
+        <Assembly Name="Blog.Domain" Dynamic="Required All" />
+        <Assembly Name="Blog.Services" Dynamic="Required All" />
+        <Assembly Name="Blog.Common" Dynamic="Required All" />
+    </Application>
+</Directives>

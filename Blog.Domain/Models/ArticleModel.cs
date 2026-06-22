@@ -1,57 +1,52 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using SqlSugar;
 
 namespace Blog.Domain;
 
-[Table("article_models")]
-public partial class ArticleModel:BaseEntity
+[SugarTable("article_models")]
+public class ArticleModel : BaseEntity
 {
-    // [Key]
-    // [Column("id")]
-    // public ulong Id { get;}
-
-    [Column("created_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "created_at", ColumnDataType = "timestamp")]
     public DateTime CreatedAt { get; set; }
 
-    [Column("updated_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "updated_at", ColumnDataType = "timestamp")]
     public DateTime UpdatedAt { get; set; }
 
-    [Column("title")]
+    [SugarColumn(ColumnName = "title")]
     public string? Title { get; set; }
 
-    [Column("desc")]
+    [SugarColumn(ColumnName = "desc")]
     public string? Desc { get; set; }
 
-    [Column("content")]
+    [SugarColumn(ColumnName = "content")]
     public string? Content { get; set; }
 
-    [Column("content_id")]
+    [SugarColumn(ColumnName = "content_id")]
     public ulong? ContentId { get; set; }
 
-    [Column("tag_list")]
+    [SugarColumn(ColumnName = "tag_list")]
     public string? TagList { get; set; }
 
-    [Column("cover")]
+    [SugarColumn(ColumnName = "cover")]
     public string? Cover { get; set; }
 
-    [Column("user_id")]
+    [SugarColumn(ColumnName = "user_id")]
     public ulong? UserId { get; set; }
 
-    [Column("look_count")]
+    [SugarColumn(ColumnName = "look_count")]
     public long? LookCount { get; set; }
 
-    [Column("like_count")]
+    [SugarColumn(ColumnName = "like_count")]
     public long? LikeCount { get; set; }
 
-    [Column("comment_count")]
+    [SugarColumn(ColumnName = "comment_count")]
     public long? CommentCount { get; set; }
 
-    [Column("collect_count")]
+    [SugarColumn(ColumnName = "collect_count")]
     public long? CollectCount { get; set; }
 
-    [Column("enable_comment")]
+    [SugarColumn(ColumnName = "enable_comment")]
     public bool? EnableComment { get; set; }
 
-    [Column("status")]
+    [SugarColumn(ColumnName = "status")]
     public long? Status { get; set; }
 }

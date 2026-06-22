@@ -1,18 +1,18 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using SqlSugar;
 
 namespace Blog.Domain;
 
-[Table("article_digg_models")]
-[Index("UserId", "ArticleId", Name = "idx_name", IsUnique = true)]
-public partial class ArticleDiggModel:BaseEntity
+[SugarTable("article_digg_models")]
+[SugarIndex("idx_name", nameof(UserId), OrderByType.Asc, true)]
+[SugarIndex("idx_name", nameof(ArticleId), OrderByType.Asc, false)]
+public class ArticleDiggModel : BaseEntity
 {
-    [Column("user_id")]
+    [SugarColumn(ColumnName = "user_id")]
     public ulong? UserId { get; set; }
 
-    [Column("article_id")]
+    [SugarColumn(ColumnName = "article_id")]
     public ulong? ArticleId { get; set; }
 
-    [Column("created_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "created_at", ColumnDataType = "timestamp")]
     public DateTime CreatedAt { get; set; }
 }

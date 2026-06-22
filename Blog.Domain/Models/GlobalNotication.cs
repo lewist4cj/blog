@@ -1,34 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using SqlSugar;
 
 namespace Blog.Domain;
 
-[Table("global_notications")]
-public partial class GlobalNotication:BaseEntity
+[SugarTable("global_notications")]
+public class GlobalNotication : BaseEntity
 {
-    // [Key]
-    // [Column("id")]
-    // public ulong Id { get; }
-
-    [Column("created_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "created_at", ColumnDataType = "timestamp")]
     public DateTime CreatedAt { get; set; }
 
-    [Column("updated_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "updated_at", ColumnDataType = "timestamp")]
     public DateTime UpdatedAt { get; set; }
 
-    [Column("title")]
-    [StringLength(32)]
+    [SugarColumn(ColumnName = "title", Length = 32)]
     public string? Title { get; set; }
 
-    [Column("icon")]
-    [StringLength(256)]
+    [SugarColumn(ColumnName = "icon", Length = 256)]
     public string? Icon { get; set; }
 
-    [Column("content")]
-    [StringLength(64)]
+    [SugarColumn(ColumnName = "content", Length = 64)]
     public string? Content { get; set; }
 
-    [Column("href")]
-    [StringLength(256)]
+    [SugarColumn(ColumnName = "href", Length = 256)]
     public string? Href { get; set; }
 }

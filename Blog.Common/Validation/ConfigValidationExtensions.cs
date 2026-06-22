@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using Blog.Common.Utils;
+using Microsoft.Extensions.Configuration;
 
 namespace Blog.Extensions.Validation;
 
@@ -13,11 +14,12 @@ public static class ConfigValidationExtensions
     /// <param name="configuration">IConfiguration instance</param>
     /// <param name="sectionName">configuration section name</param>
     /// <returns>验证后的配置对象</returns>
+    [RequiresUnreferencedCode("Config types are preserved via IOptions binding at startup")]
     public static T GetValidatedConfig<T>(this IConfiguration configuration, string sectionName)
      where T : class, IValidatableObject, new()
     {
         var config = configuration.GetSection(sectionName).Get<T>();
-        
+
         if (config == null)
         {
             throw new InvalidOperationException($"Configuration section '{sectionName}' is missing from app settings.");
@@ -36,7 +38,7 @@ public static class ConfigValidationExtensions
 
         return config;
     }
-    
+
     /// <summary>
     /// 验证配置对象，如果验证失败则抛出异常
     /// </summary>
@@ -58,7 +60,7 @@ public static class ConfigValidationExtensions
             throw new InvalidOperationException($"{configName} validation failed: {errorMessage}");
         }
     }
-    
+
     /// <summary>
     /// 验证配置对象，如果验证失败则返回错误的 ApiResult
     /// </summary>
@@ -85,7 +87,7 @@ public static class ConfigValidationExtensions
                 .Where(vr => vr != null)
                 .Select(vr => new { Field = vr.MemberNames.FirstOrDefault(), Message = vr.ErrorMessage })
                 .ToArray();
-            
+
             return ApiResult.Failure(Common.Code.BadRequest, errors);
         }
 

@@ -2,7 +2,7 @@ using System.Text;
 using Blog.Common;
 using Blog.Common.Utils;
 using Blog.Domain.Config;
-using Microsoft.EntityFrameworkCore;
+using Blog.Domain.JsonContext;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using Blog.Common.TokenModule.Models;
@@ -15,7 +15,7 @@ using Blog.Services;
 using Blog.Services.Local;
 using Blog.Services.Log;
 using Blog.Services.ConfigMgrApp;
-using Blog.Core.DbContext;
+using Blog.Core.SqlSugar;
 using Blog.Api.Filter;
 using Serilog;
 using Microsoft.Extensions.Logging;
@@ -24,6 +24,7 @@ using System.Text.Json.Serialization;
 using Blog.Common.Database;
 using Blog.Core.Sync;
 using Blog.Core.UnitOfWork;
+using SqlSugar;
 
 namespace Blog.Api.Infrastructure;
 
@@ -76,7 +77,15 @@ public static class WebApplicationBuilderExt
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var tokenModel = configuration.GetSection("Jwt").Get<JwtTokenModel>();
+        // 注册 JwtTokenModel 为 IOptions 以便运行时注入
+        services.Configure<JwtTokenModel>(configuration.GetSection("Jwt"));
+
+        // AOT 下 JwtTokenModel 类型被直接属性访问保留，Bind 安全
+        var jwtSection = configuration.GetSection("Jwt");
+        var tokenModel = new JwtTokenModel();
+#pragma warning disable IL2026 // 类型通过 Startup 中直接属性访问保留
+        jwtSection.Bind(tokenModel);
+#pragma warning restore IL2026
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
             {
@@ -151,7 +160,7 @@ public static class WebApplicationBuilderExt
     {
         response.ContentType = "application/json";
         response.StatusCode = statusCode;
-        var json = JsonSerializer.Serialize(result);
+        var json = JsonSerializer.Serialize(result, typeof(ApiResult), DomainJsonContext.Default);
         await response.WriteAsync(json);
     }
 
@@ -171,47 +180,43 @@ public static class WebApplicationBuilderExt
             opts.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             opts.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            // JsonStringEnumConverter 非泛型在 AOT 中有理论风险，但全局 MVC 枚举类型均通过实体引用得到保留
+#pragma warning disable IL3050
             opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+#pragma warning restore IL3050
             opts.JsonSerializerOptions.WriteIndented = true;
         });
 
         services.AddHttpContextAccessor();
 
-        services.AddAutoMapper(typeof(BlogProfile));
         services.AddSingleton<RedisCore>();
         services.AddRepositoryRegister();
-        services.AddServiceRegister(configuration);
+        services.AddServiceRegister();
         services.AddSingleton<LocalService>();
 
         services.AddScoped<ActionLogService>();
         services.AddScoped<RuntimeLogService>();
-        services.AddScoped<DbContextFactory>();
 
-        services.AddDbContext<BlogDbContext>((sp, opt) =>
+        // 注册 SqlSugarClient（替代 EF Core DbContext）
+        services.AddSingleton<ISqlSugarClient>(sp =>
         {
-            var config = sp.GetRequiredService<IConfiguration>();
-            DbContextFactory.ConfigureWriteContext(opt, config);
-            opt.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-        });
-
-        services.AddScoped<ReadOnlyDbContext>(sp =>
-        {
-            var factory = sp.GetRequiredService<DbContextFactory>();
-            return new ReadOnlyDbContext(factory.CreateReadContext());
+            var settings = sp.GetRequiredService<DatabaseSettings>();
+            return SqlSugarSetup.CreateClient(settings);
         });
 
         services.AddSingleton(sp =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
             var settings = new DatabaseSettings();
+#pragma warning disable IL2026 // DatabaseSettings 类型通过属性访问保留
             config.GetSection("Database").Bind(settings);
+#pragma warning restore IL2026
             if (string.IsNullOrEmpty(settings.DefaultConnection))
                 settings.DefaultConnection = config.GetConnectionString("DefaultConnection")!;
             return settings;
         });
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<ISiteConfigService, SiteConfigService>();
         services.AddSingleton<IElasticsearchSyncService, ElasticsearchSyncService>();
         services.AddHostedService<CanalSyncService>();
     }

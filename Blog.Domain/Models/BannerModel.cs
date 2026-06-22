@@ -1,24 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using SqlSugar;
 
 namespace Blog.Domain;
 
-[Table("banner_models")]
-public partial class BannerModel:BaseEntity
+[SugarTable("banner_models")]
+public class BannerModel : BaseEntity
 {
-    // [Key]
-    // [Column("id")]
-    // public ulong Id { get;}
-
-    [Column("created_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "created_at", ColumnDataType = "timestamp")]
     public DateTime CreatedAt { get; set; }
 
-    [Column("updated_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "updated_at", ColumnDataType = "timestamp")]
     public DateTime UpdatedAt { get; set; }
 
-    [Column("cover")]
+    [SugarColumn(ColumnName = "cover")]
     public string? Cover { get; set; }
 
-    [Column("href")]
+    [SugarColumn(ColumnName = "href")]
     public string? Href { get; set; }
 }

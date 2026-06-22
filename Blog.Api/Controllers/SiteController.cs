@@ -1,10 +1,11 @@
 using Blog.Common;
 using Blog.Common.Utils;
-using Blog.Domain.enums;
 using Blog.Domain.Config;
+using Blog.Domain.enums;
 using Blog.Api.Extensions;
 using Blog.Extensions.Validation;
 using Blog.Services.ConfigMgrApp;
+using Blog.Domain.JsonContext;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -70,9 +71,8 @@ public class SiteController(IConfiguration configuration, ISiteConfigService sit
     {
         if (name == "site")
         {
-            var siteMgr = new SiteMgr(configuration);
-
-            if (!await this.BindTo(siteMgr))
+            var siteMgr = await this.BindWithDefaults(new SiteMgr(configuration), DomainJsonContext.Default.SiteMgr);
+            if (siteMgr == null)
             {
                 return ApiResult.Failure(Code.BadRequest, "Request body is empty or invalid");
             }
@@ -92,19 +92,19 @@ public class SiteController(IConfiguration configuration, ISiteConfigService sit
         switch (name)
         {
             case "email":
-                await this.BindTo(otherSiteMgr.EmailSettings!);
+                otherSiteMgr.EmailSettings = await this.BindWithDefaults(otherSiteMgr.EmailSettings!, DomainJsonContext.Default.EmailSettings);
                 resp = otherSiteMgr.EmailSettings!;
                 break;
             case "qq":
-                await this.BindTo(otherSiteMgr.QqSettings!);
+                otherSiteMgr.QqSettings = await this.BindWithDefaults(otherSiteMgr.QqSettings!, DomainJsonContext.Default.QqSettings);
                 resp = otherSiteMgr.QqSettings!;
                 break;
             case "qiNiu":
-                await this.BindTo(otherSiteMgr.QiNiuSettings!);
+                otherSiteMgr.QiNiuSettings = await this.BindWithDefaults(otherSiteMgr.QiNiuSettings!, DomainJsonContext.Default.QiNiuSettings);
                 resp = otherSiteMgr.QiNiuSettings!;
                 break;
             case "ai":
-                await this.BindTo(otherSiteMgr.AiSettings!);
+                otherSiteMgr.AiSettings = await this.BindWithDefaults(otherSiteMgr.AiSettings!, DomainJsonContext.Default.AiSettings);
                 resp = otherSiteMgr.AiSettings!;
                 break;
             default:

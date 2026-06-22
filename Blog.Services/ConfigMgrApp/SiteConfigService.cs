@@ -1,8 +1,8 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Blog.Core.Repository;
 using Blog.Domain;
 using Blog.Domain.Config;
+using Blog.Domain.JsonContext;
 using Microsoft.Extensions.Configuration;
 
 namespace Blog.Services.ConfigMgrApp;
@@ -11,15 +11,6 @@ public class SiteConfigService : ISiteConfigService
 {
     private readonly IRepository<SiteConfigModel> _configRepo;
     private readonly IConfiguration _configuration;
-
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-        WriteIndented = true,
-        Converters = { new JsonStringEnumConverter() }
-    };
 
     public SiteConfigService(IRepository<SiteConfigModel> configRepo, IConfiguration configuration)
     {
@@ -32,7 +23,7 @@ public class SiteConfigService : ISiteConfigService
         var dbConfig = await _configRepo.GetAsync(c => c.Section == "SiteMgr");
         if (dbConfig != null)
         {
-            return JsonSerializer.Deserialize<SiteMgr>(dbConfig.ConfigValue, JsonOptions)
+            return JsonSerializer.Deserialize(dbConfig.ConfigValue, DomainJsonContext.Default.SiteMgr)
                    ?? new SiteMgr(_configuration);
         }
 
@@ -46,7 +37,7 @@ public class SiteConfigService : ISiteConfigService
         var dbConfig = await _configRepo.GetAsync(c => c.Section == "OtherSiteMgr");
         if (dbConfig != null)
         {
-            return JsonSerializer.Deserialize<OtherSiteMgr>(dbConfig.ConfigValue, JsonOptions)
+            return JsonSerializer.Deserialize(dbConfig.ConfigValue, DomainJsonContext.Default.OtherSiteMgr)
                    ?? new OtherSiteMgr(_configuration);
         }
 
@@ -57,20 +48,20 @@ public class SiteConfigService : ISiteConfigService
 
     public async Task SaveSiteMgrAsync(SiteMgr siteMgr)
     {
-        var json = JsonSerializer.Serialize(siteMgr, JsonOptions);
+        var json = JsonSerializer.Serialize(siteMgr, DomainJsonContext.Default.SiteMgr);
         await UpsertConfigAsync("SiteMgr", json);
     }
 
     public async Task SaveOtherSectionAsync(string sectionName, object settings)
     {
         var sectionPath = $"OtherSiteMgr:{sectionName}";
-        var json = JsonSerializer.Serialize(settings, JsonOptions);
+        var json = JsonSerializer.Serialize(settings, settings.GetType(), DomainJsonContext.Default);
         await UpsertConfigAsync(sectionPath, json);
     }
 
     private async Task SyncToDbAsync(string section, object configObj)
     {
-        var json = JsonSerializer.Serialize(configObj, JsonOptions);
+        var json = JsonSerializer.Serialize(configObj, configObj.GetType(), DomainJsonContext.Default);
         await UpsertConfigAsync(section, json);
     }
 

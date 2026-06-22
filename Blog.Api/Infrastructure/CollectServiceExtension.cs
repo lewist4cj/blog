@@ -1,8 +1,9 @@
-using System.Reflection;
 using Blog.Common;
+using Blog.Common.RedisModule;
 using Blog.Core.Repository;
-using Blog.Domain.Config;
-using Blog.Extensions.Validation;
+using Blog.Services.ConfigMgrApp;
+using Blog.Services.LogMgrApp;
+using Blog.Services.UserApp;
 
 namespace Blog.Api.Infrastructure;
 
@@ -15,25 +16,19 @@ public static class CollectServiceExtension
         return services;
     }
 
-    public static IServiceCollection AddServiceRegister(this IServiceCollection services, IConfiguration configuration)
+    /// <summary>
+    /// 显式注册所有服务（替代旧的程序集扫描方式，兼容 AOT）
+    /// </summary>
+    public static IServiceCollection AddServiceRegister(this IServiceCollection services)
     {
-        var namespaceConfig = configuration.GetSection("IocTags").Get<IocTagsConfig>();
-        namespaceConfig!.Validate();
-        var list = namespaceConfig!.List!;
-        list.ForEach(item =>
-        {
-            var ass = Assembly.Load(item);
-            var implementTypes = ass.GetTypes()
-                .Where(t => t.IsAssignableTo(typeof(ITag))
-                            && t is { IsAbstract: false, IsInterface: false });
-            foreach (var implementType in implementTypes)
-            {
-                var interfaceType = implementType
-                    .GetInterfaces()
-                    .FirstOrDefault(i => i != typeof(ITag))!;
-                services.AddTransient(interfaceType, implementType);
-            }
-        });
+        // Blog.Services 层
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ILogService, LogService>();
+        services.AddScoped<ISiteConfigService, SiteConfigService>();
+
+        // Blog.Common 层
+        services.AddScoped<IRedisWorker, RedisWorker>();
+
         return services;
     }
 }

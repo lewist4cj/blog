@@ -1,121 +1,81 @@
 using System.Linq.Expressions;
-using Blog.Core.DbContext;
 using Blog.Domain;
-using Microsoft.EntityFrameworkCore;
+using SqlSugar;
 
 namespace Blog.Core.Repository;
 
-public class Repository<TEntity>(BlogDbContext context) : IRepository<TEntity> where TEntity : BaseEntity
+public class Repository<TEntity>(ISqlSugarClient db) : IRepository<TEntity> where TEntity : BaseEntity, new()
 {
     public List<TEntity> GetList()
-    {
-        var dbSet = context.Set<TEntity>();
-        return dbSet.ToList();
-    }
+        => db.Queryable<TEntity>().ToList();
+
     public List<TEntity> GetList(Expression<Func<TEntity, bool>> predicate)
-    {
-        var dbSet = context.Set<TEntity>();
-        return dbSet.Where(predicate).ToList();
-    }
+        => db.Queryable<TEntity>().Where(predicate).ToList();
+
     public async Task<List<TEntity>> GetListAsync()
-    {
-        var dbSet = context.Set<TEntity>();
-        return await dbSet.ToListAsync();
-    }
+        => await db.Queryable<TEntity>().ToListAsync();
+
     public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        var dbSet = context.Set<TEntity>();
-        return await dbSet.Where(predicate).ToListAsync();
-    }
+        => await db.Queryable<TEntity>().Where(predicate).ToListAsync();
 
     public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? predicate = null)
     {
-        var dbSet = context.Set<TEntity>();
         if (predicate != null)
-            return await dbSet.CountAsync(predicate);
-        return await dbSet.CountAsync();
+            return await db.Queryable<TEntity>().Where(predicate).CountAsync();
+        return await db.Queryable<TEntity>().CountAsync();
     }
 
     public List<TEntity> GetList(int pageIndex, int pageSize)
-    {
-        var dbSet = context.Set<TEntity>();
-        return [.. dbSet.Skip((pageIndex - 1) * pageSize).Take(pageSize)];
-    }
+        => db.Queryable<TEntity>().Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
 
     public async Task<List<TEntity>> GetListAsync(int pageIndex, int pageSize)
-    {
-        var dbSet = context.Set<TEntity>();
-        return await dbSet.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-    }
+        => await db.Queryable<TEntity>().Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
     public TEntity? Get(ulong id)
-    {
-        var dbSet = context.Set<TEntity>();
-        return dbSet.FirstOrDefault(c => c.Id == id);
-    }
+        => db.Queryable<TEntity>().First(it => it.Id == id);
 
     public async Task<TEntity?> GetAsync(ulong id)
-    {
-        var dbSet = context.Set<TEntity>();
-        return await dbSet.FirstOrDefaultAsync(c => c.Id == id);
-    }
+        => await db.Queryable<TEntity>().FirstAsync(it => it.Id == id);
 
     public TEntity? Get(Expression<Func<TEntity, bool>> predicate)
-    {
-        var dbSet = context.Set<TEntity>();
-        return dbSet.FirstOrDefault(predicate);
-    }
+        => db.Queryable<TEntity>().First(predicate);
 
     public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        var dbSet = context.Set<TEntity>();
-        return await dbSet.FirstOrDefaultAsync(predicate);
-    }
+        => await db.Queryable<TEntity>().FirstAsync(predicate);
 
     public TEntity Insert(TEntity entity)
-    {
-        var dbSet = context.Set<TEntity>();
-        var res = dbSet.Add(entity).Entity;
-        return res;
-    }
+        => db.Insertable(entity).ExecuteReturnEntity();
 
     public async Task<TEntity> InsertAsync(TEntity entity)
-    {
-        var dbSet = context.Set<TEntity>();
-        var res = (await dbSet.AddAsync(entity)).Entity;
-        return res;
-    }
+        => await db.Insertable(entity).ExecuteReturnEntityAsync();
 
     public TEntity Delete(TEntity entity)
     {
-        var dbSet = context.Set<TEntity>();
-        var res = dbSet.Remove(entity).Entity;
-        return res;
+        db.Deleteable(entity).ExecuteCommand();
+        return entity;
     }
 
     public async Task<TEntity> DeleteAsync(TEntity entity)
     {
-        var dbSet = context.Set<TEntity>();
-        var res = dbSet.Remove(entity).Entity;
-        return res;
+        await db.Deleteable(entity).ExecuteCommandAsync();
+        return entity;
     }
 
     public TEntity Update(TEntity entity)
     {
-        var dbSet = context.Set<TEntity>();
-        var res = dbSet.Update(entity).Entity;
-        return res;
+        db.Updateable(entity).ExecuteCommand();
+        return entity;
     }
 
     public async Task<TEntity> UpdateAsync(TEntity entity)
     {
-        var dbSet = context.Set<TEntity>();
-        var res = dbSet.Update(entity).Entity;
-        return res;
+        await db.Updateable(entity).ExecuteCommandAsync();
+        return entity;
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return await context.SaveChangesAsync(cancellationToken);
+        // SqlSugar 每次操作自动提交，无需手动 SaveChanges
+        return await Task.FromResult(0);
     }
 }

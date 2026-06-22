@@ -1,30 +1,28 @@
 using System.Collections;
 using Blog.Common.Utils;
-using Blog.Core.DbContext;
 using Blog.Domain;
-using blog.Models.enums.Log;
 using blog.Models.enums;
-
-using Microsoft.EntityFrameworkCore;
+using blog.Models.enums.Log;
+using SqlSugar;
 
 namespace Blog.Services.Log;
 
-public class RuntimeLogService(BlogDbContext context)
+public class RuntimeLogService(ISqlSugarClient db)
 {
     private ArrayList ItemList  = new ArrayList();
     public string Title { get; set; } = "";
     public LogLevelEnum Level { get; set; } = LogLevelEnum.Info;
     public LogModel? LogModel { get; set; }
     public string ServiceName { get; set; } = string.Empty;
-    
-    
+
+
     private void AddItem(string label, string value, LogLevelEnum level)
     {
         ItemList.Add(
             $"<div class=\"log_item {level.ToString()}\"><div class=\"log_item_label\">{label}</div><div class=\"log_item_value\">{value}</div></div>"
         );
     }
-    
+
     public  void AddItemInfo(string label, string value)
     {
         AddItem(label, value, LogLevelEnum.Info);
@@ -46,7 +44,7 @@ public class RuntimeLogService(BlogDbContext context)
         var str = $"<div class=\"log_error\"><div class=\"line\"><div class=\"label\">{label}</div><div class=\"value\">{value}</div></div><div class=\"stack\">${stackInfo}</div></div>";
         ItemList.Add(str);
     }
-    
+
     public void AddItemNowTime()
     {
         ItemList.Add($"<div class=\"log_time\">{DateTime.Now:yyyy-M-d dddd}</div>");
@@ -56,33 +54,31 @@ public class RuntimeLogService(BlogDbContext context)
     {
         var logModel = new LogModel()
         {
-            LogType = LogTypeEnum.RuntimeLogType,
+            LogType = (int)LogTypeEnum.RuntimeLogType,
             ServiceName = serviceName,
             Title = Title,
-            Level = LogLevelEnum.Info,
+            Level = (int)LogLevelEnum.Info,
             Content = string.Join("\n", ItemList.ToArray()),
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
-        // get logs by time (使用LINQ查询替代原生SQL以提高数据库兼容性)
+        // get logs by time
         var timeThreshold = GetTimeThreshold(runDateTime);
-        var logs = context.LogModels
-            .Where(l => l.LogType == LogTypeEnum.RuntimeLogType && l.CreatedAt >= timeThreshold)
+        var logs = db.Queryable<LogModel>()
+            .Where(l => l.LogType == (int)LogTypeEnum.RuntimeLogType && l.CreatedAt >= timeThreshold)
             .OrderByDescending(l => l.UpdatedAt)
             .ToList();
         if (logs.Count > 0)
         {
             // update log
             logs[0].Content = logModel.Content;
-            context.LogModels.Update(logs[0]);
-            context.SaveChanges();
+            db.Updateable(logs[0]).ExecuteCommand();
             ItemList.Clear();
             return;
         }
-       
+
             // insert log
-            context.LogModels.Add(logModel);
-            context.SaveChanges();
+            db.Insertable(logModel).ExecuteReturnEntity();
             ItemList.Clear();
     }
 
@@ -97,26 +93,4 @@ public class RuntimeLogService(BlogDbContext context)
             _ => DateTime.Now.AddHours(-1)
         };
     }
-
-    // 已废弃：原生SQL版本（仅作参考）
-    /*
-    private string GetLogsSqlStr(RunDateTimeEnum runDateTime)
-    {
-        switch (runDateTime)
-        {
-            case RunDateTimeEnum.Hour:
-                return "INTERVAL 1 HOUR";
-            case RunDateTimeEnum.Day:
-                return "INTERVAL 1 DAY";
-            case RunDateTimeEnum.Week:
-                return "INTERVAL 1 WEEK";
-            case RunDateTimeEnum.Month:
-                return "INTERVAL 1 MONTH";
-            default:
-                return "INTERVAL 1 HOUR";
-        }
-    }
-    */
-
-
 }

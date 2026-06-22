@@ -1,21 +1,22 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using SqlSugar;
 
 namespace Blog.Domain;
 
-[Table("user_article_collect_models")]
-[Index("UserId", "ArticleId", "CollectId", Name = "idx_name", IsUnique = true)]
-public partial class UserArticleCollectModel:BaseEntity
+[SugarTable("user_article_collect_models")]
+[SugarIndex("idx_name", nameof(UserId), OrderByType.Asc, true)]
+[SugarIndex("idx_name", nameof(ArticleId), OrderByType.Asc, false)]
+[SugarIndex("idx_name", nameof(CollectId), OrderByType.Asc, false)]
+public class UserArticleCollectModel : BaseEntity
 {
-    [Column("user_id")]
+    [SugarColumn(ColumnName = "user_id")]
     public ulong? UserId { get; set; }
 
-    [Column("article_id")]
+    [SugarColumn(ColumnName = "article_id")]
     public ulong? ArticleId { get; set; }
 
-    [Column("collect_id")]
+    [SugarColumn(ColumnName = "collect_id")]
     public ulong? CollectId { get; set; }
 
-    [Column("created_at", TypeName = "timestamp")]
+    [SugarColumn(ColumnName = "created_at", ColumnDataType = "timestamp")]
     public DateTime CreatedAt { get; set; }
 }

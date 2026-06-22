@@ -1,12 +1,9 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using SqlSugar;
 
 namespace Blog.Domain;
 
 public class BaseEntity
 {
-    [Key]
-    [Column("id")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public ulong Id { get; protected set; }
+    [SugarColumn(ColumnName = "id", IsPrimaryKey = true, IsIdentity = true)]
+    public ulong Id { get; set; }
 }

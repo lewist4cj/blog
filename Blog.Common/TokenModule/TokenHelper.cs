@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Text;
 using Blog.Common.TokenModule.Models;
 using Blog.Extensions.Validation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Blog.Common.TokenModule;
@@ -12,8 +11,8 @@ public static class TokenHepler
 {
     public static string GenerateToken(JwtTokenModel? jwtTokenModel)
     {
-        if (jwtTokenModel == null) 
-            return "JwtTokenModel object is null"; 
+        if (jwtTokenModel == null)
+            return "JwtTokenModel object is null";
 
         // 验证配置
         jwtTokenModel.ValidateOrThrow("JWT Token Configuration");
@@ -26,7 +25,7 @@ public static class TokenHepler
             new Claim("Role", (jwtTokenModel.Role?.ToString() ?? "0"))
         };
 
-        
+
         // 生成密钥
         var credentials = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtTokenModel.Security!));
         var signingCredential = new SigningCredentials(credentials, SecurityAlgorithms.HmacSha256);
@@ -45,10 +44,8 @@ public static class TokenHepler
         return accessToken;
     }
 
-     public static SecurityToken GetSecurityToken(string token, IConfiguration configuration)
+    public static SecurityToken GetSecurityToken(string token, JwtTokenModel tokenModel)
     {
-        var jwtSection = configuration.GetSection("Jwt");
-        var tokenModel = jwtSection.Get<JwtTokenModel>()!;
         tokenModel.Validate();
         JwtSecurityTokenHandler tokenHandler = new();
         TokenValidationParameters parameters = new()
@@ -63,6 +60,5 @@ public static class TokenHepler
         };
         tokenHandler.ValidateToken(token, parameters, out var securityToken);
         return securityToken;
-
     }
 }

@@ -1,51 +1,35 @@
-using Blog.Core.DbContext;
-using Microsoft.EntityFrameworkCore.Storage;
+using SqlSugar;
 
 namespace Blog.Core.UnitOfWork;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(ISqlSugarClient db) : IUnitOfWork
 {
-    private readonly BlogDbContext _context;
-    private IDbContextTransaction? _currentTransaction;
-
-    public UnitOfWork(BlogDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.SaveChangesAsync(cancellationToken);
+        // SqlSugar 每次操作自动提交，无需手动 SaveChanges
+        return await Task.FromResult(0);
     }
 
-    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
-        _currentTransaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-        return _currentTransaction;
+        db.Ado.BeginTran();
+        await Task.CompletedTask;
     }
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
-        if (_currentTransaction != null)
-        {
-            await _currentTransaction.CommitAsync(cancellationToken);
-            await _currentTransaction.DisposeAsync();
-            _currentTransaction = null;
-        }
+        db.Ado.CommitTran();
+        await Task.CompletedTask;
     }
 
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
-        if (_currentTransaction != null)
-        {
-            await _currentTransaction.RollbackAsync(cancellationToken);
-            await _currentTransaction.DisposeAsync();
-            _currentTransaction = null;
-        }
+        db.Ado.RollbackTran();
+        await Task.CompletedTask;
     }
 
     public void Dispose()
     {
-        _currentTransaction?.Dispose();
+        db.Ado.RollbackTran();
     }
 }
