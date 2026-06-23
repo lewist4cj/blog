@@ -74,43 +74,59 @@
     margin: 0 auto;
   }
   .article-card {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     cursor: pointer;
+    overflow: hidden;
+  }
+  .article-card:hover .article-title {
+    color: var(--el-color-primary);
   }
   .article-item {
     display: flex;
-    gap: 20px;
+    gap: 24px;
   }
   .article-info {
     flex: 1;
+    min-width: 0;
   }
   .article-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
     color: #1d2129;
+    line-height: 1.4;
+    transition: color 0.2s;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .article-abstract {
     font-size: 14px;
     color: #86909c;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .article-meta {
-    font-size: 12px;
+    font-size: 13px;
     color: #c9cdd4;
   }
+  .article-meta :deep(.el-space__item) {
+    display: flex;
+    align-items: center;
+  }
   .article-cover {
-    width: 200px;
+    width: 220px;
     flex-shrink: 0;
   }
   .article-cover img {
     width: 100%;
-    height: 120px;
+    height: 140px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 8px;
   }
 </style>

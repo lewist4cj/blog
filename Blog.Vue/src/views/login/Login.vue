@@ -61,31 +61,38 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   .login-page {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #f2f3f5;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
   .login-card {
-    width: 400px;
-    padding: 40px;
+    width: 420px;
+    padding: 48px 40px 40px;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   }
   .login-title {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 24px;
+    margin-bottom: 36px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1d2129;
+    letter-spacing: -0.5px;
   }
   .login-footer {
     text-align: center;
-    margin-top: 16px;
+    margin-top: 20px;
   }
   .login-footer a {
-    color: #4080ff;
+    color: #909399;
+    font-size: 13px;
+  }
+  .login-footer a:hover {
+    color: var(--el-color-primary);
   }
 </style>

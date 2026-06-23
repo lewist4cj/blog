@@ -1,6 +1,6 @@
 # Blog Server - 项目文档
 
-> 一个基于 .NET 8 的个人博客系统后端 API
+> 基于 **.NET 10** + **Vue 3** 的全栈个人博客系统
 
 ---
 
@@ -12,13 +12,17 @@
 - [快速开始](#快速开始)
 - [API 接口](#api-接口)
 - [配置说明](#配置说明)
+- [架构设计](#架构设计)
+- [Native AOT](#native-aot)
+- [数据库](#数据库)
+- [日志系统](#日志系统)
 - [项目优化记录](#项目优化记录)
 
 ---
 
 ## 项目概述
 
-基于 **ASP.NET Core 8.0** 构建的个人博客系统后端，提供文章管理、用户认证、评论互动、日志记录等完整的博客功能 API。
+基于 **ASP.NET Core 10.0** + **Vue 3** 构建的全栈个人博客系统，提供文章管理、分类管理、用户认证、评论互动、收藏管理、站点配置、日志记录、文件上传等完整的博客功能 API。
 
 ---
 
@@ -26,18 +30,29 @@
 
 | 技术 | 用途 |
 |------|------|
-| **.NET 8** | 运行时框架 |
-| **ASP.NET Core** | Web API 框架 |
-| **Entity Framework Core 8** | ORM 数据访问 |
-| **PostgreSQL (Npgsql)** | 数据库（原 MySQL → PostgreSQL 迁移） |
+| **.NET 10** | 运行时框架 |
+| **ASP.NET Core Minimal API** | Web API 框架 |
+| **SqlSugarCore 5.1.4** | ORM 数据访问 |
+| **PostgreSQL (Npgsql)** | 数据库 |
 | **Redis (StackExchange)** | 缓存/黑名单 |
-| **Elasticsearch (可选)** | 全文搜索（通过配置启用） |
-| **Canal CDC (可选)** | 数据库变更同步（通过配置启用） |
 | **JWT Bearer** | 身份认证 |
-| **AutoMapper** | 对象映射 |
 | **Serilog** | 结构化日志 |
 | **HtmlAgilityPack** | HTML 解析 |
 | **IP2Region** | IP 地理位置查询 |
+
+### 前端技术栈
+
+| 技术 | 用途 |
+|------|------|
+| **Vue 3.5** | 前端框架 |
+| **TypeScript 6** | 类型检查 |
+| **Element Plus 2.14** | UI 组件库 |
+| **Pinia 3** | 状态管理 |
+| **Vue Router 5** | 路由管理 |
+| **Vite 8** | 构建工具 |
+| **ECharts 5.5** | 数据可视化 |
+| **Axios** | HTTP 请求 |
+| **SCSS (Sass)** | CSS 预处理器 |
 
 ---
 
@@ -45,64 +60,85 @@
 
 ```
 Blog.sln
-├── Blog.Api/              # API 层 - 控制器/启动配置
-│   ├── Controllers/
-│   │   ├── BaseController.cs       # 控制器基类
-│   │   ├── UserController.cs       # 用户认证接口
-│   │   ├── SiteController.cs       # 站点配置接口
-│   │   ├── LogController.cs        # 日志管理接口
-│   │   └── UploadController.cs     # 文件上传接口
-│   ├── Program.cs                  # 应用入口
-│   └── appsettings*.json           # 配置文件
-│
-├── Blog.Common/           # 公共层 - 工具/基础设施
-│   ├── AppSettings.cs              # 配置管理
-│   ├── ITag.cs                     # DI 标记接口
-│   ├── ErrorModule/                # 错误码定义
-│   ├── MD5Module/                  # MD5 密码工具
-│   ├── RedisModule/                # Redis 客户端封装
-│   ├── RespModule/                 # 统一 API 响应
-│   ├── TokenModule/                # JWT Token 工具
-│   └── Validation/                 # 配置验证扩展
-│
-├── Blog.Domain/           # 领域层 - 实体/枚举
-│   ├── BaseEntity.cs               # 实体基类
-│   ├── Models/                     # 数据模型
-│   └── enums/                      # 枚举定义
-│
-├── Blog.Core/             # 核心层 - 数据访问
-│   ├── DbContext/
-│   │   └── BlogDbContext.cs         # EF Core 数据上下文
-│   ├── Repository/
-│   │   ├── IRepository.cs          # 仓储接口
-│   │   └── Repository.cs           # 仓储实现
-│   └── Migrations/                  # 数据库迁移
-│
-├── Blog.Services/         # 服务层 - 业务逻辑
-│   ├── BlogProfile.cs              # AutoMapper 配置
-│   ├── UserApp/                    # 用户服务
-│   ├── LogMgrApp/                  # 日志查询服务
-│   └── Log/                        # 日志记录服务
-│       ├── ActionLogService.cs     # 操作日志
-│       ├── RuntimeLogService.cs    # 运行时日志
-│       └── LoginLogService.cs      # 登录日志
-│
-├── Blog.Extensions/       # 扩展层 - 中间件/配置
-│   ├── CollectServiceExtension.cs   # DI 自动注册
-│   ├── Extensions/
-│   │   ├── WebApplicationBuilderExt.cs  # 服务配置
-│   │   ├── WebApplicationExt.cs         # 管道配置
-│   │   └── ModelBindExt.cs              # 模型绑定扩展
+├── Blog.Api/                  # API 层 - Minimal API 端点/启动配置
+│   ├── Endpoints/
+│   │   ├── ArticleEndpoints.cs     # 文章接口
+│   │   ├── CategoryEndpoints.cs    # 分类接口
+│   │   ├── UserEndpoints.cs        # 用户认证接口
+│   │   ├── CommentEndpoints.cs     # 评论接口
+│   │   ├── CollectEndpoints.cs     # 收藏接口
+│   │   ├── SiteEndpoints.cs        # 站点配置接口
+│   │   ├── LogEndpoints.cs         # 日志管理接口
+│   │   └── UploadEndpoints.cs      # 文件上传接口
 │   ├── Middleware/
-│   │   ├── GlobalExceptionMiddleware.cs # 全局异常处理
-│   │   └── LogMiddleware.cs             # 请求日志中间件
-│   ├── Filter/
-│   │   ├── AuthorizationFilterAttribute.cs  # 角色授权
-│   │   └── ValidateModelFilter.cs           # 模型验证
-│   ├── Config/                    # 配置模型
-│   └── Validation/                # 配置验证
+│   │   ├── GlobalExceptionMiddleware.cs  # 全局异常处理
+│   │   └── LogMiddleware.cs              # 请求日志中间件
+│   ├── Filters/
+│   │   └── RoleAuthorizationFilter.cs    # 角色授权过滤器
+│   ├── Infrastructure/
+│   │   ├── CollectServiceExtension.cs    # DI 自动注册
+│   │   ├── WebApplicationBuilderExt.cs   # 服务配置
+│   │   └── WebApplicationExt.cs          # 管道配置
+│   ├── JsonContext/
+│   │   └── AppJsonContext.cs             # AOT JSON 序列化上下文
+│   ├── Program.cs                        # 应用入口
+│   └── appsettings*.json                 # 配置文件
 │
-└── Blog.Repository/       # (预留) 仓储层
+├── Blog.Common/               # 公共层 - 工具/基础设施
+│   ├── AppSettings.cs                    # 配置管理
+│   ├── ITag.cs                           # DI 标记接口
+│   ├── ErrorModule/                      # 错误码定义
+│   ├── MD5Module/                        # MD5 密码工具
+│   ├── RedisModule/                      # Redis 客户端封装
+│   ├── RespModule/                       # 统一 API 响应
+│   ├── TokenModule/                      # JWT Token 工具
+│   ├── Utils/                            # 通用工具类
+│   └── Validation/                       # 配置验证扩展
+│
+├── Blog.Domain/               # 领域层 - 实体/枚举/DTO
+│   ├── BaseEntity.cs                     # 实体基类
+│   ├── Models/                           # 数据模型
+│   ├── Dtos/                             # 数据传输对象
+│   ├── Config/
+│   │   ├── SiteMgr.cs                    # 站点配置模型
+│   │   ├── OtherMgr.cs                   # 其他配置模型
+│   │   └── Settings.cs                   # 系统设置
+│   ├── JsonContext/                      # AOT JSON 序列化上下文
+│   ├── enums/                            # 枚举定义
+│   └── PageModel/                        # 分页模型
+│
+├── Blog.Core/                 # 核心层 - 数据访问
+│   ├── SqlSugar/
+│   │   ├── SugarContext.cs               # SqlSugar 数据上下文
+│   │   └── SugarRepository.cs            # 仓储实现
+│   ├── Repository/                       # 仓储接口
+│   ├── Sync/                             # 数据同步服务
+│   └── UnitOfWork/                       # 工作单元
+│       └── UnitOfWork.cs                 # 事务管理
+│
+├── Blog.Services/             # 服务层 - 业务逻辑
+│   ├── ArticleApp/                       # 文章服务
+│   ├── ConfigMgrApp/                     # 配置管理服务
+│   ├── LogMgrApp/                        # 日志查询服务
+│   └── UserApp/                          # 用户服务
+│
+├── Blog.Vue/                  # 前端 - Vue 3 应用
+│   ├── src/
+│   │   ├── api/                          # API 请求层
+│   │   ├── stores/                       # Pinia 状态管理
+│   │   ├── router/                       # Vue Router 路由
+│   │   ├── views/                        # 页面组件
+│   │   ├── components/                   # 公共组件
+│   │   ├── assets/                       # 静态资源
+│   │   └── styles/                       # 全局样式
+│   ├── public/                           # 公共资源
+│   ├── index.html                        # 入口 HTML
+│   ├── vite.config.ts                    # Vite 配置
+│   └── package.json                      # 依赖管理
+│
+└── Docs/                      # 项目文档
+    ├── AOT-Publish-Guide.md              # AOT 发布指南
+    └── AOT-Size-Optimization.md          # AOT 体积优化
 ```
 
 ---
@@ -111,9 +147,10 @@ Blog.sln
 
 ### 前置条件
 
-- .NET 8 SDK
+- .NET 10 SDK
 - PostgreSQL 14+
 - Redis（可选，用于 Token 黑名单）
+- Node.js 20+（前端开发）
 
 ### 配置
 
@@ -145,15 +182,27 @@ Blog.sln
 # 还原依赖
 dotnet restore
 
-# 应用数据库迁移
+# 运行后端（SqlSugar 自动创建表结构）
 cd Blog.Api
-dotnet ef database update
-
-# 运行
 dotnet run
 ```
 
 默认监听地址：`http://localhost:5051`
+
+### 前端启动
+
+```bash
+# 进入前端目录
+cd Blog.Vue
+
+# 安装依赖
+pnpm install
+
+# 启动开发服务器
+pnpm dev
+```
+
+前端默认监听地址：`http://localhost:5173`（Vite 代理 API 请求到后端）
 
 ### 数据库架构说明
 
@@ -175,12 +224,49 @@ dotnet run
 
 ## API 接口
 
+### 文章模块
+
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| GET | `/api/article/list` | 获取文章列表（分页） | ❌ |
+| GET | `/api/article/{id}` | 获取文章详情 | ❌ |
+| POST | `/api/article` | 创建文章 | ✅ Bearer |
+| PUT | `/api/article` | 更新文章 | ✅ Bearer |
+| DELETE | `/api/article/{id}` | 删除文章 | ✅ Bearer |
+| PUT | `/api/article/top/{id}` | 置顶/取消置顶文章 | ✅ Bearer |
+| PUT | `/api/article/visible/{id}` | 公开/隐藏文章 | ✅ Bearer |
+
+### 分类模块
+
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| GET | `/api/category` | 获取全部分类 | ❌ |
+| POST | `/api/category` | 创建分类 | ✅ Bearer |
+| PUT | `/api/category` | 更新分类 | ✅ Bearer |
+| DELETE | `/api/category/{id}` | 删除分类 | ✅ Bearer |
+
 ### 用户模块
 
 | 方法 | 路径 | 说明 | 认证 |
 |------|------|------|------|
 | POST | `/api/user/login` | 用户登录 | ❌ |
 | GET | `/api/user/unregister` | 注销登录（Token 加入黑名单） | ❌ |
+
+### 评论模块
+
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| GET | `/api/comment/{articleId}` | 获取文章评论 | ❌ |
+| POST | `/api/comment` | 发表评论 | ❌ |
+| DELETE | `/api/comment/{id}` | 删除评论 | ✅ Bearer |
+
+### 收藏模块
+
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| GET | `/api/collect/list` | 获取收藏列表 | ✅ Bearer |
+| POST | `/api/collect` | 添加收藏 | ✅ Bearer |
+| DELETE | `/api/collect/{id}` | 取消收藏 | ✅ Bearer |
 
 ### 站点管理
 
@@ -203,7 +289,13 @@ dotnet run
 
 | 方法 | 路径 | 说明 | 认证 |
 |------|------|------|------|
-| POST | `/api/Uploads/upload` | 文件上传 | ❌ |
+| POST | `/api/upload` | 文件上传 | ❌ |
+
+### 数据统计
+
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| GET | `/api/article/statistics` | 文章数据统计 | ❌ |
 
 ---
 
@@ -292,7 +384,7 @@ dotnet run
 | 1002 | 用户名或密码错误 |
 | 2003 | 数据验证失败 |
 | 2004 | 用户账户已关闭 |
-| 2008 | MySQL 异常 |
+| 2008 | 数据库异常 |
 | 2009 | Redis 异常 |
 
 ---
@@ -315,118 +407,28 @@ dotnet run
 
 | # | 优化项 | 说明 |
 |---|--------|------|
-| 1 | **消除 `BuildServiceProvider()` 反模式** | JWT 事件中使用 `HttpContext.RequestServices` 替代 `services.BuildServiceProvider()`，避免每次请求创建 DI 容器导致内存泄漏 |
-| 2 | **`Func<>` → `Expression<>` 修复** | Repository 的 `Get`/`GetList` 同步方法改用 `Expression<Func<TEntity, bool>>`，避免 EF Core 在客户端（内存）中执行过滤 |
-| 3 | **修复分页总记录数** | 新增 `GetCountAsync` 方法，`LogService` 分页查询现在返回真实总记录数 |
-| 4 | **修复配置文件空 Key** | `appsettings.json` 中 `""` 修复为 `"OtherSiteMgr"`，使邮箱、QQ、AI、七牛云配置可正常读取 |
-| 5 | **修复 SiteController Bug** | `UpdateSiteSetting` 中 `qq/qiNiu` 分支的 `resp` 变量引用错误已修正；`UpdateSiteInfo` 移除无效的 `File.Exists` URL 检查；`metaDesc` 写入 `Keywords` 已修正为 `Description` |
-| 6 | **新增 CORS 配置** | 服务启动时注册了默认允许所有源的 CORS 策略 |
-| 7 | **修复密码日志泄露** | `UserController.CheckLogin` 中移除了密码明文记录 |
-| 8 | **`Encoding.Default` → `Encoding.UTF8`** | MD5Helper 使用确定性的 UTF-8 编码，消除平台差异 |
-| 9 | **修复 `Serilogs` 拼写错误** | 配置键 `Serilogs` 修正为 `Serilog` |
-| 10 | **修复 `JwtTokenModel` 字段映射** | 添加 `[JsonPropertyName("Expire")]` 使配置 `Expire` 正确映射到属性 |
-| 11 | **`OtherSiteMgr` 字段改为属性** | 将 `readonly` 字段改为自动属性，使 `BindTo` 绑定生效 |
-| 12 | **实现 `UploadController`** | 添加文件类型校验、大小限制、GUID 重命名等完整上传逻辑 |
-| 13 | **修复 AutoMapper 版本冲突** | 降级 AutoMapper 至 12.0.1 匹配 DI 扩展版本 |
-| 14 | **修复 `RedisCore` 可为 null 警告** | `Db` 属性添加 `null!` 抑制警告 |
-| 15 | **`.sln` → `.slnx` 格式** | 转换到新的 XML 解决方案格式 |
-| 16 | **MySQL → PostgreSQL 迁移** | Pomelo.EntityFrameworkCore.MySql → Npgsql.EntityFrameworkCore.PostgreSQL |
-| 17 | **读写分离配置化** | 通过 `Database.EnableReadWriteSplitting` 控制，默认禁用 |
-| 18 | **Elasticsearch 同步配置化** | 通过 `Database.EnableElasticsearchSync` 控制，默认禁用 |
-| 19 | **Canal CDC 配置化** | 通过 `Database.EnableCanalSync` 控制，默认禁用 |
-| 20 | **数据库配置集中管理** | 新增 `DatabaseSettings` 配置模型和 `DbContextFactory` |
-| 21 | **`Code.MySqlAccessDenied` → `Code.DbAccessDenied`** | 全局异常处理更新为 PostgreSQL |
+| 1 | **EF Core → SqlSugar** | 从 Entity Framework Core 迁移到 SqlSugarCore 5.1.4，消除 EF Core 版本冲突，简化数据访问 |
+| 2 | **Controller → Minimal API** | 从传统的 Controller 基类模式迁移到 ASP.NET Core Minimal API，减少样板代码 |
+| 3 | **Native AOT 支持** | 项目配置为支持 Native AOT 发布，减小部署体积并提升启动速度 |
+| 4 | **AOT JSON 序列化** | 使用 `JsonSerializerContext` 源码生成器，避免 AOT 下反射序列化问题 |
+| 5 | **AOT 配置绑定** | 配置绑定使用源码生成器，确保 AOT 下配置正确加载 |
+| 6 | **Vue 3 + Element Plus 前端** | 使用 Vite 8 + Vue 3.5 + Element Plus 2.14 重构前端 |
+| 7 | **MySQL → PostgreSQL** | 从 MySQL 迁移到 PostgreSQL，使用 Npgsql 驱动 |
+| 8 | **Vite 代理配置** | 开发环境通过 Vite proxy 代理 API 请求，解决跨域问题 |
+| 9 | **运行时配置持久化** | 配置支持运行时修改并持久化，部分配置项可热更新 |
+| 10 | **`.sln` → `.slnx` 格式** | 转换到新的 XML 解决方案格式 |
+| 11 | **`Code.MySqlAccessDenied` → `Code.DbAccessDenied`** | 全局异常处理更新为 PostgreSQL |
+| 12 | **修复配置空 Key** | `appsettings.json` 中 `""` 修复为 `"OtherSiteMgr"` |
+| 13 | **新增 CORS 配置** | 服务启动时注册了默认允许所有源的 CORS 策略 |
+| 14 | **修复 `Serilogs` 拼写错误** | 配置键 `Serilogs` 修正为 `Serilog` |
+| 15 | **`Encoding.Default` → `Encoding.UTF8`** | MD5Helper 使用确定性的 UTF-8 编码，消除平台差异 |
 
 ### 待优化项
 
 | # | 建议 | 说明 |
 |---|------|------|
-| 1 | **MD5 → BCrypt 密码哈希** | 当前使用 MD5（不安全），建议使用 `BCrypt.Net-Next` 或 `Identity.Password.Hasher` |
-| 2 | **日志批量写入** | 当前每次请求 `SaveChanges`，高并发下建议改为批量/异步队列写入 |
-| 3 | **工作单元模式** | Repository 每次操作立即 `SaveChanges`，建议引入 UnitOfWork 批量提交事务 |
-| 4 | **日志 HTML 拼接** | `ActionLogService` 手工拼接 HTML，建议改为结构化日志或模板渲染 |
-| 5 | **`AppSettings` 静态类** | 建议逐步替换为标准的 `IOptions<T>` / `IConfiguration` DI 注入 |
-| 6 | **EF Core Relational 版本冲突** | Pomelo 依赖的 EF Core 8.0.13 与项目 8.0.23 版本不一致，可升级 Pomelo |
+| 1 | **MD5 → BCrypt 密码哈希** | 当前使用 MD5（不安全），建议使用 `BCrypt.Net-Next` |
+| 2 | **日志批量写入** | 当前每次请求写入日志，高并发下建议改为批量/异步队列写入 |
+| 3 | **工作单元模式完善** | UnitOfWork 已初步实现，需完善事务提交和回滚机制 |
 
----
 
-## 数据库架构
-
-### 读写分离
-
-系统支持可选的读写分离，通过配置文件 `Database.EnableReadWriteSplitting` 控制：
-
-```
-┌─────────────┐    写入     ┌──────────┐
-│  写入操作    │ ──────────→│  主库     │
-│ (Insert/    │            │ (Write)   │
-│  Update/    │            └──────────┘
-│  Delete)    │
-└─────────────┘
-┌─────────────┐    读取     ┌──────────┐
-│  查询操作    │ ──────────→│  从库     │
-│ (Select/    │            │ (Read)    │
-│  Get/List)  │            └──────────┘
-└─────────────┘
-```
-
-- **禁用时**（默认）：读写均使用 `DefaultConnection`
-- **启用时**：读操作路由到 `ReadConnection`，写操作路由到 `DefaultConnection`
-- 通过 `ReadOnlyDbContext` 包装器实现，Repository 查询方法可选择使用只读上下文
-
-### Elasticsearch 同步（可选）
-
-- 通过 `Database.EnableElasticsearchSync` 控制
-- 禁用时所有 ES 操作为空操作（Noop），不影响业务逻辑
-- 启用时自动将文章/分类数据同步到 ES 索引
-- 搜索操作优先走 ES，降级回数据库查询
-
-### Canal CDC 同步（可选）
-
-- 通过 `Database.EnableCanalSync` 控制
-- 禁用时 Canal 后台服务不执行任何操作
-- 启用时连接 Canal Server 监听数据库变更事件
-- 适用于需要实时同步到 ES 或清理缓存的场景
-
-## 依赖注入架构
-
-### 自动注册机制
-
-系统通过 `ITag` 标记接口和配置文件实现服务的自动注册：
-
-1. 服务类实现 `ITag` 标记接口
-2. `appsettings.json` 中 `IocTags.list` 配置要扫描的程序集
-3. `CollectServiceExtension.AddServiceRegister()` 通过反射自动注册
-
-### 已注册服务
-
-| 服务 | 生命周期 | 说明 |
-|------|----------|------|
-| `AppSettings` | Singleton | 配置管理 |
-| `RedisCore` | Singleton | Redis 连接 |
-| `BlogDbContext` | Scoped | EF Core 数据上下文（主库） |
-| `ReadOnlyDbContext` | Scoped | 只读数据上下文（从库） |
-| `DbContextFactory` | Scoped | DbContext 工厂 |
-| `DatabaseSettings` | Singleton | 数据库配置 |
-| `IRepository<T>` | Transient | 泛型仓储 |
-| `IElasticsearchSyncService` | Singleton | ES 同步（可配置空操作） |
-| `CanalSyncService` | Singleton | Canal CDC 后台服务（可配置跳过） |
-| `ActionLogService` | Scoped | 操作日志 |
-| `RuntimeLogService` | Scoped | 运行时日志 |
-| `LocalService` | Singleton | IP 地理位置 |
-
----
-
-## 中间件管道
-
-请求处理顺序（`WebApplicationExt.UseEntry`）：
-
-```
-1. GlobalExceptionMiddleware  (全局异常捕获)
-2. UseCors                   (跨域)
-3. UseAuthentication         (JWT 认证)
-4. UseAuthorization          (授权)
-5. LogMiddleware             (请求/响应日志)
-6. MapControllers            (路由到控制器)
-7. UseStaticFiles            (静态文件)
-```

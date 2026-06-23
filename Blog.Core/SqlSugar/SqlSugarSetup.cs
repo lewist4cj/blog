@@ -75,5 +75,16 @@ public static class SqlSugarSetup
             typeof(UserConfModel),
             typeof(UserModel)
         );
+
+        // 修复 site_configs.config_value 列类型（初始创建时误为 varchar(255)）
+        try
+        {
+            db.Ado.ExecuteCommand(
+                "ALTER TABLE site_configs ALTER COLUMN config_value TYPE TEXT");
+        }
+        catch
+        {
+            // 列已经为 TEXT 类型时忽略
+        }
     }
 }

@@ -18,6 +18,7 @@ public class SiteConfigModel : BaseEntity
     /// <summary>
     /// 配置 JSON 内容
     /// </summary>
+    [SugarColumn(Length = -1)]
     public string ConfigValue { get; set; } = string.Empty;
 
     [SugarColumn(ColumnDataType = "timestamp")]

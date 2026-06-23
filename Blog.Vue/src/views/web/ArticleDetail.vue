@@ -48,33 +48,65 @@
   <div v-else class="not-found">文章不存在</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   .article-detail {
     max-width: 800px;
     margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   }
   .detail-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 16px;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: #1d2129;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
   }
   .detail-meta {
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     color: #86909c;
     font-size: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
   }
   .detail-cover {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
   .detail-cover img {
     width: 100%;
-    max-height: 400px;
+    max-height: 450px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
   }
   .detail-content {
-    line-height: 1.8;
+    line-height: 1.9;
     font-size: 16px;
+    color: #333;
+    word-wrap: break-word;
+  }
+  .detail-content :deep(img) {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  .detail-content :deep(pre) {
+    background: #f6f8fa;
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 14px;
+  }
+  .detail-content :deep(code) {
+    background: #f6f8fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .detail-content :deep(pre code) {
+    background: none;
+    padding: 0;
   }
   .not-found {
     text-align: center;

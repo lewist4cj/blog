@@ -14,7 +14,7 @@ public static class SiteEndpoints
 {
     public static RouteGroupBuilder MapSiteEndpoints(this RouteGroupBuilder group)
     {
-        group.MapGet("/info", GetSiteInfo).RequireAuthorization();
+        group.MapGet("/info", GetSiteInfo);
         group.MapGet("/redirection", GetRedirection).RequireAuthorization();
         group.MapPut("/info", UpdateSiteSetting).RequireAuthorization();
         group.MapPut("/update", UpdateSiteInfo).RequireAuthorization();

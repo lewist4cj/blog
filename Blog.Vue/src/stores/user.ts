@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { userLogoutApi } from '@/api/user'
-import { siteApi, type SiteInfoResponse } from '@/api/site'
+import { siteApi } from '@/api/site'
 import { unReadMsgApi, type UnReadMsgType } from '@/api/message'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
@@ -20,39 +20,40 @@ export interface UserInfo {
   place: string
 }
 
-export interface SiteInfo {
-  siteInfo: {
-    title: string
-    logo: string
-    beian: string
-    mode: number
+export interface SiteInfoResponse {
+  siteSettings?: {
+    title?: string
+    logo?: string
+    beiAn?: string
+    isBlogMode?: boolean
   }
-  project: {
-    title: string
-    icon: string
-    webPath: string
+  projectSettings?: {
+    title?: string
+    icon?: string
+    fontend?: string
   }
-  seo: {
-    keywords: string
-    description: string
+  aboutSettings?: {
+    siteDate?: string
+    siteVersion?: string
+    qqCode?: string
+    wechatCode?: string
+    github?: string
+    gitee?: string
+    bilibli?: string
   }
-  about: {
-    siteDate: string
-    version: string
-    qq: string
-    wechat: string
-    github: string
-    gitee: string
-    bilibili: string
+  seoSettings?: {
+    keywords?: string
+    description?: string
+    author?: string
   }
-  login: {
-    qqLogin: boolean
-    usernamePwdLogin: boolean
-    emailLogin: boolean
-    captcha: boolean
+  loginSettings?: {
+    qq?: string
+    email?: string
+    usernamePwdLogin?: boolean
+    captcha?: boolean
   }
-  article: {
-    noExamine: boolean
+  articleSettings?: {
+    examine?: boolean
   }
 }
 

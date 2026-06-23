@@ -9,7 +9,7 @@
 <template>
   <el-container class="admin-layout">
     <el-aside :width="220">
-      <div class="admin-logo" @click="router.push('/admin')">{{ store.siteInfo?.siteInfo.title || '管理后台' }}</div>
+      <div class="admin-logo" @click="router.push('/admin')">{{ store.siteInfo?.siteSettings?.title || '管理后台' }}</div>
       <el-menu :default-active="router.currentRoute.value.name as string">
         <el-menu-item index="dashboard">
           <router-link to="/admin">📊 数据统计</router-link>
